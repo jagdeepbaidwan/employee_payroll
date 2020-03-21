@@ -226,29 +226,36 @@ void deactivate (int emp_id)
 	 else
 	 {
 	 	//strcpy(status,row[0]);
+	 	
 	 	if(strcmp("A",row[1]))
 	 	{
 		 	printf(" failed");
 		 }
 		 else
 		 {
-		 	char qry[]="update  login_details set status='I' where emp_id='%d'";
-			sprintf(query,qry,emp_id) ;
-			if (mysql_query(conn2, query))
-	 		{
-		   		printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
-		   	}
-		   	else
-		   	{
-			   printf("User Successfully deactivated");
-		}
-		 	
+		 	 if(atoi(row[0])!=emp_id)
+		 	 {
+		 	 	
+			 	char qry[]="update  login_details set status='I' where emp_id='%d'";
+				sprintf(query,qry,emp_id) ;
+				if (mysql_query(conn2, query))
+		 		{
+			   		printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
+			   	}
+			   	else
+			   	{
+				   printf("User Successfully deactivated");
+				}
+		 	}
+		 	else
+		 	{
+		 		printf("Sorry! You can not deactivate the logged in account");	
+			}
 		 }
 	 }
 	}
 }
 /*End de-activating employee function*/
-
 
 
 
