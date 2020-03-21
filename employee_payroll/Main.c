@@ -4,6 +4,7 @@
 #include<windows.h>
 #include<mysql.h>
 #include<string.h>
+#include "External.h"
 MYSQL *oo,*conn;
 MYSQL_RES *read=NULL;
 MYSQL_RES *res=NULL;
@@ -113,63 +114,7 @@ int main(int argc, char *argv[]) {
 		    
 			scanf("%d",&i);
 		    
-		    switch(i)
-		    {
-			    case 1:
-			        {   
-			            printf("                Press 1 Add Employee\n");
-		                printf("                Press 2 Modify Employee\n");
-		                printf("                Press 3 Deactivate Employee\n");
-		                printf("                Press 4 Display Employee\n");
-		                
-		                scanf("%d",&i);
-		                
-	
-				    }
-			
-			    case 2:
-			        {   
-			            printf("                Press 1 View pending requests\n");
-		                printf("                Press 2 Display leaves\n");
-		                break;
-				    }
-				
-			    case 3:
-			       {   
-			            printf("                Press 1 Display attendance\n");
-		                printf("                Press 2 Update attendance\n");
-		                break;
-				    }
-				
-			    case 4:
-			        {   
-			            printf("                Press 1 Display salary\n");
-		                printf("                Press 2 Update salary\n");
-		                break;
-				    }
-				
-			    case 5:
-			        {   
-			            printf("                Press 1 Add Employee\n");
-			            break;
-				    }
-			    case 6:
-			        {    
-			            printf("                Press 1 Increment Salary\n");
-			            break;
-				    }
-			    case 7:
-			        {   
-			            printf("                Press 1 Grievance redressal\n");
-			            break;
-				    }
-								
-			    default:
-				    {
-					    printf("wrong input");
-					    break;
-				    }
-		    }
+		    int st=emp_management(i,id);
 		    
 		}
 		
@@ -304,3 +249,4 @@ int main(int argc, char *argv[]) {
 	
 return 0;
 }
+
