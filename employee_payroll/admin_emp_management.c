@@ -21,8 +21,7 @@ char* add_employee()
 	   char status[100]; 
 	   int day;
 	   int month;
-	   int year; 
-        
+	   int year;
     };
      
     struct employee emp;
@@ -124,10 +123,8 @@ char* add_employee()
    		
  	    }
        	else
- 	    {
- 		
+ 	    {	
  		   return "\n\n\nuser added successfully\n\n\n\n\n";
- 	
 	    }
     }
    
@@ -136,11 +133,7 @@ char* add_employee()
     	printf("not connected");
         printf("%s\n", mysql_error(conn2));
     	
-	}
-
-	
-	
-	
+	}	
 }
 
 
@@ -261,3 +254,191 @@ int emp_management(int i,int emp_id)
 	}
 	
 }	
+
+
+//Start of displaying employee detail
+void emp_display_details(int case_type){
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	int num;
+	
+	char stmt[1500];
+    char qry_id[]={"select * from emp_details where emp_id='%d'"};
+	char qry_dep[] ={"select * from emp_details where department='%s'"};
+	char qry_des[] ={"select * from emp_details where designation='%s'"};
+	char qry_all[] = {"select * from emp_details"};
+    int emp_id;
+    char emp_depart_display[50];
+    char emp_desig_display[50];
+    char data[20];
+
+
+    switch(case_type)
+    {
+    case 1:
+        {
+        printf("Enter the employee id: ");
+        scanf("%d",&emp_id);
+    	if(conn2)
+        {
+            int n=sprintf(stmt,qry_id,emp_id);
+            mysql_query(conn2,stmt);
+			read = mysql_store_result(conn2);
+            if (mysql_query(conn2,stmt))
+            {
+                printf(" Error: %s\n", mysql_error(conn2));
+                printf("Failed to execute query.");
+            }
+
+            else
+            {
+            	int i=0;
+				row = mysql_fetch_row(read);
+                
+                num = mysql_num_fields(read);
+               	printf("|");
+				for(i = 0; i < num; i++)
+                    {
+                        printf("%s|", row[i]);
+                    }
+                printf("\n");
+            }
+        }
+
+        else
+        {
+            printf("not connected");
+            printf("%s\n", mysql_error(conn2));
+        }
+        break;
+        }
+
+    case 2:
+        {
+        	
+        printf("\nEnter the department: ");
+        scanf("%s",emp_depart_display);
+
+    	if(conn2)
+        {
+            int n=sprintf(stmt,qry_dep,emp_depart_display);
+            mysql_query(conn2,stmt);
+			read = mysql_store_result(conn2);
+            if (mysql_query(conn2,stmt))
+            {
+                printf(" Error: %s\n", mysql_error(conn2));
+                printf("Failed to execute query.");
+            }
+
+            else
+            {
+            	int i=0;
+            	while((row = mysql_fetch_row(read)))
+            	{
+            		num = mysql_num_fields(read);
+            		for(i = 0; i < num; i++)
+                    {
+                        printf("%s ", row[i]);
+                    }
+                    printf("\n");
+				}
+            }
+        }
+
+        else
+        {
+            printf("not connected");
+            printf("%s\n", mysql_error(conn2));
+        }
+        break;
+        }
+
+    case 3:
+        {
+        	
+        printf("\nEnter the designation: ");
+        scanf("%s",emp_desig_display);
+
+    	if(conn2)
+        {
+            int n=sprintf(stmt,qry_des,emp_desig_display);
+            mysql_query(conn2,stmt);
+			read = mysql_store_result(conn2);
+            if (mysql_query(conn2,stmt))
+            {
+                printf(" Error: %s\n", mysql_error(conn2));
+                printf("Failed to execute query.");
+            }
+
+            else
+            {
+            	int i=0;
+            	while((row = mysql_fetch_row(read)))
+            	{
+            		num = mysql_num_fields(read);
+            		for(i = 0; i < num; i++)
+                    {
+                        printf(" |%s| ", row[i]);
+                    }
+                    printf("\n");
+				}
+            }
+        }
+
+        else
+        {
+            printf("not connected");
+            printf("%s\n", mysql_error(conn2));
+        }
+        break;
+        }
+
+    case 4:
+        {
+        	
+    	if(conn2)
+        {
+            int n=sprintf(stmt,qry_all);
+            mysql_query(conn2,stmt);
+			read = mysql_store_result(conn2);
+            if (mysql_query(conn2,stmt))
+            {
+                printf(" Error: %s\n", mysql_error(conn2));
+                printf("Failed to execute query.");
+            }
+
+            else
+            {
+            	int i=0;
+            	while((row = mysql_fetch_row(read)))
+            	{
+            		num = mysql_num_fields(read);
+            		for(i = 0; i < num; i++)
+                    {
+                        printf("%s ", row[i]);
+                    }
+                    printf("\n");
+				}
+            }
+        }
+
+        else
+        {
+            printf("not connected");
+            printf("%s\n", mysql_error(conn2));
+        }
+        break;
+        }
+
+    default:
+    {
+        printf("Inavalid Input");
+        break;
+    }
+
+    }
+return;
+}
+//end of displaying employee details.
+
