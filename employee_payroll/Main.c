@@ -50,6 +50,81 @@ char* login(int id, char pwd[25])
     }
 }
 
+char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_pass[45])
+{
+	
+	char stmt[1500];
+	char qry[]={"select password from login_details where emp_id='%d'"};
+	if(oo)
+    {
+    	
+    	sprintf(stmt,qry,emp_id);
+        
+        if (mysql_query(oo,stmt))
+      	{
+   		    printf(" Error: %s\n", mysql_error(oo));
+   		    return "Failed to execute query.";
+   		
+ 	    }
+       	else
+ 	    {
+ 		
+ 		   read=mysql_store_result(oo);
+           row = mysql_fetch_row(read);
+           if(row==NULL)
+           {
+        	     return "\nWrong username or password\n\n\n\n\n";
+        	
+		    }
+		    else
+		    {
+		        if(strcmp(old_pass,row[0])==0)
+		        {
+			        char qry[]={"update login_details set password='%s' where emp_id='%d'"};
+			        
+			        if(strcmp(new_pass,confirm_pass)==0)
+			        {
+			        	sprintf(stmt,qry,new_pass,emp_id);
+        
+                        if (mysql_query(oo,stmt))
+      	                {
+   		                    printf(" Error: %s\n", mysql_error(oo));
+   		                    return "Failed to execute query.\n";
+   		
+ 	                    }
+         	            else
+ 	                    {
+ 	                    	 
+ 	                    	 return "Password updated\n";
+			        	
+					    }
+					    
+				}
+					else
+					{
+						return "re-enter new password \n";
+					}
+		        }
+		        else
+		        {
+			         return "\nOld password wrong\n\n\n";
+			         
+			
+		        }
+		    }
+ 	
+	    }
+    }
+    else
+    {
+    	printf("not connected");
+        printf("%s\n", mysql_error(oo));
+        return "Error\n";
+    	
+	}
+	
+}
+
 int main(int argc, char *argv[]) {
 	int i,id;
 	char ch;
@@ -120,59 +195,7 @@ int main(int argc, char *argv[]) {
 		
 		else if(strcmp("employee",user_type)==0)
 		{
-			printf("                Press 1 Personal details management\n");
-		    printf("                Press 2 Attendance management\n");
-		    printf("                Press 3 Leave management\n");
-		    printf("                Press 4 Salary management\n");
-        	printf("                Press 5 Grievances redressal\n");
-        	
-        	scanf("%d",&i);
-		    
-		    switch(i)
-		    {
-			    case 1:
-			        {   
-			            printf("                Press 1 Display employee details \n");
-		                printf("                Press 2 Update employee details\n");
-		                printf("                Press 3 View employee feedback\n");
-		                printf("                Press 4 Change password\n");
-		                break;
-				    }
-				    
-				case 2:
-			        {   
-			            printf("                Press 1 Display attendance\n");
-		                printf("                Press 2 Request attendance change\n");
-		                break;
-				    }
-				    
-				case 3:
-			        {   
-			            printf("                Press 1 Request leave\n");
-		                printf("                Press 2 Display leaves\n");
-		                break;
-				    }
-				
-			    				
-			    case 4:
-			        {   
-			            printf("                Press 1 Display salary (Hourly)\n");
-		                printf("                Press 2 Display salary (Regular)\n");
-		                break;
-				    }
-
-			    case 5:
-			        {   
-			            printf("                Press 1 Raise Grievance\n");
-			            break;
-				    }
-								
-			    default:
-				    {
-					    printf("wrong input");
-					    break;
-				    }
-		    }
+			employee(id);
 			
 		}
 		
@@ -249,5 +272,3 @@ int main(int argc, char *argv[]) {
 	
 return 0;
 }
-
-
