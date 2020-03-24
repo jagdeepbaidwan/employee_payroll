@@ -1,6 +1,7 @@
 #include<windows.h>
 #include<mysql.h>
-MYSQL *conn2;
+#include<stdlib.h>
+MYSQL *conn2, *oo1;
 char query[1500];
 
 
@@ -200,6 +201,9 @@ return;
 //start of  adding a new employee
 char* add_employee()
 {
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
 	struct employee 
 	{ 
        int id; 
@@ -223,6 +227,7 @@ char* add_employee()
     struct employee emp;
     int x=0;
     char ch;
+    int num;
 	printf("Enter the first name of employee\n");
     scanf("%s",emp.f_name);
     printf("Enter the Last name of employee\n");
@@ -321,7 +326,7 @@ char* add_employee()
        	else
  	    {
  		
- 		   return "\n\n\nuser added successfully\n\n\n\n\n";
+ 		   printf( "\n\n\nuser details added successfully\n\n\n\n\n");
  	
 	    }
     }
@@ -330,6 +335,73 @@ char* add_employee()
     {
     	printf("not connected");
         printf("%s\n", mysql_error(conn2));
+    	
+	}
+	int emp_id;
+	char qry2[]={"select max(emp_id) as id from emp_details"};
+	if(conn2)
+    {
+    	
+    	int n=sprintf(stmt,qry2);
+        mysql_query(conn2,stmt);
+		read = mysql_store_result(conn2);
+        if (mysql_query(conn2,stmt))
+        {
+            printf(" Error: %s\n", mysql_error(conn2));
+            printf("Failed to execute query.");
+        }
+
+        else
+        {
+            int i=0;
+			row = mysql_fetch_row(read);
+            emp_id=atoi(row[0]);
+            printf("%d\n",emp_id);
+            mysql_free_result(read);
+             
+        }
+ 		   
+ 	
+	}
+
+   
+    else
+    {
+    	printf("not connected");
+        printf("%s\n", mysql_error(conn2));
+    	
+	}
+	
+	oo1=mysql_init(NULL);
+	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	char password []="1234";
+	char employee_type[30];
+	printf("Enter the employee type -Admin,Employee or Manager\n");
+	scanf("%s",employee_type);
+	char qry3[]={"insert into login_details (emp_id,password,emp_type,status) VALUES('%d','%s','%s','%s')"};
+	if(oo1)
+    {
+    	
+    	sprintf(stmt,qry3,emp_id,password,employee_type,emp.status);
+        printf("%s",stmt);
+        if (mysql_query(oo1,stmt))
+      	{
+   		    printf(" Error: %s\n", mysql_error(oo1));
+   		    return "Failed to execute query.";
+   		
+ 	    }
+       	else
+ 	    {
+ 		
+ 		   return "\n\n\nuser added successfully\n\n\n\n\n";
+ 	
+	    }
+    }
+   
+    else
+    {
+    	printf("not connected");
+        printf("%s\n", mysql_error(oo1));
     	
 	}
 
