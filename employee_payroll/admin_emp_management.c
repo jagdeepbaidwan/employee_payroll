@@ -450,8 +450,9 @@ int emp_management(int i,int emp_id)
 								}
 							case 3:
 								{
-									printf("Pleae specify the employee id: ");
+									printf("Please specify the employee id: ");
 		                			scanf("%d",&id);
+									deactivate(id);
 									break;
 								}
 							case 4:
@@ -909,4 +910,61 @@ char* modify_employee(int emp_id)
 				}	
 	    }	
 return NULL;
+}
+
+void deactivate (int emp_id)
+{
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	char status[20]="0" ;
+	
+ 	snprintf(query,1500,"select emp_id,status FROM login_details where emp_id = '%d'",emp_id) ;
+ 	/* send SQL query */
+ 	if (mysql_query(conn2, query))
+ 	{
+   	printf("Failed to execute quesry. Error: %s\n", mysql_error(conn2));
+   	
+ 	}
+ 	else
+ 	{
+	 res = mysql_store_result(conn2);
+	 
+	 row = mysql_fetch_row(res);
+	 if (row == NULL)
+	 {
+	 
+	   printf("Username Not Found");
+	 }
+	 else
+	 {
+	 	//strcpy(status,row[0]);
+	 	
+	 	if(strcmp("A",row[1]))
+	 	{
+		 	printf(" failed");
+		 }
+		 else
+		 {
+		 	 if(atoi(row[0])==emp_id)
+		 	 {
+		 	 	
+			 	char qry[]="update  login_details set status='I' where emp_id='%d'";
+				sprintf(query,qry,emp_id) ;
+				if (mysql_query(conn2, query))
+		 		{
+			   		printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
+			   	}
+			   	else
+			   	{
+				   printf("User Successfully deactivated");
+				}
+		 	}
+		 	else
+		 	{
+		 		printf("Sorry! You can not deactivate the logged in account");	
+			}
+		 }
+	 }
+	}
 }
