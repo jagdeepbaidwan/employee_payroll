@@ -94,7 +94,7 @@ char* add_employee()
     	int x=0;
     	char ch;
     	int num;
-	printf("Enter the first name of employee\n");
+	    printf("Enter the first name of employee\n");
     	scanf("%s",emp.f_name);
     	printf("Enter the Last name of employee\n");
     	scanf("%s",emp.l_name);

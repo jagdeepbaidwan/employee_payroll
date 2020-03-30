@@ -29,6 +29,18 @@ void employee(int emp_id)
 			        {   
 			            printf("                Press 1 Request leave\n");
 		                printf("                Press 2 Display leaves\n");
+		                scanf("%d",&i);
+		                switch(i)
+		                {
+		                	case 1:
+		                		break;
+		                	case 2:
+		                		emp_display_leaves(emp_id);
+		                		break;
+		                	default:
+		                		printf("Wrong input");
+		                		break;
+						}
 		                break;
 				    }
 				

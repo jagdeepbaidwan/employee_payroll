@@ -11,7 +11,7 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=
-Linker="../../../../Program Files (x86)/Dev-Cpp/MinGW64/lib/libmysql.a"_@@_"../../../../Program Files/MySQL/MySQL Server 5.7/lib/libmysql.dll"_@@_
+Linker="../../../../../../Program Files (x86)/Dev-Cpp/MinGW64/lib/libmysql.a"_@@_"../../../../../../Program Files/MySQL/MySQL Server 5.7/lib/libmysql.dll"_@@_
 IsCpp=0
 Icon=
 ExeOutput=
@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000000000000
-UnitCount=6
+UnitCount=8
 
 [VersionInfo]
 Major=1
@@ -102,6 +102,26 @@ BuildCmd=
 
 [Unit6]
 FileName=admin_emp_management.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit7]
+FileName=emp_leavemanagement.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit8]
+FileName=emp_leavemanagement.h
 CompileCpp=0
 Folder=
 Compile=1
