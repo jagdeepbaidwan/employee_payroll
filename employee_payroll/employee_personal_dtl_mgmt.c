@@ -4,7 +4,6 @@ MYSQL *conn3;
 char query[1500];
 
 
-
 void change_password(int id)
 {
 	char old_pass[40],new_pass[40],confirm_pass[40];
