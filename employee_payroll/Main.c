@@ -144,14 +144,19 @@ int main(int argc, char *argv[]) {
 		{
 		    case 1:
 			    {
-				    printf("\nEnter your employee id:");
+			     printf("\nEnter your employee id:");
         		    scanf("%d",&id);
-	        		
 	        		printf("\nEnter your Password:");
         			int p=0; 
     				do{ 
        				  pwd[p]=getch(); 
-                      if(pwd[p]!='\r'){ 
+       				  if(pwd[p]=='\b'&& p>0)
+       				  {
+       				  	p--;
+       				  	printf("\b \b");
+       				  	continue;
+       			      }
+					  if(pwd[p]!='\r'){ 
                         printf("*"); 
                       } 
                       p++; 
@@ -160,9 +165,6 @@ int main(int argc, char *argv[]) {
 					  strcpy(user_type,login(id,pwd));
 					  printf("%s\n",user_type);
 					  break;
-					strcpy(user_type,login(id,pwd));
-					printf("%s\n",user_type);
-					break;
 				}
 			case 2:
 				{
