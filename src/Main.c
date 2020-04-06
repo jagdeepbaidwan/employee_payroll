@@ -1,10 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<windows.h>
+#include<mysql.h>
 #include<string.h>
+MYSQL *oo,*conn;
+MYSQL_RES *read=NULL;
+MYSQL_RES *res=NULL;
+MYSQL_ROW row=NULL;
+
 
 char* login(int id, char pwd[25])
 {
-	return "admin";
+	char stmt[1500];
+	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
+	oo=mysql_init(NULL);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	if(oo)
+    {
+    	
+        int n=sprintf(stmt,qry,id,pwd);
+        mysql_query(oo,stmt);
+        read=mysql_store_result(oo);
+        row = mysql_fetch_row(read);
+        if(row==NULL)
+        {
+        	return "\nWrong username or password\n\n\n\n\n";
+        	
+		}
+		else
+		{
+		if(strcmp("I",row[3])==0)
+		{
+			
+			return "\nUser is deactivated\n\n\n\n\n\n";
+		}
+		else
+		{
+			printf("\nSuccessfully logged in \n\n\n\n\n\n\n\n\n");
+			return row[2];
+			
+		}
+		}
+	}
+    else
+    {
+        printf("not connected");
+        printf("%s\n", mysql_error(oo));
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -24,15 +66,12 @@ int main(int argc, char *argv[]) {
 	
 		switch(i){
 		    case 1:{
-				    printf("\nEnter your employee id:");
+				   printf("\nEnter your employee id:");
         		    scanf("%d",&id);
-	        		
-	        		printf("\nEnter your password:");
+	        		printf("\nEnter your Password:");
         			scanf("%s",pwd);
-					int p=0;
-					
-					strcpy(user_type,login(id,pwd));
-					printf("\n%s\n",user_type);
+        			strcpy(user_type,login(id,pwd));
+					printf("%s\n",user_type);
 					break;
 				    }
 			case 2:{
