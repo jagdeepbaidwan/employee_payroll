@@ -8,7 +8,7 @@ The software automatically takes attendance data from a csv file and calculate s
 
 # Authors
 
-- Arshdeep Singh
+- Arshpreet Singh
 - Jagdeep Singh
 - Puneet Singh
 - varinder Dhanda -Varinderdhanda@cmail.carleton.ca - Carleton University
