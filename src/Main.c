@@ -1,134 +1,184 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<windows.h>
+#include<mysql.h>
 #include<string.h>
+MYSQL *oo,*conn;
+MYSQL_RES *read=NULL;
+MYSQL_RES *res=NULL;
+MYSQL_ROW row=NULL;
+
 
 char* login(int id, char pwd[25])
 {
-	return "admin";
+	char stmt[1500];
+	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
+	oo=mysql_init(NULL);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	if(oo)
+	{
+        	int n=sprintf(stmt,qry,id,pwd);
+        	mysql_query(oo,stmt);
+        	read=mysql_store_result(oo);
+        	row = mysql_fetch_row(read);
+        	if(row==NULL)
+        	{
+	        	return "\nWrong username or password\n\n\n\n\n";
+		}
+		else
+		{
+			if(strcmp("I",row[3])==0)
+			{
+				return "\nUser is deactivated\n\n\n\n\n\n";
+			}
+			else
+			{
+				printf("\nSuccessfully logged in \n\n\n\n\n\n\n\n\n");
+				return row[2];
+			}
+		}
+	}
+	else
+	{
+        	printf("not connected");
+        	printf("%s\n", mysql_error(oo));
+    	}
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
 	int i,id;
 	char ch;
 	char pwd[25];
 	char user_type[25];
 	system("clear");
      	printf("\n**********\n");
-		printf("                                      Login                           \n");
-		printf("\n**********\n");
-		
+	printf("                                      Login                           \n");
+	printf("\n**********\n");	
 
-		printf("                Press 1 LOGIN\n");
-		printf("                Press 2 EXIT\n");
-		scanf("%d",&i);
-	
-		switch(i){
-		    case 1:{
-				    printf("\nEnter your employee id:");
-        		    scanf("%d",&id);
-	        		
-	        		printf("\nEnter your password:");
-        			scanf("%s",pwd);
-					int p=0;
+	printf("                Press 1 LOGIN\n");
+	printf("                Press 2 EXIT\n");
+	scanf("%d",&i);
+	switch(i)
+	{
+		case 1:{
+			printf("\nEnter your employee id:");
+        		scanf("%d",&id);
+	        	printf("\nEnter your Password:");
+        		scanf("%s",pwd);
+        		strcpy(user_type,login(id,pwd));
+			printf("%s\n",user_type);
+			break;
+			}
+			
+		case 2:{
+			printf("EXIT\n");
+			break;		
+			}
 					
-					strcpy(user_type,login(id,pwd));
-					printf("\n%s\n",user_type);
-					break;
-				    }
-			case 2:{
-					printf("EXIT\n");
-					break;		
-				    }
-					
-			default:
-				{
-					printf("Wrong Input");
-					break;
-				}
+		default:
+			{
+				printf("Wrong Input");
+				break;
+			}
 	    }
-		
-        if(strcmp("admin",user_type)==0){
-        	
-            printf("                Press 1 Employee management\n");
-		    printf("                Press 2 Leave management\n");
-		    printf("                Press 3 Attendance management\n");
-		    printf("                Press 4 Salary management\n");
+	
+	if(strcmp("admin",user_type)==0)
+	{
+        	printf("                Press 1 Employee management\n");
+		printf("                Press 2 Leave management\n");
+		printf("                Press 3 Attendance management\n");
+		printf("                Press 4 Salary management\n");
         	printf("                Press 5 Department management\n");
-		    printf("                Press 6 Increment management\n");
-		    printf("                Press 7 Grievances redressal\n");
-			scanf("%d",&i);
+		printf("                Press 6 Increment management\n");
+		printf("                Press 7 Grievances redressal\n");
+		scanf("%d",&i);
 		    
-		    switch(i){
-			    case 1:{   
-			            printf("                Press 1 Add Employee\n");
-		                printf("                Press 2 Modify Employee\n");
+		switch(i)
+		{
+			case 1:
+			{   
+			       	printf("                Press 1 Add Employee\n");
+		               	printf("                Press 2 Modify Employee\n");
 		                printf("                Press 3 Deactivate Employee\n");
 		                printf("                Press 4 Display Employee\n");
 		                break;
-				    }
+			}
 			
-			    case 2:{   
-			            printf("                Press 1 View pending requests\n");
+			case 2:
+			{   
+				printf("                Press 1 View pending requests\n");
 		                printf("                Press 2 Display leaves\n");
 		                break;
-				    }
+			}
 				
-			    case 3:{   
-			            printf("                Press 1 Display attendance\n");
+			case 3:
+			{   
+				printf("                Press 1 Display attendance\n");
 		                printf("                Press 2 Update attendance\n");
 		                break;
-				    }
+			}
 				
-			    case 4:{   
-			            printf("                Press 1 Display salary\n");
+			case 4:
+			{   
+				printf("                Press 1 Display salary\n");
 		                printf("                Press 2 Update salary\n");
 		                break;
-				    }
+			}
 				
-			    case 5:{   
-			            printf("                Press 1 Add Employee\n");
-			            break;
-				    }
-			    case 6:{    
-			            printf("                Press 1 Increment Salary\n");
-			            break;
-				    }
-			    case 7:{   
-			            printf("                Press 1 Grievance redressal\n");
-			            break;
-				    }
+			case 5:
+			{   
+				printf("                Press 1 Add Employee\n");
+			        break;
+			}
+		
+			case 6:
+			{    
+				printf("                Press 1 Increment Salary\n");
+			        break;
+			}
+			
+			case 7:
+			{   
+				printf("                Press 1 Grievance redressal\n");
+			        break;
+			}
 								
-			    default:{
-					    printf("Wrong Input");
-					    break;
-				    }
+			default:
+			{
+				printf("Wrong Input");
+				break;
+			}
 		}			    
 	}
 		
-		else if(strcmp("employee",user_type)==0){
-			
+		else if(strcmp("employee",user_type)==0)
+		{
 			int i;
 			printf("                Press 1 Personal details management\n");
-		    printf("                Press 2 Attendance management\n");
-		    printf("                Press 3 Leave management\n");
-		    printf("                Press 4 Salary management\n");
-        	printf("                Press 5 Grievances redressal\n");
-        	scanf("%d",&i);
+		    	printf("                Press 2 Attendance management\n");
+		    	printf("                Press 3 Leave management\n");
+		    	printf("                Press 4 Salary management\n");
+        		printf("                Press 5 Grievances redressal\n");
+        		scanf("%d",&i);
         	
-			switch(i){
-				case 1:{   
-			            printf("                Press 1 Display employee details \n");
-		                printf("                Press 2 Update employee details\n");
-		                printf("                Press 3 View employee feedback\n");
-		                printf("                Press 4 Change password\n");
-		                break;
-				    }
+			switch(i)
+			{
+				case 1:
+				{   
+			        	printf("                Press 1 Display employee details \n");
+		                	printf("                Press 2 Update employee details\n");
+		                	printf("                Press 3 View employee feedback\n");
+		                	printf("                Press 4 Change password\n");
+		                	break;
+				}
 				    
-				case 2:{   
-			            printf("                Press 1 Display attendance\n");
-		                printf("                Press 2 Request attendance change\n");
-		                break;
-				    }
+				case 2:
+				{   
+			        	printf("                Press 1 Display attendance\n");
+		                	printf("                Press 2 Request attendance change\n");
+		                	break;
+				}
 				    
 				case 3:{   
 			            printf("                Press 1 Request leave\n");
