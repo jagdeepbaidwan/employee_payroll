@@ -211,11 +211,65 @@ char* add_employee()
         printf("%s\n", mysql_error(oo1));
     	
 	}
-
-	
-	
-	
 }
+
+//Start of displaying employee detail
+void emp_display_details(char stmt[]){
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	MYSQL_FIELD *field;
+	int num;
+
+    if(conn2)
+    {
+        mysql_query(conn2,stmt);
+		read = mysql_store_result(conn2);
+        if (mysql_query(conn2,stmt))
+        {
+            printf(" Error: %s\n", mysql_error(conn2));
+            printf("Failed to execute query.");
+        }
+
+        else
+        {
+        	  while ((row = mysql_fetch_row(read))) 
+  			{
+  				int num_fields;
+				num_fields = mysql_num_fields(read);
+	  			int i;
+    			for(i = 0; i < num_fields; i++) 
+    			{
+    			printf(" |");
+       		   	if (i == 0) 
+          		{              
+            		while(field = mysql_fetch_field(read)) 
+  		          	{
+        	    	printf("%s |", field->name);
+            		}
+
+	            	printf("\n");           
+          		}
+        
+				printf("%s  ", row[i] ? row[i] : "NULL"); 
+      			}			 
+  			}		
+  
+		printf("\n");
+        }
+    }
+
+    /*mysql_free_result(read);*/
+    else
+    {
+        printf("not connected");
+        printf("%s\n", mysql_error(conn2));
+    }
+
+return;
+}
+//end of displaying employee details.
+
 
 
 int emp_management(int i,int emp_id)
@@ -234,7 +288,7 @@ int emp_management(int i,int emp_id)
 		    {
 			    case 1:
 			        {   
-			        printf("                Press 1 Add Employee\n");
+			       		printf("                Press 1 Add Employee\n");
 		                printf("                Press 2 Modify Employee\n");
 		                printf("                Press 3 Deactivate Employee\n");
 		                printf("                Press 4 Display Employee\n");
@@ -242,34 +296,78 @@ int emp_management(int i,int emp_id)
 		                scanf("%d",&k);
 		                switch(k)
 		                {
-		                			case 1:
-		                			{
-		                			
-		            
+		                	case 1:
+		                		{
 		                			printf("%s",add_employee());
 		                			break;
 								}
 							case 2:
 								{
 									printf("Pleae specify the employee id: ");
-		                			                scanf("%d",&id);
-		                			                break;
+		                		    scanf("%d",&id);
+		                		    break;
 								}
 							case 3:
 								{
 									printf("Pleae specify the employee id: ");
-		                			                scanf("%d",&id);
+		                		    scanf("%d",&id);
 									break;
 								}
 							case 4:
 								{
 									int j;
+									int emp_id;
+                                    char emp_depart_display[50];
+                                    char emp_desig_display[50];
 									printf("\n                Press 1 Display with Employee ID.");
                                     printf("\n                Press 2 Display with Departments");
                                     printf("\n                Press 3 Display with Designations");
                                     printf("\n                Press 4 Display all Employees.\n");
                                     scanf("%d",&j);
-                                    					
+                                    if (j == 1)
+                                    {
+                                    	char stmt[1500];
+                                        printf("Enter the Employee ID: ");
+                                        scanf("%d",&emp_id);
+                                        char qry[] = {"select * from emp_details where emp_id = %d"};
+                                        int n = sprintf(stmt,qry,emp_id);
+                                        emp_display_details(stmt);
+                                    }
+                                    
+                                    else if (j == 2)
+                                    {
+                                    	char stmt[1500];
+                                        printf("\nEnter the department: ");
+                                        scanf("%s",emp_depart_display);
+                                        char qry[] = {"select * from emp_details where department= '%s'"};
+                                        int n = sprintf(stmt,qry,emp_depart_display);
+                                        emp_display_details(stmt);
+                                    }
+                                    
+                                    else if (j == 3)
+                                    {
+                                    	char stmt[1500];
+                                        printf("\nEnter the designation: ");
+                                        scanf("%s",emp_desig_display);
+                                        char qry[] = {"select * from emp_details where designation = '%s'"};
+                                        int n = sprintf(stmt,qry,emp_desig_display);
+                                        emp_display_details(stmt);
+                                    }
+                                    
+                                    else if (j == 4)
+                                    {
+                                    	char stmt[1500];
+                                        printf("\nDisplaying all employees \n");
+                                        char qry[] = {"select * from emp_details"};
+                                        int n = sprintf(stmt,qry);
+                                        emp_display_details(stmt);
+                                    }
+                                    
+                                    else
+                                    {
+                                    printf("Entered Incorrect number");
+                                    break;
+                                    }					
 								}
 						}
 		                			break;
