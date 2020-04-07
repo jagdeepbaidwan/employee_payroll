@@ -15,10 +15,10 @@ char* add_employee()
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
-    struct employee 
-    { 
-        int id; 
-        char f_name[50]; 
+    struct employee
+    {
+        int id;
+        char f_name[50];
         char l_name[50];
         char dep[50];
         char des[50];
@@ -28,16 +28,16 @@ char* add_employee()
         char phonenumber[20];
 	char gender[10];
 	char email[100];
-	char status[100]; 
+	char status[100];
 	int day;
 	int month;
-	int year; 
+	int year;
     };
     struct employee emp;
     int x=0;
     char ch;
     int num;
-	getchar(); 
+	getchar();
     do{
     printf("Enter the first name of employee\n");
     gets(emp.f_name);
@@ -73,7 +73,7 @@ char* add_employee()
     x=notempty(emp.address1);
     }while(x==0);
     x=0;
-   
+
     do{
     printf("\nEnter city and country\n");
     gets(emp.address2);
@@ -86,7 +86,7 @@ char* add_employee()
     if (strcasecmp(emp.gender,"Male")==0 || strcasecmp(emp.gender,"Female")==0 || strcasecmp(emp.gender,"Female")==0)
     {
         x=1;
-        break;	
+        break;
      }
      } while(x==0);
      x=0;
@@ -103,7 +103,7 @@ char* add_employee()
           if (strcasecmp(emp.status,"A")==0 || strcasecmp(emp.status,"I")==0)
           {
              x=1;
-             break;	
+             break;
 	   }
         } while(x==0);
       x=0;
@@ -136,21 +136,21 @@ char* add_employee()
        	else
        {
  	   printf( "\n\n\nuser details added successfully\n\n\n\n\n");
- 	
+
        }
     }
-   
+
     else
     {
     	printf("not connected");
         printf("%s\n", mysql_error(conn2));
-    	
+
     }
 	int emp_id;
 	char qry2[]={"select max(emp_id) as id from emp_details"};
     if(conn2)
     {
-    	
+
     	int n=sprintf(stmt,qry2);
         mysql_query(conn2,stmt);
 		read = mysql_store_result(conn2);
@@ -167,20 +167,20 @@ char* add_employee()
             emp_id=atoi(row[0]);
             printf("%d\n",emp_id);
             mysql_free_result(read);
-             
+
         }
- 		   
- 	
+
+
 	}
   else
     {
     	printf("not connected");
         printf("%s\n", mysql_error(conn2));
-    	
+
     }
-	
+
 	oo1=mysql_init(NULL);
-	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	char password []="1234";
 	char employee_type[30];
 	printf("Enter the employee type -Admin,Employee or Manager\n");
@@ -188,30 +188,79 @@ char* add_employee()
 	char qry3[]={"insert into login_details (emp_id,password,emp_type,status) VALUES('%d','%s','%s','%s')"};
 	if(oo1)
     {
-    	
+
     	sprintf(stmt,qry3,emp_id,password,employee_type,emp.status);
         printf("%s",stmt);
         if (mysql_query(oo1,stmt))
       	{
    		    printf(" Error: %s\n", mysql_error(oo1));
    		    return "Failed to execute query.";
-   		
+
  	    }
        	else
  	    {
- 		
+
  		   return "\n\n\nuser added successfully\n\n\n\n\n";
- 	
+
 	    }
     }
-   
+
     else
     {
     	printf("not connected");
         printf("%s\n", mysql_error(oo1));
-    	
+
 	}
 }
+
+
+
+
+/* De-activating employee*/
+void deactivate (int emp_id, int login_id){
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	char status[20]="0" ;
+ 	snprintf(query,1500,"select emp_id,status FROM login_details where emp_id = '%d'",emp_id) ;
+ 	/* send SQL query */
+ 	if (mysql_query(conn2, query)){
+   	printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
+    }
+ 	else{
+	 res = mysql_store_result(conn2);
+	 row = mysql_fetch_row(res);
+	 if (row == NULL){
+	   printf("Username Not Found");
+	 }
+	 else{
+	 	//strcpy(status,row[0]);
+
+	 	if(strcmp("A",row[1])){
+		 	printf("Already deactivated");
+		 }
+		 else{
+		 	 if(atoi(row[0])!=login_id){
+			 	char qry[]="update  login_details set status='I' where emp_id='%d'";
+				sprintf(query,qry,emp_id) ;
+				if (mysql_query(conn2, query)){
+			   		printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
+			   	}
+			   	else{
+				   printf("User Successfully deactivated");
+				}
+		 	}
+		 	else{
+		 		printf("Sorry! You can not deactivate the logged in account");
+			}
+		 }
+      }
+	}
+}
+/*End de-activating employee function*/
+
+
+
 
 //Start of displaying employee detail
 void emp_display_details(char stmt[]){
@@ -233,28 +282,28 @@ void emp_display_details(char stmt[]){
 
         else
         {
-        	  while ((row = mysql_fetch_row(read))) 
+        	  while ((row = mysql_fetch_row(read)))
   			{
   				int num_fields;
 				num_fields = mysql_num_fields(read);
 	  			int i;
-    			for(i = 0; i < num_fields; i++) 
+    			for(i = 0; i < num_fields; i++)
     			{
     			printf(" |");
-       		   	if (i == 0) 
-          		{              
-            		while(field = mysql_fetch_field(read)) 
+       		   	if (i == 0)
+          		{
+            		while(field = mysql_fetch_field(read))
   		          	{
         	    	printf("%s |", field->name);
             		}
 
-	            	printf("\n");           
+	            	printf("\n");
           		}
-        
-				printf("%s  ", row[i] ? row[i] : "NULL"); 
-      			}			 
-  			}		
-  
+
+				printf("%s  ", row[i] ? row[i] : "NULL");
+      			}
+  			}
+
 		printf("\n");
         }
     }
@@ -276,7 +325,7 @@ int emp_management(int i,int emp_id)
 {
 	conn2=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	if(!conn2)
 	{
 		printf("Connection error");
@@ -287,7 +336,7 @@ int emp_management(int i,int emp_id)
 	switch(i)
 		    {
 			    case 1:
-			        {   
+			        {
 			       		printf("                Press 1 Add Employee\n");
 		                printf("                Press 2 Modify Employee\n");
 		                printf("                Press 3 Deactivate Employee\n");
@@ -311,6 +360,7 @@ int emp_management(int i,int emp_id)
 								{
 									printf("Pleae specify the employee id: ");
 		                		    scanf("%d",&id);
+		                		    deactivate(id,emp_id);
 									break;
 								}
 							case 4:
@@ -333,7 +383,7 @@ int emp_management(int i,int emp_id)
                                         int n = sprintf(stmt,qry,emp_id);
                                         emp_display_details(stmt);
                                     }
-                                    
+
                                     else if (j == 2)
                                     {
                                     	char stmt[1500];
@@ -343,7 +393,7 @@ int emp_management(int i,int emp_id)
                                         int n = sprintf(stmt,qry,emp_depart_display);
                                         emp_display_details(stmt);
                                     }
-                                    
+
                                     else if (j == 3)
                                     {
                                     	char stmt[1500];
@@ -353,7 +403,7 @@ int emp_management(int i,int emp_id)
                                         int n = sprintf(stmt,qry,emp_desig_display);
                                         emp_display_details(stmt);
                                     }
-                                    
+
                                     else if (j == 4)
                                     {
                                     	char stmt[1500];
@@ -362,30 +412,30 @@ int emp_management(int i,int emp_id)
                                         int n = sprintf(stmt,qry);
                                         emp_display_details(stmt);
                                     }
-                                    
+
                                     else
                                     {
                                     printf("Entered Incorrect number");
                                     break;
-                                    }					
+                                    }
 								}
 						}
 		                			break;
 				    }
-			
+
 			    case 2:
-			        {   
+			        {
 			            printf("                Press 1 View pending requests\n");
 		                printf("                Press 2 Display leaves\n");
 		                int ch;
 		                scanf("%d",&ch);
 		                if(ch==1)
 		                {
-		                	
+
 						}
 						else if(ch==2)
 						{
-							
+
 						}
 						else
 						{
@@ -393,37 +443,37 @@ int emp_management(int i,int emp_id)
 						}
 		                break;
 				    }
-				
+
 			    case 3:
-			        {   
+			        {
 			            printf("                Press 1 Display attendance\n");
 		                printf("                Press 2 Update attendance\n");
 		                break;
 				    }
-				
+
 			    case 4:
-			        {   
+			        {
 			            printf("                Press 1 Display salary\n");
 		                printf("                Press 2 Update salary\n");
 		                break;
 				    }
-				
+
 			    case 5:
-			        {   
+			        {
 			            printf("                Press 1 Add Employee\n");
 			            break;
 				    }
 			    case 6:
-			        {    
+			        {
 			            printf("                Press 1 Increment Salary\n");
 			            break;
 				    }
 			    case 7:
-			        {   
+			        {
 			            printf("                Press 1 Grievance redressal\n");
 			            break;
 				    }
-								
+
 			    default:
 				    {
 					    printf("wrong input");
@@ -432,5 +482,5 @@ int emp_management(int i,int emp_id)
 		    }
 		    return 1;
 	}
-	
-}	
+
+}
