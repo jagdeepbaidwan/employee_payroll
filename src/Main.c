@@ -3,10 +3,26 @@
 #include<windows.h>
 #include<mysql.h>
 #include<string.h>
+#include <termios.h>
+#include <unistd.h>
 MYSQL *oo,*conn;
-MYSQL_RES *read=NULL;
+MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
+
+
+int getch(void)
+{
+    struct termios oldt,newt;
+    int   ch;
+    tcgetattr( STDIN_FILENO, &oldt );
+    newt = oldt;
+    newt.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+    return ch;
+}
 
 
 char* login(int id, char pwd[25])
@@ -16,35 +32,38 @@ char* login(int id, char pwd[25])
 	oo=mysql_init(NULL);
 	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(oo)
-	{
-        	int n=sprintf(stmt,qry,id,pwd);
-        	mysql_query(oo,stmt);
-        	read=mysql_store_result(oo);
-        	row = mysql_fetch_row(read);
-        	if(row==NULL)
-        	{
-	        	return "\nWrong username or password\n\n\n\n\n";
-		}
-		else
-		{
-			if(strcmp("I",row[3])==0)
-			{
-				return "\nUser is deactivated\n\n\n\n\n\n";
-			}
-			else
-			{
-				printf("\nSuccessfully logged in \n\n\n\n\n\n\n\n\n");
-				return row[2];
-			}
-		}
+    {
+    	
+            int n=sprintf(stmt,qry,id,pwd);
+            mysql_query(oo,stmt);
+            read1=mysql_store_result(oo);
+            row = mysql_fetch_row(read1);
+            if(row==NULL)
+            { 
+                return "\nWrong username or password\n\n\n\n\n";
+        	
+	        }
+	    else
+	    {
+	        if(strcmp("I",row[3])==0)
+	        {
+			
+	         return "\nUser is deactivated\n\n\n\n\n\n";
+	        }
+	        else
+	        {
+	            printf("\nSuccessfully logged in \n\n\n\n\n\n\n\n\n");
+	            return row[2];
+			
+		    }
+	    }
 	}
-	else
-	{
-        	printf("not connected");
-        	printf("%s\n", mysql_error(oo));
-    	}
+    else
+    {
+        printf("not connected");
+        printf("%s\n", mysql_error(oo));
+    }
 }
-
 int main(int argc, char *argv[]) 
 {
 	int i,id;
@@ -52,9 +71,9 @@ int main(int argc, char *argv[])
 	char pwd[25];
 	char user_type[25];
 	system("clear");
-     	printf("\n**********\n");
-	printf("                                      Login                           \n");
-	printf("\n**********\n");	
+     	printf("\n*********************************************************************\n");
+	printf("                               Login                                   \n");
+	printf("\n*********************************************************************\n");	
 
 	printf("                Press 1 LOGIN\n");
 	printf("                Press 2 EXIT\n");
@@ -62,14 +81,36 @@ int main(int argc, char *argv[])
 	switch(i)
 	{
 		case 1:{
-			printf("\nEnter your employee id:");
-        		scanf("%d",&id);
-	        	printf("\nEnter your Password:");
-        		scanf("%s",pwd);
-        		strcpy(user_type,login(id,pwd));
-			printf("%s\n",user_type);
-			break;
-			}
+			   printf("\nEnter your employee id:");
+        	           scanf("%d",&id);
+        	           getchar();
+	                   printf("\nEnter your Password:");
+        	           int p=0; 
+    		           do
+			   { 
+       		           pwd[p]=getch();
+       			   if(pwd[p]=='\b'&& p>0)
+       		 	   {
+       			       p--;
+       			       printf("\b \b");
+       			       continue;
+       			    }
+			    if(pwd[p]!='\r')
+			    { 
+                                printf("*"); 
+                            }
+			    if(pwd[p]=='\n'||pwd[p]==13)
+			    {
+				p++;
+				break;
+			    } 
+                           p++; 
+                           }while(pwd[p-1]!='\r'||pwd[p-1]!=13); 
+                           pwd[p-1]='\0'; 
+        	           strcpy(user_type,login(id,pwd));
+			   printf("%s\n",user_type);
+			   break;
+		       }
 			
 		case 2:{
 			printf("EXIT\n");
