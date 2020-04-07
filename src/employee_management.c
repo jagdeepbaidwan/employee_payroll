@@ -473,6 +473,11 @@ int emp_management(int i,int emp_id)
 			            printf("                Press 1 Grievance redressal\n");
 			            break;
 				    }
+				case 8:
+			        {
+			            change_password(emp_id);
+		    			break;
+				    }
 
 			    default:
 				    {
