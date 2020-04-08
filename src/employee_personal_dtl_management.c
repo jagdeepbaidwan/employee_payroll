@@ -10,7 +10,7 @@ void emp_detail_mgmt(int emp_id)
 {
 	conn3=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	int i;
 	printf("                Press 1 Display employee details \n");
 	printf("                Press 2 Update employee details\n");

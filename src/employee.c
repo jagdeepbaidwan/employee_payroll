@@ -13,38 +13,39 @@ void employee(int emp_id)
     switch(i)
     {
 	case 1:
-	{   
+	{
 	    emp_detail_mgmt(emp_id);
             break;
 	}
 	case 2:
-	{   
+	{
+	    emp_attendance_mgmt(emp_id);
 	    break;
         }
-				    
+
 	case 3:
-	{   
+	{
 	    printf("                Press 1 Request leave\n");
             printf("                Press 2 Display leaves\n");
 	    break;
 	}
 	case 4:
-	{   
+	{
             printf("                Press 1 Display salary (Hourly)\n");
             printf("                Press 2 Display salary (Regular)\n");
             break;
 	}
         case 5:
-	{   
+	{
 	     printf("                Press 1 Raise Grievance\n");
 	     break;
 	}
-								
+
 	default:
         {
             printf("wrong input");
 	    break;
 	}
-				    
+
     }
 }

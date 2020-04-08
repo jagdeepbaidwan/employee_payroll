@@ -45,7 +45,7 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
             if(row==NULL)
             {
                  return "\nWrong username or password\n\n\n\n\n";
-        	
+
             }
             else
 	    {
@@ -74,10 +74,10 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
 	       else
 	       {
 	          return "\nOld password wrong\n\n\n";
-			   
+
                }
 	   }
- 	
+
        }
     }
     else
@@ -85,9 +85,9 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
     	printf("not connected");
         printf("%s\n", mysql_error(oo));
         return "Error\n";
-    	
+
     }
-	
+
 }
 
 void change_password(int id)
@@ -139,7 +139,7 @@ void change_password(int id)
 	 }
          p++;
         }while(new_pass[p-1]!='\r'||new_pass[p-1]!=13);
-        new_pass[p-1]='\0'; 
+        new_pass[p-1]='\0';
         printf("\nConfirm new password\n");
         p=0;
     do
@@ -162,7 +162,7 @@ void change_password(int id)
 	}
         p++;
     }while(confirm_pass[p-1]!='\r'||confirm_pass[p-1]!=13);
-    confirm_pass[p-1]='\0';			 
+    confirm_pass[p-1]='\0';
     printf("%s\n",change_pass(id,new_pass,confirm_pass,old_pass));
 }
 
@@ -171,7 +171,7 @@ char* login(int id, char pwd[25])
 	char stmt[1500];
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	if(oo)
     {
 
@@ -298,10 +298,10 @@ int main(int argc, char *argv[])
 		    switch(i){
 			    case 1:
 			    {
-			            printf("                Press 1 Display employee details \n");
-		                    printf("                Press 2 Update employee details\n");
-		                    printf("                Press 3 Change password\n");
-                                    scanf("%d",&i);
+                    printf("                Press 1 Display employee details \n");
+                    printf("                Press 2 Update employee details\n");
+                    printf("                Press 3 Change password\n");
+                    scanf("%d",&i);
 				    switch (i)
 				    {
 					case 1:
