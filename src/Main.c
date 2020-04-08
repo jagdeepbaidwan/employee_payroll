@@ -171,7 +171,7 @@ char* login(int id, char pwd[25])
 	char stmt[1500];
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(oo)
     {
 
@@ -267,11 +267,11 @@ int main(int argc, char *argv[])
 
 	if(strcmp("admin",user_type)==0)
 	{
-                printf("                Press 1 Employee management\n");
+        printf("                Press 1 Employee management\n");
 		printf("                Press 2 Leave management\n");
 		printf("                Press 3 Attendance management\n");
 		printf("                Press 4 Salary management\n");
-                printf("                Press 5 Department management\n");
+        printf("                Press 5 Department management\n");
 		printf("                Press 6 Increment management\n");
 		printf("                Press 7 Grievances redressal\n");
 		printf("                Press 8 To change password\n");
