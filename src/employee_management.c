@@ -514,6 +514,7 @@ char* modify_employee(int emp_id)
      
     struct employee emp;
 	int i=0;
+	int x=0;
 	char stmt[1500];
 	getchar();
     printf("                Press 1 First Name\n");
@@ -532,10 +533,14 @@ char* modify_employee(int emp_id)
 	scanf("%d",&i);
 	switch(i){
 	    case 1:{
-			
-			printf("Please provide the first name: \n");
-	    	scanf("%s",emp.f_name);
+	
 	    	getchar();
+			do{
+			printf("Please provide the first name: \n");
+			gets(emp.f_name);
+			x=notempty(emp.f_name);
+			}while(x==0);
+			x=0;
 			char qry[]={"update emp_details set name1='%s' where emp_id='%d'"};
 			
 			if(conn2){
@@ -556,10 +561,15 @@ char* modify_employee(int emp_id)
 			break;
 		}
 		
-		case 2:{
-			printf("Please provide the last name: \n");
-	    	scanf("%s",emp.l_name);
+		case 2:{    	
 	    	getchar();
+			do{
+			printf("Please provide the last name: \n");
+			gets(emp.l_name);
+			x=notempty(emp.l_name);
+			}while(x==0);
+			x=0;
+	    	
 			char qry[]={"update emp_details set name2='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.l_name,emp_id);
@@ -606,10 +616,11 @@ char* modify_employee(int emp_id)
 			
 		case 4:{   
 		    int x=0; 
-	    	do{
-				printf("Enter address line 1\n");
-	    		gets(emp.address1);
-				x=notempty(emp.address1);
+	    	getchar();
+			do{
+			printf("Enter address line 1\n");
+	    	gets(emp.address1);
+			x=notempty(emp.address1);
 			}while(x==0);
 						
 	    	char qry[]={"update emp_details set address_l1='%s' where emp_id='%d'"};
@@ -633,11 +644,12 @@ char* modify_employee(int emp_id)
 		}
 				
 		case 5:{
-			int x=0; 
+			int x=0;
+			getchar();
 	    	do{
-				printf("Enter address line 2\n");
-	    		gets(emp.address2);
-				x=notempty(emp.address2);
+			printf("Enter address line 2\n");
+	    	gets(emp.address2);
+			x=notempty(emp.address2);
 			}while(x==0);
 					
 			char qry[]={"update emp_details set address_l2='%s' where emp_id='%d'"};
@@ -691,10 +703,17 @@ char* modify_employee(int emp_id)
 			break;
 		}
 				
-		case 7:{
-			printf("Enter gender Male,Female or Others\n");
-	    	scanf("%s",emp.gender);
-	    	getchar();
+		case 7:{	    	
+	    	do{
+			printf("\nEnter gender Male , Female or Others\n");
+			scanf("%s",emp.gender);
+			if (strcasecmp(emp.gender,"Male")==0 || strcasecmp(emp.gender,"Female")==0 || strcasecmp(emp.gender,"Female")==0){
+			    x=1;
+				break;
+			}
+			} while(x==0);
+			x=0;
+	    
 			char qry[]={"update emp_details set gender='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.gender,emp_id);
