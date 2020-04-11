@@ -7,96 +7,281 @@ MYSQL *conn3;
 
 //Start of displaying a employee detail
 void emp_display(char stmt[]){
-	MYSQL_RES *read=NULL;
-	MYSQL_RES *res=NULL;
-	MYSQL_ROW row=NULL;
-	MYSQL_FIELD *field;
-	int num;
-
+    MYSQL_RES *read=NULL;
+    MYSQL_RES *res=NULL;
+    MYSQL_ROW row=NULL;
+    MYSQL_FIELD *field;
+    int num;
+    
     if(conn3)
     {
         mysql_query(conn3,stmt);
-		read = mysql_store_result(conn3);
+        read = mysql_store_result(conn3);
         if (mysql_query(conn3,stmt))
         {
             printf(" Error: %s\n", mysql_error(conn3));
             printf("Failed to execute query.");
         }
-
+        
         else
         {
-        	while (row = mysql_fetch_row(read))
-  			{
-  				int num_fields;
-				num_fields = mysql_num_fields(read);
-	  			int i;
-    			for(i = 0; i < num_fields; i++)
-    			{
-    			printf("|");
-       		   	if (i == 0)
-          		{
-            		while(field = mysql_fetch_field(read))
-  		          	{
-        	    	printf("%s|", field->name);
-            		}
-	            	printf("\n");
-          		}
-				printf(" %s", row[i] ? row[i] : "NULL");
-      			}
-  			}
-
-		printf("\n");
-		}
+            while (row = mysql_fetch_row(read))
+            {
+                int num_fields;
+                num_fields = mysql_num_fields(read);
+                int i;
+                for(i = 0; i < num_fields; i++)
+                {
+                    printf("|");
+                    if (i == 0)
+                    {
+                        while(field = mysql_fetch_field(read))
+                        {
+                            printf("%s|", field->name);
+                        }
+                        printf("\n");
+                    }
+                    printf(" %s", row[i] ? row[i] : "NULL");
+                }
+            }
+            
+            printf("\n");
+        }
     }
-
+    
     else
     {
         printf("not connected");
         printf("%s\n", mysql_error(conn3));
     }
-
-return;
+    
+    return;
 }
 //end of displaying a employee detail.
 
+//Start of update employee function.
+char* update_employee(int emp_id)
+{
+    conn3=mysql_init(NULL);
+    int id;
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    struct employee
+    {
+        char address1[45];
+        char address2[45];
+        char phonenumber[20];
+        char gender[10];
+        char email[100];
+    };
+    
+    struct employee emp;
+    int i=0;
+    char stmt[1500];
+    printf("                Press 1 Address Line 1\n");
+    printf("                Press 2 Address Line 2\n");
+    printf("                Press 3 Phone Number\n");
+    printf("                Press 4 Gender\n");
+    printf("                Press 5 Email\n");
+    printf("                Press 6 Exit\n");
+    scanf("%d",&i);
+    switch(i)
+    {
+        case 1:
+        {
+            int x=0;
+            do
+            {
+                printf("Enter address line 1\n");
+                gets(emp.address1);
+                x=notempty(emp.address1);
+            }while(x==0);
+            char qry[]={"update emp_details set address_l1='%s' where emp_id='%d'"};
+            if(conn3)
+            {
+                sprintf(stmt,qry,emp.address1,emp_id);
+                if(mysql_query(conn3,stmt))
+                {
+                    printf(" Error: %s\n", mysql_error(conn3));
+                    return "Failed to execute query.";
+                }
+                else
+                {
+                    return "\n\n\n\nUser modified successfully\n\n\n\n";
+                }
+            }
+            else
+            {
+                printf("not connected");
+                printf("%s\n", mysql_error(conn3));
+            }
+            break;
+        }
+        
+        case 2:
+        {
+            int x=0;
+            do
+            {
+                printf("Enter address line 2\n");
+                gets(emp.address2);
+                x=notempty(emp.address2);
+            }while(x==0);
+            
+            char qry[]={"update emp_details set address_l2='%s' where emp_id='%d'"};
+            if(conn3)
+            {
+                sprintf(stmt,qry,emp.address2,emp_id);
+                if(mysql_query(conn3,stmt))
+                {
+                    printf(" Error: %s\n", mysql_error(conn3));
+                    return "Failed to execute query.";
+                }
+                else
+                {
+                    return "\n\n\n\nUser modified successfully\n\n\n\n";
+                }
+            }
+            else
+            {
+                printf("not connected");
+                printf("%s\n", mysql_error(conn3));
+            }
+            break;
+        }
+        
+        case 3:
+        {
+            int x=0;
+            do
+            {
+                printf("Please provide the phone number: \n");
+                scanf("%s",emp.phonenumber);
+                x=valid_phone(emp.phonenumber);
+            }while(x==0);
+            
+            
+            char qry[]={"update emp_details set phonen='%s' where emp_id='%d'"};
+            
+            if(conn3)
+            {
+                sprintf(stmt,qry,emp.phonenumber,emp_id);
+                if(mysql_query(conn3,stmt))
+                {
+                    printf(" Error: %s\n", mysql_error(conn3));
+                    return "Failed to execute query.";
+                }
+                else
+                {
+                    return "\n\n\n\nUser modified successfully\n\n\n\n";
+                }
+            }
+            else
+            {
+                printf("not connected");
+                printf("%s\n", mysql_error(conn3));
+            }
+            break;
+        }
+        
+        case 4:
+        {
+            printf("Enter gender Male,Female or Others\n");
+            scanf("%s",emp.gender);
+            char qry[]={"update emp_details set gender='%s' where emp_id='%d'"};
+            if(conn3)
+            {
+                sprintf(stmt,qry,emp.gender,emp_id);
+                if(mysql_query(conn3,stmt))
+                {
+                    printf(" Error: %s\n", mysql_error(conn3));
+                    return "Failed to execute query.";
+                }
+                else
+                {
+                    return "\n\n\n\nUser modified successfully\n\n\n\n";
+                }
+            }
+            else
+            {
+                printf("not connected");
+                printf("%s\n", mysql_error(conn3));
+            }
+            break;
+        }
+        case 5:
+        {
+            int x=0;
+            do{
+                printf("Please provide the email: \n");
+                scanf("%s",emp.email);
+                x=valid_email(emp.email);
+            }while(x==0);
+            
+            char qry[]={"update emp_details set email='%s' where emp_id='%d'"};
+            if(conn3)
+            {
+                sprintf(stmt,qry,emp.email,emp_id);
+                if(mysql_query(conn3,stmt))
+                {
+                    printf(" Error: %s\n", mysql_error(conn3));
+                    return "Failed to execute query.";
+                }
+                else
+                {
+                    return "\n\n\n\nUser modified successfully\n\n\n\n";
+                }
+            }
+            else
+            {
+                printf("not connected");
+                printf("%s\n", mysql_error(conn3));
+            }
+            
+            break;
+        }
+    }
+}
+
+// end of update employee
 
 void emp_detail_mgmt(int emp_id)
 {
-	conn3=mysql_init(NULL);
-	int id;
-	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
-	int i;
-	printf("                Press 1 Display employee details \n");
-	printf("                Press 2 Update employee details\n");
-	printf("                Press 3 View employee feedback\n");
-	printf("                Press 4 Change password\n");
-	scanf("%d",&i);
-	switch (i)
-	{
-		case 1:
-			{
-				char stmt[1500];
-            	char qry[] = {"select * from emp_details where emp_id = %d"};
-            	int n = sprintf(stmt,qry,emp_id);
-            	emp_display(stmt);
-				break;
-			}
-		case 2:
-			break;
-		case 3:
-			{
-				char stmt[1500];
-	           	char qry[] = {"select * from emp_perfor where emp_id = %d"};
-    	        int n = sprintf(stmt,qry,emp_id);
-        	    emp_display(stmt);
-				break;
-			}
-		case 4:
-		{
-		    change_password(emp_id);
-		    break;
-		}
-		default:
-		    break;
-	}
+    conn3=mysql_init(NULL);
+    int id;
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    int i;
+    printf("                Press 1 Display employee details \n");
+    printf("                Press 2 Update employee details\n");
+    printf("                Press 3 View employee feedback\n");
+    printf("                Press 4 Change password\n");
+    scanf("%d",&i);
+    switch (i)
+    {
+        case 1:
+        {
+            char stmt[1500];
+            char qry[] = {"select * from emp_details where emp_id = %d"};
+            int n = sprintf(stmt,qry,emp_id);
+            emp_display(stmt);
+            break;
+        }
+        case 2:
+        printf("%s",update_employee(emp_id));
+        break;
+        case 3:
+        {
+            char stmt[1500];
+            char qry[] = {"select * from emp_perfor where emp_id = %d"};
+            int n = sprintf(stmt,qry,emp_id);
+            emp_display(stmt);
+            break;
+        }
+        case 4:
+        {
+            change_password(emp_id);
+            break;
+        }
+        default:
+        break;
+    }
 }
