@@ -336,7 +336,7 @@ int emp_management(int i,int emp_id)
 {
 	conn2=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(!conn2)
 	{
 		printf("Connection error");
@@ -475,12 +475,31 @@ int emp_management(int i,int emp_id)
 		                break;
 				    }
 
-			    case 5:
-			        {
-			            printf("                Press 1 Add Employee\n");
-			            break;
+				case 5:{
+					int i=0;
+					printf("                Press 1 View pending requests to add employee\n");
+					printf("                Press 2 Add employee to the department\n");
+					scanf("%d",&i);
+					switch(i){
+						case 1:{
+							char status[10];
+							strcpy(status,"Pending");
+							printf("%s",view_pending_requests(status));
+							break;
+						}
+						case 2:{
+							int req_id;
+							printf("Please provide the request id to be addressed: ");
+							scanf("%d",&req_id);
+							printf("%s",add_employee_department(req_id));
+							break;
+						}	
+						break;
 				    }
-			    case 6:
+						
+					break;
+				}
+				case 6:
 			        {
 			            printf("                Press 1 Increment Salary\n");
 			            break;
