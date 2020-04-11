@@ -7,11 +7,11 @@
 #include <unistd.h>
 #include "..\include\employee_management.h"
 #include "..\include\employee.h"
-MYSQL *oo,*conn;
+#include "..\include\manager_dept_management.h"
+MYSQL *oo,*conn,*conn4;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
-
 
 int getch(void)
 {
@@ -171,7 +171,7 @@ char* login(int id, char pwd[25])
 	char stmt[1500];
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(oo)
     {
 
@@ -343,11 +343,37 @@ int main(int argc, char *argv[])
 				    }
 
 				case 6:{
-						printf("                Press 1 Request Employee\n");
-			            printf("                Press 2 Rate employee\n");
-			            printf("                Press 3 Display employee rating \n");
-						break;
+					int j=0;
+				    printf("                Press 1 Request Employee\n");
+			        printf("                Press 2 Rate employee\n");
+			        printf("                Press 3 Display employee rating \n");
+			        scanf("%d",&j);
+			            
+			        switch(j){
+			            case 1:{
+							char stmt[1500];
+							char dept[10];
+							conn4=mysql_init(NULL);
+							mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+							char qry_dep[]={"select department from emp_details where emp_id='%d'"};
+							if(conn4){
+							    int n=sprintf(stmt,qry_dep,id);
+								mysql_query(conn4,stmt);
+								read1=mysql_store_result(conn4);
+								row=mysql_fetch_row(read1);
+								strcpy(dept,row[0]);
+								printf("%s",employee_request(id,dept));
+							}else{
+								printf("not connected");
+								printf("%s\n", mysql_error(oo));
+							}
+								
+							break;
+						}
+						break;		
 				    }
+				break;
+				}
 			    default:{
 					    printf("Wrong Input");
 					    break;
