@@ -5,12 +5,12 @@
 #include<stdlib.h>
 #include "..\include\Validation.h"
 #include "..\include\employee_management.h"
-MYSQL *conn2, *oo1;
+MYSQL *conn2, *oo1,*oo3,*conn8;
 char query[1500];
 
 
 //start of  adding a new employee
-char* add_employee()
+char* add_employee(char dept[],char desig[],int check, int request_id)
 {
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
@@ -50,19 +50,26 @@ char* add_employee()
     x=notempty(emp.l_name);
     }while(x==0);
     x=0;
-    do{
-    printf("Enter the department of employee\n");
-    gets(emp.dep);
-    x=notempty(emp.dep);
-    }while(x==0);
-    x=0;
-
-    do{
-    printf("Enter the designation of employee\n");
-    gets(emp.des);
-    x=notempty(emp.des);
-    }while(x==0);
-    x=0;
+    
+    if(check==1){
+    	strcpy(emp.dep,dept);
+    	strcpy(emp.des,desig);
+	}
+    else{
+	    do{
+	    printf("Enter the department of employee\n");
+	    gets(emp.dep);
+	    x=notempty(emp.dep);
+	    }while(x==0);
+	    x=0;
+	
+	    do{
+	    printf("Enter the designation of employee\n");
+	    gets(emp.des);
+	    x=notempty(emp.des);
+	    }while(x==0);
+	    x=0;
+	}
 
     printf("Enter the age of employee\n");
     scanf("%d",&emp.age);
@@ -83,7 +90,6 @@ char* add_employee()
     do{
     printf("\nEnter gender Male , Female or Others\n");
     scanf("%s",emp.gender);
-    printf("%d",strlen(emp.gender));
     if (strcasecmp(emp.gender,"Male")==0 || strcasecmp(emp.gender,"Female")==0 || strcasecmp(emp.gender,"Female")==0)
     {
         x=1;
@@ -125,13 +131,15 @@ char* add_employee()
            x=datevalid(emp.day,emp.month,emp.year);
      } while(x==0);
     char stmt[1500];
+    conn8=mysql_init(NULL);
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
     char qry[]={"insert into emp_details (name1,name2,department,designation,age,address_l1,address_l2,phonen,gender,email,day,month,year,emp_type) VALUES('%s','%s','%s','%s','%d','%s','%s','%s','%s','%s','%d','%d','%d','%s')"};
-    if(conn2)
+    if(conn8)
     {
         sprintf(stmt,qry,emp.f_name,emp.l_name,emp.dep,emp.des,emp.age,emp.address1,emp.address2,emp.phonenumber,emp.gender,emp.email,emp.day,emp.month,emp.year,emp.status);
-        if (mysql_query(conn2,stmt))
+        if (mysql_query(conn8,stmt))
       	{
-   		    printf(" Error: %s\n", mysql_error(conn2));
+   		    printf(" Error: %s\n", mysql_error(conn8));
    		    return "Failed to execute query.";
         }
        	else
@@ -144,20 +152,20 @@ char* add_employee()
     else
     {
     	printf("not connected");
-        printf("%s\n", mysql_error(conn2));
+        printf("%s\n", mysql_error(conn8));
 
     }
 	int emp_id;
 	char qry2[]={"select max(emp_id) as id from emp_details"};
-    if(conn2)
+    if(conn8)
     {
 
     	int n=sprintf(stmt,qry2);
-        mysql_query(conn2,stmt);
-		read = mysql_store_result(conn2);
-        if (mysql_query(conn2,stmt))
+        mysql_query(conn8,stmt);
+		read = mysql_store_result(conn8);
+        if (mysql_query(conn8,stmt))
         {
-            printf(" Error: %s\n", mysql_error(conn2));
+            printf(" Error: %s\n", mysql_error(conn8));
             printf("Failed to execute query.");
         }
 
@@ -176,12 +184,12 @@ char* add_employee()
   else
     {
     	printf("not connected");
-        printf("%s\n", mysql_error(conn2));
+        printf("%s\n", mysql_error(conn8));
 
     }
 
 	oo1=mysql_init(NULL);
-	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	char password []="1234";
 	char employee_type[30];
 	printf("Enter the employee type -Admin,Employee or Manager\n");
@@ -191,7 +199,6 @@ char* add_employee()
     {
 
     	sprintf(stmt,qry3,emp_id,password,employee_type,emp.status);
-        printf("%s",stmt);
         if (mysql_query(oo1,stmt))
       	{
    		    printf(" Error: %s\n", mysql_error(oo1));
@@ -200,9 +207,30 @@ char* add_employee()
  	    }
        	else
  	    {
-
- 		   return "\n\n\nuser added successfully\n\n\n\n\n";
-
+ 	    	
+			if(check=1)
+			{
+			
+			oo3=mysql_init(NULL);
+			mysql_real_connect(oo3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+			char request_status[]="Completed";
+			char qry_update_request_status[]={"update employee_request set request_status='%s' where request_id='%d'"};
+			if(oo3){
+				sprintf(stmt,qry_update_request_status,request_status,request_id);
+				if (mysql_query(oo3,stmt)){
+				    printf(" Error: %s\n", mysql_error(oo3));
+					return "Failed to execute query.";
+				}
+				else{
+					printf("Status updated successfully");
+				}
+		    }
+			else{
+			    printf("not connected");
+			    printf("%s\n", mysql_error(oo3));
+			}
+			}
+		return "\n\n\nUser added successfully\n\n\n\n\n";
 	    }
     }
 
@@ -210,12 +238,8 @@ char* add_employee()
     {
     	printf("not connected");
         printf("%s\n", mysql_error(oo1));
-
 	}
 }
-
-
-
 
 /* De-activating employee*/
 void deactivate (int emp_id, int login_id){
@@ -358,7 +382,7 @@ int emp_management(int i,int emp_id)
 		                {
 		                	case 1:
 		                		{
-		                			printf("%s",add_employee());
+		                			printf("%s",add_employee("empty","empty",0,0));
 		                			break;
 								}
 							case 2:
