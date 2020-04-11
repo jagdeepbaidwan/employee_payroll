@@ -105,7 +105,7 @@ void reuest_status(int emp_id)
 void emp_attendance_mgmt(int emp_id)
 {
 	conn3=mysql_init(NULL);
-	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(!conn3)
 	{
 		printf("Connection error");

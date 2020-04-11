@@ -180,7 +180,7 @@ char* add_employee()
     }
 
 	oo1=mysql_init(NULL);
-	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	char password []="1234";
 	char employee_type[30];
 	printf("Enter the employee type -Admin,Employee or Manager\n");
