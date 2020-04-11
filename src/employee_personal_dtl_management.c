@@ -3,7 +3,7 @@
 #include<mysql.h>
 #include "..\include\employee_personal_dtl_management.h"
 MYSQL *conn3;
-
+MYSQL *conn8;
 
 //Start of displaying a employee detail
 void emp_display(char stmt[]){
@@ -241,14 +241,87 @@ char* update_employee(int emp_id)
         }
     }
 }
-
 // end of update employee
+
+
+// Starting of the raise grievance function.
+char* raise_grievances(int e_id)
+{    
+	conn8 = mysql_init(NULL);
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	
+	if(!conn8)
+	{
+		printf("Connection error");
+		return 0;
+	}
+	
+	else
+	{
+		char stmt[1500];
+		char description[200];
+		char choice[10];
+		int x=0;
+		getchar();
+    
+		do
+		{
+    		printf("Redress the problem in 200 characters\n");
+    		gets(description);
+    		x=notempty(description);
+    	}while(x==0);
+    
+    	printf("Do you want to anonymous? y/n: ");
+    	scanf("%s",choice);
+
+    	if ( 0 == strcasecmp(choice,"y"))
+		{	 
+			char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL,NULL,'%s')"};
+			sprintf(stmt,qry,description);
+			if (mysql_query(conn8,stmt))
+    		{
+   				printf(" Error: %s\n", mysql_error(conn8));
+   				return "Failed to execute query.";
+   			}
+    
+			else
+ 			{
+ 	   			return "\n\n\n Grievance Raised. \n\n\n\n";
+ 			}
+    	}
+    
+		else if (0 == strcasecmp(choice,"n"))
+    	{
+			char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL, %d,'%s')"};
+			sprintf(stmt,qry,e_id,description);
+		
+			if (mysql_query(conn8,stmt))
+    		{
+   				printf(" Error: %s\n", mysql_error(conn8));
+   				return "Failed to execute query.";
+   			}	
+    
+			else
+	 		{
+	 			return "\n\n\n Grievance Raised. \n\n\n\n";
+	 		}
+    	}
+
+	    else
+	    {
+	    	printf("Wrong choice.");
+	    	return 1;
+	    } 
+	}
+}
+// Ending of the raise grievance function.
+
 
 void emp_detail_mgmt(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
     int i;
     printf("                Press 1 Display employee details \n");
     printf("                Press 2 Update employee details\n");
