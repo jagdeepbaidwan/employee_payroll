@@ -83,6 +83,7 @@ char* add_employee()
     do{
     printf("\nEnter gender Male , Female or Others\n");
     scanf("%s",emp.gender);
+    printf("%d",strlen(emp.gender));
     if (strcasecmp(emp.gender,"Male")==0 || strcasecmp(emp.gender,"Female")==0 || strcasecmp(emp.gender,"Female")==0)
     {
         x=1;
@@ -180,7 +181,7 @@ char* add_employee()
     }
 
 	oo1=mysql_init(NULL);
-	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	char password []="1234";
 	char employee_type[30];
 	printf("Enter the employee type -Admin,Employee or Manager\n");
@@ -241,8 +242,18 @@ void deactivate (int emp_id, int login_id){
 		 }
 		 else{
 		 	 if(atoi(row[0])!=login_id){
-			 	char qry[]="update  login_details set status='I' where emp_id='%d'";
-				sprintf(query,qry,emp_id) ;
+                int dd,mm,yy;
+				int r;
+				do
+				{
+					printf("\nEnter the date of leave of an employee:Format(dd/mm/yyyy)");
+					scanf("%d/%d/%d",&dd,&mm,&yy);
+					r=validate_date(dd,mm,yy);
+				}while(r!=1);
+				char date[15];
+		 	 	sprintf(date,"%d/%d/%d", dd,mm,yy);
+			 	char qry[]="update  login_details set status='I', DOL='%s' where emp_id='%d'";
+				sprintf(query,qry,date,emp_id);
 				if (mysql_query(conn2, query)){
 			   		printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
 			   	}
@@ -325,7 +336,7 @@ int emp_management(int i,int emp_id)
 {
 	conn2=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	if(!conn2)
 	{
 		printf("Connection error");
@@ -447,8 +458,13 @@ int emp_management(int i,int emp_id)
 
 			    case 3:
 			        {
-			            printf("                Press 1 Display attendance\n");
-		                printf("                Press 2 Update attendance\n");
+			            printf("                Press 1 create attendance month\n");
+						printf("                Press 2 to add daily attendance attendance\n");
+			            printf("                Press 3 Display attendance\n");
+		                printf("                Press 4 Update attendance\n");
+		                int ch;
+		                scanf("%d",&ch);
+		                attend_mgmt(ch);
 		                break;
 				    }
 
@@ -496,9 +512,9 @@ int emp_management(int i,int emp_id)
 
 char* modify_employee(int emp_id)
 {
-    struct employee{ 
-        int id; 
-        char f_name[50]; 
+    struct employee{
+        int id;
+        char f_name[50];
         char l_name[50];
         int age;
         char address1[45];
@@ -506,12 +522,12 @@ char* modify_employee(int emp_id)
         char phonenumber[20];
 	    char gender[10];
 	    char email[100];
-	    char status[100]; 
+	    char status[100];
 	    int day;
 	    int month;
         int year;
 	};
-     
+
     struct employee emp;
 	int i=0;
 	int x=0;
@@ -533,7 +549,7 @@ char* modify_employee(int emp_id)
 	scanf("%d",&i);
 	switch(i){
 	    case 1:{
-	
+
 	    	getchar();
 			do{
 			printf("Please provide the first name: \n");
@@ -542,11 +558,11 @@ char* modify_employee(int emp_id)
 			}while(x==0);
 			x=0;
 			char qry[]={"update emp_details set name1='%s' where emp_id='%d'"};
-			
+
 			if(conn2){
 				sprintf(stmt,qry,emp.f_name,emp_id);
-		    	
-				if(mysql_query(conn2,stmt)){	
+
+				if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
@@ -557,11 +573,11 @@ char* modify_employee(int emp_id)
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
-			}	
+			}
 			break;
 		}
-		
-		case 2:{    	
+
+		case 2:{
 	    	getchar();
 			do{
 			printf("Please provide the last name: \n");
@@ -569,28 +585,28 @@ char* modify_employee(int emp_id)
 			x=notempty(emp.l_name);
 			}while(x==0);
 			x=0;
-	    	
+
 			char qry[]={"update emp_details set name2='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.l_name,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
-						
+
 				else{
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
-				
+
 				break;
 		}
-			
+
 		case 3:{
 			printf("Please provide the age: \n");
 	    	scanf("%d",&emp.age);
@@ -598,7 +614,7 @@ char* modify_employee(int emp_id)
 			char qry[]={"update emp_details set age='%d' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.age,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
@@ -606,43 +622,43 @@ char* modify_employee(int emp_id)
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
 			break;
 		}
-			
-		case 4:{   
-		    int x=0; 
+
+		case 4:{
+		    int x=0;
 	    	getchar();
 			do{
 			printf("Enter address line 1\n");
 	    	gets(emp.address1);
 			x=notempty(emp.address1);
 			}while(x==0);
-						
+
 	    	char qry[]={"update emp_details set address_l1='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.address1,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
-						
+
 				else{
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-				
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
 			break;
 		}
-				
+
 		case 5:{
 			int x=0;
 			getchar();
@@ -651,11 +667,11 @@ char* modify_employee(int emp_id)
 	    	gets(emp.address2);
 			x=notempty(emp.address2);
 			}while(x==0);
-					
+
 			char qry[]={"update emp_details set address_l2='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.address2,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
@@ -663,14 +679,14 @@ char* modify_employee(int emp_id)
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
 			break;
 		}
-				
+
 		case 6:{
 	    	int x=0;
 			do{
@@ -679,31 +695,31 @@ char* modify_employee(int emp_id)
 	    		getchar();
 				x=valid_phone(emp.phonenumber);
 	    	}while(x==0);
-	    			    
-	    			    
+
+
 	    	char qry[]={"update emp_details set phonen='%s' where emp_id='%d'"};
-				
+
 			if(conn2){
 				sprintf(stmt,qry,emp.phonenumber,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
-						
+
 				else{
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
-				
+
 			break;
 		}
-				
-		case 7:{	    	
+
+		case 7:{
 	    	do{
 			printf("\nEnter gender Male , Female or Others\n");
 			scanf("%s",emp.gender);
@@ -713,28 +729,28 @@ char* modify_employee(int emp_id)
 			}
 			} while(x==0);
 			x=0;
-	    
+
 			char qry[]={"update emp_details set gender='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.gender,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
-				
+
 				else{
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
 			break;
 		}
-			
-		case 8:{   
+
+		case 8:{
 	    	int x=0;
 			do{
 			    printf("Please provide the email: \n");
@@ -742,11 +758,11 @@ char* modify_employee(int emp_id)
 				getchar();
 				x=valid_email(emp.email);
 			}while(x==0);
-	    			
+
 	    	char qry[]={"update emp_details set email='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.email,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
@@ -754,15 +770,15 @@ char* modify_employee(int emp_id)
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-				
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
-				
+
 			break;
 		}
-			
+
 		case 9:{
 			printf("Please provide the day of joining: \n");
 	    	scanf("%d",&emp.day);
@@ -770,24 +786,24 @@ char* modify_employee(int emp_id)
 			char qry[]={"update emp_details set day='%d' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.day,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 			        printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
-				
+
 				else{
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
-			
+
 			break;
 		}
-			
+
 		case 10:{
 			printf("Please provide the month of joining: \n");
 	    	scanf("%d",&emp.month);
@@ -795,24 +811,24 @@ char* modify_employee(int emp_id)
 			char qry[]={"update emp_details set month='%d' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.month,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
-						
+
 				else{
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
-			
+
 			break;
 		}
-			
+
 		case 11:{
 			printf("Please provide the year: \n");
 	    	scanf("%d",&emp.year);
@@ -820,7 +836,7 @@ char* modify_employee(int emp_id)
 			char qry[]={"update emp_details set year='%d' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.year,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
@@ -828,14 +844,14 @@ char* modify_employee(int emp_id)
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-					
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
 			break;
 		}
-					
+
 		case 12:{
 	    	int x=0;
 			do{
@@ -845,11 +861,11 @@ char* modify_employee(int emp_id)
 	    			x=1;
 				}
 	    	}while(x==0);
-	    			
+
 	    	char qry[]={"update emp_details set emp_type='%s' where emp_id='%d'"};
 			if(conn2){
 				sprintf(stmt,qry,emp.status,emp_id);
-		    	if(mysql_query(conn2,stmt)){	
+		    	if(mysql_query(conn2,stmt)){
 		    		printf(" Error: %s\n", mysql_error(conn2));
 					return "Failed to execute query.";
 				}
@@ -857,14 +873,14 @@ char* modify_employee(int emp_id)
 					return "\n\n\n\nUser modified successfully\n\n\n\n";
 				}
 			}
-			
+
 			else{
 				printf("not connected");
 				printf("%s\n", mysql_error(conn2));
 			}
-				
+
 			break;
-		}	
-	}	
+		}
+	}
 return NULL;
 }

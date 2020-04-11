@@ -25,26 +25,26 @@ void emp_display(char stmt[]){
 
         else
         {
-        	while (row = mysql_fetch_row(read)) 
+        	while (row = mysql_fetch_row(read))
   			{
   				int num_fields;
 				num_fields = mysql_num_fields(read);
 	  			int i;
-    			for(i = 0; i < num_fields; i++) 
+    			for(i = 0; i < num_fields; i++)
     			{
     			printf("|");
-       		   	if (i == 0) 
-          		{             
-            		while(field = mysql_fetch_field(read)) 
+       		   	if (i == 0)
+          		{
+            		while(field = mysql_fetch_field(read))
   		          	{
         	    	printf("%s|", field->name);
             		}
-	            	printf("\n");           
+	            	printf("\n");
           		}
-				printf(" %s", row[i] ? row[i] : "NULL"); 
-      			}			 
-  			}		
-  
+				printf(" %s", row[i] ? row[i] : "NULL");
+      			}
+  			}
+
 		printf("\n");
 		}
     }
@@ -64,7 +64,7 @@ void emp_detail_mgmt(int emp_id)
 {
 	conn3=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	int i;
 	printf("                Press 1 Display employee details \n");
 	printf("                Press 2 Update employee details\n");
