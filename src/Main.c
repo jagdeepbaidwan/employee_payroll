@@ -277,11 +277,9 @@ int main(int argc, char *argv[])
 		printf("                Press 8 To change password\n");
 		scanf("%d",&i);
 		int st=emp_management(i,id);
-
-	}
-
-	else if(strcmp("employee",user_type)==0)
-	{
+    }
+	
+	else if(strcmp("employee",user_type)==0){
 	    employee(id);
 	}
 

@@ -234,7 +234,6 @@ void attend_mgmt(int ch)
 	if(!conn4)
 	{
 		printf("Connection error");
-		return 0;
 	}
 	else
 	{
