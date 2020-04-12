@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include "..\include\employee_personal_dtl_management.h"
 #include "..\include\employee.h"
+
 void employee(int emp_id)
 {
     int i;
@@ -38,6 +39,7 @@ void employee(int emp_id)
         case 5:
 	{
 	     printf("                Press 1 Raise Grievance\n");
+	     printf("%s",raise_grievances(emp_id));
 	     break;
 	}
 

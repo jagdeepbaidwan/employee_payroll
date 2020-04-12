@@ -9,6 +9,7 @@
 #include "..\include\employee.h"
 #include "..\include\manager_dept_management.h"
 #include "..\include\employee_personal_dtl_management.h"
+
 MYSQL *oo,*conn,*conn4;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
@@ -341,6 +342,7 @@ int main(int argc, char *argv[])
             
             case 5:{
                 printf("                Press 1 Raise Grievance\n");
+                printf("%s",raise_grievances(id));
                 break;
             }
             

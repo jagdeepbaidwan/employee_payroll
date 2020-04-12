@@ -230,7 +230,7 @@ void attend_mgmt(int ch)
 {
 	conn4=mysql_init(NULL);
 	//int id;
-	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(!conn4)
 	{
 		printf("Connection error");
