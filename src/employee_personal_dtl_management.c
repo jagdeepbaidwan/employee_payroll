@@ -1,7 +1,9 @@
 #include<stdio.h>
 #include<windows.h>
 #include<mysql.h>
+#include "..\include\Validation.h"
 #include "..\include\employee_personal_dtl_management.h"
+#include "..\include\employee.h"
 MYSQL *conn3;
 MYSQL *conn8;
 
@@ -12,7 +14,7 @@ void emp_display(char stmt[]){
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
     int num;
-    
+
     if(conn3)
     {
         mysql_query(conn3,stmt);
@@ -22,7 +24,7 @@ void emp_display(char stmt[]){
             printf(" Error: %s\n", mysql_error(conn3));
             printf("Failed to execute query.");
         }
-        
+
         else
         {
             while (row = mysql_fetch_row(read))
@@ -44,17 +46,17 @@ void emp_display(char stmt[]){
                     printf(" %s", row[i] ? row[i] : "NULL");
                 }
             }
-            
+
             printf("\n");
         }
     }
-    
+
     else
     {
         printf("not connected");
         printf("%s\n", mysql_error(conn3));
     }
-    
+
     return;
 }
 //end of displaying a employee detail.
@@ -64,7 +66,7 @@ char* update_employee(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
     struct employee
     {
         char address1[45];
@@ -73,7 +75,7 @@ char* update_employee(int emp_id)
         char gender[10];
         char email[100];
     };
-    
+
     struct employee emp;
     int i=0;
     char stmt[1500];
@@ -116,7 +118,7 @@ char* update_employee(int emp_id)
             }
             break;
         }
-        
+
         case 2:
         {
             int x=0;
@@ -126,7 +128,7 @@ char* update_employee(int emp_id)
                 gets(emp.address2);
                 x=notempty(emp.address2);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set address_l2='%s' where emp_id='%d'"};
             if(conn3)
             {
@@ -148,7 +150,7 @@ char* update_employee(int emp_id)
             }
             break;
         }
-        
+
         case 3:
         {
             int x=0;
@@ -158,10 +160,10 @@ char* update_employee(int emp_id)
                 scanf("%s",emp.phonenumber);
                 x=valid_phone(emp.phonenumber);
             }while(x==0);
-            
-            
+
+
             char qry[]={"update emp_details set phonen='%s' where emp_id='%d'"};
-            
+
             if(conn3)
             {
                 sprintf(stmt,qry,emp.phonenumber,emp_id);
@@ -182,7 +184,7 @@ char* update_employee(int emp_id)
             }
             break;
         }
-        
+
         case 4:
         {
             printf("Enter gender Male,Female or Others\n");
@@ -216,7 +218,7 @@ char* update_employee(int emp_id)
                 scanf("%s",emp.email);
                 x=valid_email(emp.email);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set email='%s' where emp_id='%d'"};
             if(conn3)
             {
@@ -236,7 +238,7 @@ char* update_employee(int emp_id)
                 printf("not connected");
                 printf("%s\n", mysql_error(conn3));
             }
-            
+
             break;
         }
     }
@@ -246,16 +248,16 @@ char* update_employee(int emp_id)
 
 // Starting of the raise grievance function.
 char* raise_grievances(int e_id)
-{    
+{
 	conn8 = mysql_init(NULL);
-	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
-	
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+
 	if(!conn8)
 	{
 		printf("Connection error");
-		return 0;
+		return "0";
 	}
-	
+
 	else
 	{
 		char stmt[1500];
@@ -263,19 +265,19 @@ char* raise_grievances(int e_id)
 		char choice[10];
 		int x=0;
 		getchar();
-    
+
 		do
 		{
     		printf("Redress the problem in 200 characters\n");
     		gets(description);
     		x=notempty(description);
     	}while(x==0);
-    
+
     	printf("Do you want to anonymous? y/n: ");
     	scanf("%s",choice);
 
     	if ( 0 == strcasecmp(choice,"y"))
-		{	 
+		{
 			char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL,NULL,'%s')"};
 			sprintf(stmt,qry,description);
 			if (mysql_query(conn8,stmt))
@@ -283,24 +285,24 @@ char* raise_grievances(int e_id)
    				printf(" Error: %s\n", mysql_error(conn8));
    				return "Failed to execute query.";
    			}
-    
+
 			else
  			{
  	   			return "\n\n\n Grievance Raised. \n\n\n\n";
  			}
     	}
-    
+
 		else if (0 == strcasecmp(choice,"n"))
     	{
 			char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL, %d,'%s')"};
 			sprintf(stmt,qry,e_id,description);
-		
+
 			if (mysql_query(conn8,stmt))
     		{
    				printf(" Error: %s\n", mysql_error(conn8));
    				return "Failed to execute query.";
-   			}	
-    
+   			}
+
 			else
 	 		{
 	 			return "\n\n\n Grievance Raised. \n\n\n\n";
@@ -310,8 +312,8 @@ char* raise_grievances(int e_id)
 	    else
 	    {
 	    	printf("Wrong choice.");
-	    	return 1;
-	    } 
+	    	return "1";
+	    }
 	}
 }
 // Ending of the raise grievance function.
@@ -321,7 +323,7 @@ void emp_detail_mgmt(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
     int i;
     printf("                Press 1 Display employee details \n");
     printf("                Press 2 Update employee details\n");

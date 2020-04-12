@@ -34,7 +34,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 	attnd=rtrim(attnd);
 	if(strcmp(attnd,"L")==0 || strcmp(attnd,"PHL")==0 || strcmp(attnd,"ML")==0 || strcmp(attnd,"PL")==0 || strcmp(attnd,"LWP")==0 || strcmp(attnd,"WOFF")==0 || strcmp(attnd,"A")==0 || strcmp(attnd,"P")==0)
 	{
-		if(strcmp(attnd,"ML\n")==0 )
+		if(strcmp(attnd,"ML")==0 )
 		{
 			char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
 			sprintf(query,qry_id,yy,emp_id);
@@ -68,7 +68,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 			//printf("%s",attnd);
 			return 1;
 		}
-		if(strcmp(attnd,"PL\n")==0)
+		if(strcmp(attnd,"PL")==0)
 		{
 			char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
 			sprintf(query,qry_id,yy,emp_id);
