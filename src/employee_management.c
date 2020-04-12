@@ -473,6 +473,10 @@ int emp_management(int i,int emp_id)
                 }
                 else if(ch==2)
                 {
+                    int emp_id;
+		    printf("Enter the employee id \n");
+                    scanf("%d",&emp_id);
+                    int k=display_leaves(emp_id);
 
                 }
                 else
@@ -929,3 +933,59 @@ char* modify_employee(int emp_id)
     }
     return NULL;
 }
+
+//Start of Leaves display function
+int display_leaves(int emp_id)
+{
+    MYSQL_RES *read=NULL;
+    MYSQL_RES *res=NULL;
+    MYSQL_ROW row=NULL;
+    MYSQL_FIELD *field;
+    int num;
+    char stmt[1500];
+    char qry[]={"select * from leave_details where emp_id='%d'"};
+    if(conn2)
+    {
+        int n = sprintf(stmt,qry,emp_id);
+        mysql_query(conn2,stmt);
+        read = mysql_store_result(conn2);
+        if (mysql_query(conn2,stmt))
+        {
+            printf(" Error: %s\n", mysql_error(conn2));
+            printf("Failed to execute query.");
+	    return 0;
+        }
+        
+        else
+        {
+            while ((row = mysql_fetch_row(read)))
+            {
+                int num_fields;
+                num_fields = mysql_num_fields(read);
+                int i;
+                for(i = 0; i < num_fields; i++)
+                {
+                    printf(" |");
+                    if (i == 0)
+                    {
+                        while(field = mysql_fetch_field(read))
+                        {
+                            printf("%s |", field->name);
+                        }
+                        
+                        printf("\n");
+                    }
+                    
+                    printf("    %s    ", row[i] ? row[i] : "NULL");
+                }
+                
+            }
+            
+            printf("\n");
+        }
+    }
+    
+    return 1;
+}
+//End of leaves display
+
