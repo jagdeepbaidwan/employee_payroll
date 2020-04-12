@@ -32,7 +32,7 @@ MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
 
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
     char stmt[1500];
     char qry[]={"select password from login_details where emp_id='%d'"};
     if(oo)
