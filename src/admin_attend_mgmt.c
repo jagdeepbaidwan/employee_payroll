@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "..\include\Validation.h"
+#include "..\include\attendance_display.h"
 MYSQL *conn4;
 char query[1500];
 
@@ -287,8 +288,8 @@ void new_month()
 void attend_mgmt(int ch)
 {
 	conn4=mysql_init(NULL);
-	//int id;
-	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	int id;
+	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3306, NULL, 0);
 	if(!conn4)
 	{
 		printf("Connection error");
@@ -309,6 +310,9 @@ void attend_mgmt(int ch)
 								}
 		                	case 3:
 		                		{
+		                			printf("Please specify the employee_id for the attendance display: ");
+		                			scanf("%d",&id);
+		                			view_attendance(id);
 		                			break;
 								}
 							case 4:

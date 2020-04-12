@@ -134,7 +134,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
     } while(x==0);
     char stmt[1500];
     conn8=mysql_init(NULL);
-    mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
     char qry[]={"insert into emp_details (name1,name2,department,designation,age,address_l1,address_l2,phonen,gender,email,day,month,year,emp_type) VALUES('%s','%s','%s','%s','%d','%s','%s','%s','%s','%s','%d','%d','%d','%s')"};
     if(conn8)
     {
@@ -191,7 +191,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
     }
 
     oo1=mysql_init(NULL);
-    mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    mysql_real_connect(oo1, "localhost", "root", "1234","payroll", 3306, NULL, 0);
     char password []="1234";
     char employee_type[30];
     printf("Enter the employee type -Admin,Employee or Manager\n");
@@ -214,7 +214,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
             {
 
                 oo3=mysql_init(NULL);
-                mysql_real_connect(oo3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+                mysql_real_connect(oo3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
                 char request_status[]="Completed";
                 char qry_update_request_status[]={"update employee_request set request_status='%s' where request_id='%d'"};
                 if(oo3){
@@ -362,7 +362,7 @@ int emp_management(int i,int emp_id)
 {
     conn2=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
     if(!conn2)
     {
         printf("Connection error");
