@@ -17,6 +17,6 @@ Main: Main.c
 
 	gcc -g -O -c admin_dept_management.c -fPIC -DPIC -o ../build/admin_dept_management.o
 	
-	gcc -o ../bin/Payroll ../build/Main.o ../build/employee_management.o ../build/Validation.o ../build/employee.o ../build/employee_personal_dtl_management.o ../build/employee_attdnce_management.o ../build/admin_attend_mgmt.o ../build/manager_dept_management.o ../build/admin_dept_management.o ./libmysql.dll
+	gcc -o ../bin/Payroll ../build/Main.o ../build/employee_management.o ../build/Validation.o ../build/employee.o ../build/employee_personal_dtl_management.o ../build/employee_attdnce_management.o ../build/admin_attend_mgmt.o ../build/manager_dept_management.o ../build/admin_dept_management.o libmysql.dll
 
 	../bin/Payroll

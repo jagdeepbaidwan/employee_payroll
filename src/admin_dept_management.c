@@ -15,12 +15,12 @@ char* view_pending_requests(char status[]){
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res=NULL;
 	MYSQL_ROW row=NULL;
-	
+
 	char stmt[1500];
 	char qry_req[]={"select * from employee_request where request_status='%s'"};
 	conn5=mysql_init(NULL);
-	mysql_real_connect(conn5, "localhost", "root", "1234","payroll", 3306, NULL, 0);
-	
+	mysql_real_connect(conn5, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+
 	if(conn5){
         int n=sprintf(stmt,qry_req,status);
         mysql_query(conn5,stmt);
@@ -60,10 +60,10 @@ char* add_employee_department(int request_id){
     char dep[20];
     char des[20];
     int check=1;
-	char stmt[1500];		
+	char stmt[1500];
 	char qry_retrieve[]={"select department,designation from employee_request where request_id='%d'"};
-	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
-	
+	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+
 	if(conn2){
 		int n=sprintf(stmt,qry_retrieve,request_id);
 		mysql_query(conn2,stmt);
@@ -76,7 +76,7 @@ char* add_employee_department(int request_id){
 			row = mysql_fetch_row(read);
 			strcpy(dep,row[0]);
 			strcpy(des,row[1]);
-        }		
+        }
 	}
 	else{
     	printf("not connected");
