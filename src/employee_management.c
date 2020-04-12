@@ -941,12 +941,14 @@ int display_leaves(int emp_id)
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
-    int num;
+    int num,year;
     char stmt[1500];
-    char qry[]={"select * from leave_details where emp_id='%d'"};
+    printf("Enter the leave year you wish to see: \n");
+    scanf("%d",&year);
+    char qry[]={"select * from leave_details where emp_id='%d' and Leave_year='%d'"};
     if(conn2)
     {
-        int n = sprintf(stmt,qry,emp_id);
+        int n = sprintf(stmt,qry,emp_id,year);
         mysql_query(conn2,stmt);
         read = mysql_store_result(conn2);
         if (mysql_query(conn2,stmt))
