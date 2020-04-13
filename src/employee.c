@@ -5,6 +5,10 @@
 #include<string.h>
 #include <termios.h>
 #include <unistd.h>
+#define MAX_YEAR 2020
+#define MIN_YEAR 2010
+#define MAX_MONTH 12
+#define MIN_MONTH 1
 #include "..\include\employee_personal_dtl_management.h"
 //#include "..\include\employee.h"
 #include "..\include\admin_attendance.h"
@@ -23,6 +27,132 @@ int getch(void)
     return ch;
 }
 
+//start of display_salary
+int display_salary(int emp_id)
+{
+MYSQL *conn2;
+	
+	conn2=mysql_init(NULL);
+    int id;
+    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	MYSQL_RES *read=NULL;
+    MYSQL_RES *res=NULL;
+    MYSQL_ROW row=NULL;
+    MYSQL_FIELD *field;
+    int num;
+    char stmt[1500];
+    int option;
+    printf("                Press 1 if you want to see all pay slips\n");
+	printf("                Press 2 if you want to see pay slips for particular pay period\n");
+	scanf("%d",&option);
+	char qry[300];
+	if(option==1)
+	{
+	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc , week desc");	
+	}
+	else if(option==2)
+	{
+	    strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'and week ='%d'");
+	}
+    if(conn2)
+    {
+    	int n;
+    	if(option==1)
+    	{
+    	    n = sprintf(stmt,qry,emp_id);	
+		}
+		else if(option==2)
+		{
+			int year,month,week;
+			int x=0;
+			do{
+			printf("Enter the  year you wish to see: \n");
+            scanf("%d",&year);
+            if(year<=MAX_YEAR && year>=MIN_YEAR)
+            {
+            	x=1;
+			}
+			else{
+				printf("INVALID year, enter again\n");
+			}
+            }while(x==0);
+            x=0;
+            do{
+	        printf("Enter the month you wish to see: \n");
+            scanf("%d",&month);
+            if(month<=MAX_MONTH && month>=MIN_MONTH)
+            {
+            	x=1;
+	    }
+	    else{
+				printf("INVALID month, enter again\n");
+			}
+            }while(x==0);
+            x=0;
+            do{
+            printf("Enter the pay week you wish to see :\n Select 1 for first half of month \n Select 2 for second half of month\n");
+            scanf("%d",&week);
+            if(week==1 || week==2)
+            {
+            	x=1;
+			}
+			else{
+				printf("INVALID week, enter again\n");
+			}
+            }while(x==0);
+
+            n = sprintf(stmt,qry,emp_id,year,month,week);	
+		}
+        
+        mysql_query(conn2,stmt);
+        read = mysql_store_result(conn2);
+        if (mysql_query(conn2,stmt))
+        {
+            printf(" Error: %s\n", mysql_error(conn2));
+            printf("Failed to execute query.");
+            return 0;
+        }
+
+        else
+        {
+            row = mysql_fetch_row(read);
+	    if(row==NULL)
+            {
+              printf("No details found");
+            }
+            while (row)
+            {
+                int num_fields;
+                num_fields = mysql_num_fields(read);
+                int i;
+                for(i = 0; i < num_fields; i++)
+                {
+                    printf(" |");
+                    if (i == 0)
+                    {
+                        while(field = mysql_fetch_field(read))
+                        {
+                            printf("%s |", field->name);
+                        }
+
+                        printf("\n");
+                    }
+
+                    printf("    %s    ", row[i] ? row[i] : "NULL");
+                }
+                row = mysql_fetch_row(read);
+
+            }
+ 
+            
+		    
+		}
+    }
+
+    return 1;
+}
+
+//end of display_salary
 
 char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_pass[45])
 {
@@ -104,7 +234,7 @@ void change_password(int id)
     do
     {
        old_pass[p]=getch();
-       if(old_pass[p]=='\b'&& p>0)
+       if((old_pass[p]=='\b' ||old_pass[p]==127)&& p>0)
        {
            p--;
        	   printf("\b \b");
@@ -127,7 +257,7 @@ void change_password(int id)
      do
      {
          new_pass[p]=getch();
-       	 if(new_pass[p]=='\b'&& p>0)
+       	 if((new_pass[p]=='\b'||new_pass[p]==127)&& p>0)
        	 {
        	     p--;
        	     printf("\b \b");
@@ -150,7 +280,7 @@ void change_password(int id)
     do
     {
         confirm_pass[p]=getch();
-        if(confirm_pass[p]=='\b'&& p>0)
+        if((confirm_pass[p]=='\b'||confirm_pass[p]==127)&& p>0)
         {
        	    p--;
        	    printf("\b \b");
@@ -201,8 +331,7 @@ void employee(int emp_id)
 	}
 	case 4:
 	{
-            printf("                Press 1 Display salary (Hourly)\n");
-            printf("                Press 2 Display salary (Regular)\n");
+            int k=display_salary(emp_id);
             break;
 	}
         case 5:
