@@ -7,8 +7,159 @@
 #include "..\include\employee_management.h"
 #include "..\include\admin_attendance.h"
 #include "..\include\employee.h"
+#define MAX_YEAR 2020
+#define MIN_YEAR 2010
+#define MAX_MONTH 12
+#define MIN_MONTH 1
 MYSQL *conn2, *oo1,*oo3,*conn8;
 char query[1500];
+
+//start of update salary
+
+char* update_salary(int emp_id)
+{
+	MYSQL_RES *read=NULL;
+	MYSQL_ROW row=NULL;
+    conn2 = mysql_init(NULL);
+    char stmt[300];
+    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    if(!conn2)
+	{
+		return "Connection error";
+	}
+	else
+	
+	{
+	   int option;
+	   int salary;
+	   printf("To increment the salary of employee press 1. \nTo make changes to calculated salary press 2\n");
+	   scanf("%d",&option);
+	   if(option==1)
+	   { 	
+			char qry1[]={"select salary_type from salary where emp_id=%d"};
+			sprintf(stmt,qry1,emp_id);
+			if (mysql_query(conn2,stmt))
+			{
+        		printf("		Error: %s\n", mysql_error(conn2));
+        		return ("		Failed to execute query.");
+    		}
+    		else
+    		{
+    			read = mysql_store_result(conn2);
+				row = mysql_fetch_row(read);
+				if(row==NULL)
+				{
+				    return("		No data found for this id\n");
+					
+				}
+			    if(strcasecmp(row[0],"salaried")==0)
+			    {
+			    	printf("%d is a salaried employee, enter salary per cheque i.e. half month salary\n ",emp_id);
+				}
+				else if(strcasecmp(row[0],"hourly")==0)
+				{
+					printf("%d is a hourly employee, enter  per hour salary\n ",emp_id);
+				}
+				scanf("%d",&salary);
+    		    char qry2[]={"update salary set salary='%d' where emp_id=%d"};
+    		    sprintf(stmt,qry2,salary,emp_id);
+
+		      	if (mysql_query(conn2,stmt))
+				{
+					printf("		Error: %s\n", mysql_error(conn8));
+					return ("		Failed to execute query.");
+				}
+
+				else
+				{
+   					return ("\n\n Salary updated. \n");
+				}
+    		    
+			}
+
+	    
+   }
+   else if(option==2)
+   {
+   			int year,month,week;
+			int x=0;
+			do{
+			printf("Enter the  year you wish to update: \n");
+            scanf("%d",&year);
+            if(year<=MAX_YEAR && year>=MIN_YEAR)
+            {
+            	x=1;
+			}
+			else{
+				printf("INVALID year, enter again\n");
+			}
+            }while(x==0);
+            x=0;
+            do{
+	        printf("Enter the month you wish to update: \n");
+            scanf("%d",&month);
+            if(month<=MAX_MONTH && month>=MIN_MONTH)
+            {
+            	x=1;
+	    }
+	    else{
+				printf("INVALID month, enter again\n");
+			}
+            }while(x==0);
+            x=0;
+            do{
+            printf("Enter the pay week you wish to update :\n Select 1 for first half of month \n Select 2 for second half of month\n");
+            scanf("%d",&week);
+            if(week==1 || week==2)
+            {
+            	x=1;
+			}
+			else{
+				printf("INVALID week, enter again\n");
+			}
+            }while(x==0);
+            
+            printf("Enter salary you wish to update\n");
+            scanf("%d",&salary);
+			char qry[200];
+			char qry2[]={"select salary_type from salary_cal where emp_id='%d' and year='%d'and month='%d'and week ='%d'"};
+			sprintf(stmt,qry2,emp_id,year,month,week);
+			if (mysql_query(conn2,stmt))
+			{
+        		printf("		Error: %s\n", mysql_error(conn2));
+        		return ("		Failed to execute query.");
+    		}
+    		else
+    		{
+    			read = mysql_store_result(conn2);
+				row = mysql_fetch_row(read);
+				if(row==NULL)
+				{
+				    return("	No data found to update\n");
+					
+				}
+			
+		    strcpy(qry,"update salary_cal set calculated_salary='%d' where emp_id='%d' and year='%d'and month='%d'and week ='%d'");
+			int n = sprintf(stmt,qry,salary,emp_id,year,month,week);
+            if (mysql_query(conn2,stmt))
+				{
+					printf("		Error: %s\n", mysql_error(conn2));
+					return ("		Failed to execute query.");
+				}
+
+				else
+				{
+   					return ("\n\n Salary updated. \n");
+				}
+   }
+   	
+   }
+   
+   
+	
+}
+}
+//End of update salary
 
 
 void new_leave_detail()
@@ -1162,6 +1313,22 @@ int emp_management(int i,int emp_id)
             {
                 printf("                Press 1 Display salary\n");
                 printf("                Press 2 Update salary\n");
+                int i;
+                scanf("%d",&i);
+                switch(i)
+                {
+                	case 1:
+                		break;
+                	case 2:
+                		printf("Enter employee id of employee, you wish to change salary for: \n");
+                		int i;
+                		scanf("%d",&i);
+                		printf("%s",update_salary(i));
+                		break;
+                	default:
+                	    printf("Wrong option\n");
+                	    break;
+		}
                 break;
             }
 

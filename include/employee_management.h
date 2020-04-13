@@ -6,3 +6,4 @@ char* view_pending_requests(char []);
 char* add_employee_department(int );
 int display_leaves(int);
 void view_raised_grievances();
+char* update_salary(int);
