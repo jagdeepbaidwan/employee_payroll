@@ -19,7 +19,7 @@ char* view_pending_requests(char status[]){
 	char stmt[1500];
 	char qry_req[]={"select * from employee_request where request_status='%s'"};
 	conn5=mysql_init(NULL);
-	mysql_real_connect(conn5, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn5, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 
 	if(conn5){
         int n=sprintf(stmt,qry_req,status);
@@ -62,7 +62,7 @@ char* add_employee_department(int request_id){
     int check=1;
 	char stmt[1500];
 	char qry_retrieve[]={"select department,designation from employee_request where request_id='%d'"};
-	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 
 	if(conn2){
 		int n=sprintf(stmt,qry_retrieve,request_id);

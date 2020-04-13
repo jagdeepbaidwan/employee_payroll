@@ -66,7 +66,7 @@ char* update_employee(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
     struct employee
     {
         char address1[45];
@@ -250,7 +250,7 @@ char* update_employee(int emp_id)
 char* raise_grievances(int e_id)
 {
 	conn8 = mysql_init(NULL);
-	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 
 	if(!conn8)
 	{
@@ -323,7 +323,7 @@ void emp_detail_mgmt(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
     int i;
     printf("                Press 1 Display employee details \n");
     printf("                Press 2 Update employee details\n");

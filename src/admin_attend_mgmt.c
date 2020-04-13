@@ -213,6 +213,100 @@ void add_attendance()
 	}
 }
 
+//hourly_attendance function
+void hourly_attendance()
+{
+	MYSQL_RES *read=NULL, *res2;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL, *row1=NULL, *row2=NULL;
+	int num,u;
+	int emp[1000],lp=0,ff;
+	struct attendance
+	{
+		int emp_att_id;
+		char in_time[12];
+		char out_time[12];
+		char t_hours[5];
+	};
+	struct attendance attnd[150];
+	char buffer[1024] ;
+    char *record,*line;
+    int i=0,j=0,x=0;
+    int mat[100][100];
+    FILE *fstream = fopen("Attend.csv","r");
+    if(fstream == NULL)   {
+       printf("\n file opening failed ");
+       //return -1 ;
+    }
+    while((line=fgets(buffer,sizeof(buffer),fstream))!=NULL)
+    {
+		record = strtok(line,";");
+		while(record != NULL)
+			{
+
+				char *ptr=strtok(record,",");
+				attnd[x].emp_att_id=atoi(ptr);
+				ptr = strtok(NULL, ",");
+				strcpy(attnd[x].in_time,ptr);
+				ptr = strtok(NULL, ",");
+				strcpy(attnd[x].out_time,ptr);
+				ptr = strtok(NULL, ",");
+				strcpy(attnd[x].t_hours,ptr);
+				x++;
+				mat[i][j++] = atoi(record) ;
+			 	record = strtok(NULL,";");
+			}
+		++i ;
+	}
+	int tmp=0;
+	int dd,mm,yy;
+	int r;
+	do
+	{
+		printf("\nEnter the attendance date of file:");
+		scanf("%d/%d/%d",&dd,&mm,&yy);
+		r=validate_date(dd,mm,yy);
+	}while(r!=1);
+	while(tmp<x)
+	{
+		char qry_id1[]={"select *from hourly_attendance where emp_id='%d' and att_day='%d' and att_month='%d' and att_year='%d'"};
+		sprintf(query,qry_id1,attnd[tmp].emp_att_id,dd,mm,yy);
+
+		if (mysql_query(conn4,query))
+	    {
+	       	printf(" Error: %s\n", mysql_error(conn4));
+	       	printf("Failed to execute query.");
+	    }
+	    else
+	    {
+	    	res2=mysql_store_result(conn4);
+        	row = mysql_fetch_row(res2);
+        	int count_row = mysql_num_rows(res2);
+	        if(count_row>1)
+	        {
+	        	printf("Attendance is already in the database");
+			}
+			else
+			{
+				char qry_id[]={"insert into hourly_attendance (emp_id,att_day,att_month,att_year,in_time,out_time,days) values ('%d','%d','%d','%d','%s','%s','%s')"};
+				sprintf(query,qry_id,attnd[tmp].emp_att_id,dd,mm,yy,attnd[tmp].in_time,attnd[tmp].out_time,attnd[tmp].t_hours);
+				if (mysql_query(conn4,query))
+	    		{
+		        	printf(" Error: %s\n", mysql_error(conn4));
+		        	printf("Failed to execute query.");
+		    	}
+		    	else
+		    	{
+		    		printf("\nAdded attendance of employee:%d",attnd[tmp].emp_att_id);
+				}
+			}
+	    }
+		tmp=tmp+1;
+	}
+}
+//End Hourly attendance function
+
+
 
 void new_month()
 {
@@ -289,7 +383,7 @@ void attend_mgmt(int ch)
 {
 	conn4=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	if(!conn4)
 	{
 		printf("Connection error");
@@ -305,7 +399,22 @@ void attend_mgmt(int ch)
 								}
 		                	case 2:
 		                		{
-		                			add_attendance();
+		                			printf("		Enter 1 to enter hourly employee attendance\n");
+		                			printf("		Enter 2 to enter salaried employee attendance\n");
+		                			int choi;
+		                			scanf("%d",&choi);
+		                			if(choi==1)
+		                			{
+		                				hourly_attendance();
+									}
+									else if(choi==2)
+									{
+										add_attendance();
+									}
+									else
+									{
+										printf("Wrong choice");
+									}
 		                			break;
 								}
 		                	case 3:
