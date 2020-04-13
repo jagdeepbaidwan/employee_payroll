@@ -35,7 +35,7 @@ char* login(int id, char pwd[25])
 	char stmt[1500];
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	if(oo)
     {
 
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
                         char stmt[1500];
                         char dept[10];
                         conn4=mysql_init(NULL);
-                        mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+                        mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3305, NULL, 0);
                         char qry_dep[]={"select department from emp_details where emp_id='%d'"};
                         if(conn4){
                             int n=sprintf(stmt,qry_dep,id);

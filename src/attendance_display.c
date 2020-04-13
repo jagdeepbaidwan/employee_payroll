@@ -13,7 +13,7 @@ void view_attendance(int emp_id)
 	char stmt[2500];
 	char qry_id[2000];
 	conn10=mysql_init(NULL);
-	mysql_real_connect(conn10, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(conn10, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	int days;
     do
 	{
