@@ -312,40 +312,58 @@ void employee(int emp_id)
     scanf("%d",&i);
     switch(i)
     {
-	case 1:
-	{
-	    emp_detail_mgmt(emp_id);
+		case 1:
+		{
+	    	emp_detail_mgmt(emp_id);
             break;
-	}
-	case 2:
-	{
-	    emp_attendance_mgmt(emp_id);
-	    break;
+		}
+		
+		case 2:
+		{
+	    	emp_attendance_mgmt(emp_id);
+	    	break;
         }
 
-	case 3:
-	{
-	    printf("                Press 1 Request leave\n");
+		case 3:
+		{
+	    	printf("                Press 1 Request leave\n");
             printf("                Press 2 Display leaves\n");
-	    break;
-	}
-	case 4:
-	{
+	    	break;
+		}
+		
+		case 4:
+		{
             int k=display_salary(emp_id);
             break;
-	}
+		}
+		
         case 5:
-	{
-	     printf("                Press 1 Raise Grievance\n");
-	     printf("%s",raise_grievances(emp_id));
-	     break;
-	}
+		{
+	    	int choice;
+	    	printf("		Press 1 Raise Grievance\n");
+	    	printf("		Press 2 View Grievances\n");
+	    	scanf("%d",&choice);
+	    	if (1 == choice)
+	    	{
+	    		printf("%s",raise_grievances(emp_id));
+			}
+			
+			else if(2 == choice)
+			{
+				//view_raised_grievances();
+			}
+			
+			else
+			{
+				printf("\t\t Wrong Choice Entered.\n");
+			}
+	     	break;
+		}
 
-	default:
+		default:
         {
             printf("wrong input");
-	    break;
-	}
-
+	    	break;
+		}
     }
 }
