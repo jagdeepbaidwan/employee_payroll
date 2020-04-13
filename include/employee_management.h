@@ -5,3 +5,4 @@ char* modify_employee(int);
 char* view_pending_requests(char []);
 char* add_employee_department(int );
 int display_leaves(int);
+void view_raised_grievances();

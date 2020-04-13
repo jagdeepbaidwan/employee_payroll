@@ -235,13 +235,28 @@ int main(int argc, char *argv[])
 
                         break;
                     }
-                    break;
-                }
-                break;
-            }
-            default:{
-                printf("Wrong Input");
-                break;
+                    
+					case 2:
+		            {
+		               	printf("%s",employee_rating());
+		               	break;
+					}
+                    		
+                    case 3:
+                    {
+	    	        	char stmt[1500];
+    	    		    char qry[] = {"select * from emp_perfor where emp_id = %d"};
+			            int n = sprintf(stmt,qry,id);
+            			emp_display(stmt);
+            			break;	
+					}
+                	
+            		default:{
+                		printf("Wrong Input");
+                		break;
+            		}
+                	break;
+            	}
             }
         }
     }

@@ -99,8 +99,6 @@ void reuest_status(int emp_id)
 
 
 // Attendance request change...
-
-
 void emp_attendance_mgmt(int emp_id)
 {
 	conn3=mysql_init(NULL);
