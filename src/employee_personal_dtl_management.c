@@ -380,12 +380,20 @@ char* employee_rating()
 			
 			if(rate <= 0)
 			{
-				printf("		Rating cannot be 0");
+				printf("		Rating cannot be 0.\n");
 				temp = 0;
 			}
-			else
+			
+			else if (rate >1 && rate <=5)
 			{
+				rate = rate;
 				temp =1;
+			}
+			
+			else 
+			{
+				printf("		Rating does not exceed 5.\n");
+				temp = 0;
 			}
 		}while (temp!=1);
 	
@@ -415,7 +423,6 @@ char* employee_rating()
 	return 1;
 }
 // End of the rating of the employee.
-
 
 
 void emp_detail_mgmt(int emp_id)
