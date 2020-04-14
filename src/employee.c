@@ -12,8 +12,7 @@
 #include "..\include\employee_personal_dtl_management.h"
 //#include "..\include\employee.h"
 #include "..\include\admin_attendance.h"
-
-
+int port4=3305;
 int getch(void)
 {
     struct termios oldt,newt;
@@ -31,10 +30,10 @@ int getch(void)
 int display_salary(int emp_id)
 {
 MYSQL *conn2;
-	
+
 	conn2=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", port4, NULL, 0);
 	MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
@@ -48,7 +47,7 @@ MYSQL *conn2;
 	char qry[300];
 	if(option==1)
 	{
-	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc , week desc");	
+	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc , week desc");
 	}
 	else if(option==2)
 	{
@@ -59,7 +58,7 @@ MYSQL *conn2;
     	int n;
     	if(option==1)
     	{
-    	    n = sprintf(stmt,qry,emp_id);	
+    	    n = sprintf(stmt,qry,emp_id);
 		}
 		else if(option==2)
 		{
@@ -101,9 +100,9 @@ MYSQL *conn2;
 			}
             }while(x==0);
 
-            n = sprintf(stmt,qry,emp_id,year,month,week);	
+            n = sprintf(stmt,qry,emp_id,year,month,week);
 		}
-        
+
         mysql_query(conn2,stmt);
         read = mysql_store_result(conn2);
         if (mysql_query(conn2,stmt))
@@ -143,9 +142,9 @@ MYSQL *conn2;
                 row = mysql_fetch_row(read);
 
             }
- 
-            
-		    
+
+
+
 		}
     }
 
@@ -162,7 +161,7 @@ MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
 
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", port4, NULL, 0);
     char stmt[1500];
     char qry[]={"select password from login_details where emp_id='%d'"};
     if(oo)
@@ -317,7 +316,7 @@ void employee(int emp_id)
 	    	emp_detail_mgmt(emp_id);
             break;
 		}
-		
+
 		case 2:
 		{
 	    	emp_attendance_mgmt(emp_id);
@@ -330,13 +329,13 @@ void employee(int emp_id)
             printf("                Press 2 Display leaves\n");
 	    	break;
 		}
-		
+
 		case 4:
 		{
             int k=display_salary(emp_id);
             break;
 		}
-		
+
         case 5:
 		{
 	    	int choice;
@@ -347,12 +346,12 @@ void employee(int emp_id)
 	    	{
 	    		printf("%s",raise_grievances(emp_id));
 			}
-			
+
 			else if(2 == choice)
 			{
 				//view_raised_grievances();
 			}
-			
+
 			else
 			{
 				printf("\t\t Wrong Choice Entered.\n");

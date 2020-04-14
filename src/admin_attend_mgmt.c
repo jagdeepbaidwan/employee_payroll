@@ -9,7 +9,7 @@ MYSQL *conn4;
 char query[1500];
 
 // Check record availability in attendance
-
+int port1=3305;
 int attendance_month_availability(int mm, int yy)
 {
 	MYSQL_RES *read=NULL;
@@ -282,9 +282,9 @@ void hourly_attendance()
 	    	res2=mysql_store_result(conn4);
         	row = mysql_fetch_row(res2);
         	int count_row = mysql_num_rows(res2);
-	        if(count_row>1)
+	        if(count_row>=1)
 	        {
-	        	printf("Attendance is already in the database");
+	        	printf("Attendance is already in the database\n");
 			}
 			else
 			{
@@ -346,7 +346,7 @@ void new_month()
         row = mysql_fetch_row(res2);
         int count_row = mysql_num_rows(res2);
 
-        if(count_row>1)
+        if(count_row>=1)
         {
         	printf("This Month is already in the database");
 		}
@@ -383,7 +383,7 @@ void attend_mgmt(int ch)
 {
 	conn4=mysql_init(NULL);
 	int id;
-	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn4, "localhost", "root", "1234","payroll", port1, NULL, 0);
 	if(!conn4)
 	{
 		printf("Connection error");
