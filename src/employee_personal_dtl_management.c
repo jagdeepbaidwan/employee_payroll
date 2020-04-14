@@ -7,7 +7,7 @@
 
 MYSQL *conn3;
 MYSQL *conn8;
-int port7=3305;
+int port7=3306;
 //Start of displaying a employee detail
 void emp_display(char stmt[]){
     MYSQL_RES *read=NULL;

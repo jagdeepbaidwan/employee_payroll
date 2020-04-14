@@ -15,7 +15,7 @@ MYSQL *oo,*conn,*conn4;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
-int port8=3305;
+int port8=3306;
 /*
 int getch(void)
 {
@@ -192,8 +192,21 @@ int main(int argc, char *argv[])
             }
 
             case 3:{
+            	int i;
                 printf("                Press 1 Request leave\n");
                 printf("                Press 2 Display leaves\n");
+                
+				scanf("%d",&i);
+				switch(i){	
+				case 1:{
+	    			break;
+				}
+				case 2:{
+					display_leaves(id);
+					break;
+				}
+				break;
+				}
                 break;
             }
 

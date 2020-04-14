@@ -12,7 +12,8 @@
 #include "..\include\employee_personal_dtl_management.h"
 //#include "..\include\employee.h"
 #include "..\include\admin_attendance.h"
-int port4=3305;
+#include "..\include\employee_management.h"
+int port4=3306;
 int getch(void)
 {
     struct termios oldt,newt;
@@ -325,11 +326,24 @@ void employee(int emp_id)
 
 		case 3:
 		{
+			int i;
 	    	printf("                Press 1 Request leave\n");
             printf("                Press 2 Display leaves\n");
-	    	break;
+	    	scanf("%d",&i);
+	    	switch(i)
+	    	{
+			
+			case 1:{
+	    			break;
+				}
+			case 2:{
+					display_leaves(emp_id);
+					break;
+				}
+			break;
+			}
+		break;
 		}
-
 		case 4:
 		{
             int k=display_salary(emp_id);
