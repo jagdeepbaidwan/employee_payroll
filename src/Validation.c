@@ -9,7 +9,7 @@
 MYSQL *conn9;
 char query[1500];
 
-
+int port9=3305;
 char *rtrim(char *s)
 {
     char* back = s + strlen(s);
@@ -25,7 +25,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 	MYSQL_ROW row=NULL;
 	conn9=mysql_init(NULL);
 	//int id;
-	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
 	if(!conn9)
 	{
 		printf("Connection error");

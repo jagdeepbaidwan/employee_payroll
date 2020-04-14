@@ -4,9 +4,10 @@
 #include "..\include\Validation.h"
 #include "..\include\employee_personal_dtl_management.h"
 #include "..\include\employee.h"
+
 MYSQL *conn3;
 MYSQL *conn8;
-
+int port7=3305;
 //Start of displaying a employee detail
 void emp_display(char stmt[]){
     MYSQL_RES *read=NULL;
@@ -66,7 +67,7 @@ char* update_employee(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", port7, NULL, 0);
     struct employee
     {
         char address1[45];
@@ -250,7 +251,7 @@ char* update_employee(int emp_id)
 char* raise_grievances(int e_id)
 {
 	conn8 = mysql_init(NULL);
-	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port7, NULL, 0);
 
 	if(!conn8)
 	{
@@ -321,19 +322,19 @@ char* raise_grievances(int e_id)
 
 // Rate or Feedback the employee
 char* employee_rating()
-{   
+{
 	MYSQL_RES *read=NULL;
 	MYSQL_ROW row=NULL;
 
 	conn8 = mysql_init(NULL);
-	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
-	
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port7, NULL, 0);
+
 	if(!conn8)
 	{
 		printf("Connection error");
 		return 0;
 	}
-	
+
 	else
 	{
 		char stmt[1500];
@@ -343,7 +344,7 @@ char* employee_rating()
 		int x=0;
 		char *choice;
 		int temp;
-		
+
 		do
 		{
 			temp = 0;
@@ -356,7 +357,7 @@ char* employee_rating()
         		printf("		Error: %s\n", mysql_error(conn8));
         		return ("		Failed to execute query.");
     		}
-    		
+
     		else
     		{
     			read = mysql_store_result(conn8);
@@ -372,43 +373,43 @@ char* employee_rating()
 				}
     		}
 		}while (temp!=1);
-		
+
 		do
-		{   
+		{
 			printf("Enter the rating of the employee: ");
 			scanf("%d",&rate);
-			
+
 			if(rate <= 0)
 			{
 				printf("		Rating cannot be 0.\n");
 				temp = 0;
 			}
-			
+
 			else if (rate >1 && rate <=5)
 			{
 				rate = rate;
 				temp =1;
 			}
-			
-			else 
+
+			else
 			{
 				printf("		Rating does not exceed 5.\n");
 				temp = 0;
 			}
 		}while (temp!=1);
-	
+
 		getchar();
-		
+
 		do
 		{
     		printf("Feedback of the employee under 200 characters\n");
 			gets(description);
 			x=notempty(description);
     	}while(x==0);
-    	
+
     	char qry2[]={"update emp_perfor set rating = '%d',description ='%s' where emp_id= '%d'"};
 		sprintf(stmt,qry2,rate,description,e_id);
-		
+
 		if (mysql_query(conn8,stmt))
 		{
 			printf("		Error: %s\n", mysql_error(conn8));
@@ -429,7 +430,7 @@ void emp_detail_mgmt(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
-    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", port7, NULL, 0);
     int i;
     printf("                Press 1 Display employee details \n");
     printf("                Press 2 Update employee details\n");

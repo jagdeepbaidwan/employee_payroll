@@ -3,8 +3,8 @@
 #include<windows.h>
 #include<mysql.h>
 #include<stdlib.h>
-MYSQL *conn4;
 
+MYSQL *conn4;
 char* employee_request(int emp_id,char dept[]){
 	char stmt[1500];
 	char status[15];
@@ -13,7 +13,7 @@ char* employee_request(int emp_id,char dept[]){
 	strcpy(status,"Pending");
 	printf("At which position/designation is the employee required: \n");
 	scanf("%s",designation);
-	
+
 	if(conn4){
 	    int n=sprintf(stmt,qry_request,emp_id,dept,designation,status);
 		if (mysql_query(conn4,stmt)){

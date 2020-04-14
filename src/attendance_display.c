@@ -2,8 +2,9 @@
 #include<windows.h>
 #include<mysql.h>
 #include "..\include\Validation.h"
-MYSQL *conn10;
 
+MYSQL *conn10;
+int port3=3305;
 void view_attendance(int emp_id)
 {
 	int dd,mm,yy,r,num;
@@ -13,7 +14,7 @@ void view_attendance(int emp_id)
 	char stmt[2500];
 	char qry_id[2000];
 	conn10=mysql_init(NULL);
-	mysql_real_connect(conn10, "localhost", "root", "1234","payroll", 3305, NULL, 0);
+	mysql_real_connect(conn10, "localhost", "root", "1234","payroll", port3, NULL, 0);
 	int days;
     do
 	{
