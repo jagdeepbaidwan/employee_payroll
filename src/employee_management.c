@@ -11,6 +11,7 @@
 #define MIN_YEAR 2010
 #define MAX_MONTH 12
 #define MIN_MONTH 1
+#define sal_year 2020
 MYSQL *conn2, *oo1,*oo3,*conn8;
 char query[1500];
 
@@ -61,8 +62,8 @@ char* update_salary(int emp_id)
 					printf("%d is a hourly employee, enter  per hour salary\n ",emp_id);
 				}
 				scanf("%d",&salary);
-    		    char qry2[]={"update salary set salary='%d' where emp_id=%d"};
-    		    sprintf(stmt,qry2,salary,emp_id);
+    		    char qry2[]={"update salary set salary='%d' where emp_id='%d' and sal_year='%d'"};
+    		    sprintf(stmt,qry2,salary,emp_id,sal_year);
 
 		      	if (mysql_query(conn2,stmt))
 				{
