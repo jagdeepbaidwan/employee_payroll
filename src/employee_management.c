@@ -1517,7 +1517,7 @@ int emp_management(int i,int emp_id)
 
                     else if(2 == choice)
                     {
-                        //view_raised_grievances();
+                        view_raised_grievances();
                     }
 
                     else

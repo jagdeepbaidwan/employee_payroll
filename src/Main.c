@@ -244,8 +244,24 @@ int main(int argc, char *argv[])
             }
 
             case 5:{
-                printf("                Press 1 Raise Grievance\n");
-                printf("%s",raise_grievances(id));
+                int choice;
+	    		printf("		Press 1 Raise Grievance\n");
+	    		printf("		Press 2 View Grievances\n");
+	    		scanf("%d",&choice);
+	    		if (1 == choice)
+	    		{
+	    			printf("%s",raise_grievances(id));
+				}
+
+				else if(2 == choice)
+				{
+					view_raised_grievances();
+				}
+
+				else
+				{
+					printf("\t\t Wrong Choice Entered.\n");
+				}
                 break;
             }
 

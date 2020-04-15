@@ -8,7 +8,8 @@
 MYSQL *conn3;
 MYSQL *conn8;
 int port7=3306;
-//Start of displaying a employee detail
+
+// In this function, it will display the detail of the employee and doesnot return nothing but instead printing the messages on the console screen.
 void emp_display(char stmt[]){
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
@@ -58,9 +59,10 @@ void emp_display(char stmt[]){
         printf("%s\n", mysql_error(conn3));
     }
 
-    return;
 }
+
 //end of displaying a employee detail.
+
 
 //Start of update employee function.
 char* update_employee(int emp_id)
@@ -318,6 +320,128 @@ char* raise_grievances(int e_id)
 	}
 }
 // Ending of the raise grievance function.
+
+
+// For viewing the grievances: view_raise_grievances();
+void view_raised_grievances()
+{   
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	MYSQL_FIELD *field;
+	
+	conn8 = mysql_init(NULL);
+	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	
+	if(!conn8)
+	{
+		printf("Connection error");
+		printf("%s\n", mysql_error(conn8));
+	}
+	
+	else
+	{	char stmt[1500];
+		int choice;
+		printf("		Press 1 View Grievances by employee id\n");
+		printf("		Press 2 View all Grievances\n");
+		scanf("%d",&choice);
+		
+		if (1 == choice)
+		{
+			int gri_choice;
+			printf("Enter the employee id to see their grievances: \n");
+			scanf("%d",&gri_choice);
+			char qry[]={"select response_number, description from grievances where emp_id = %d"};
+			sprintf(stmt,qry,gri_choice);
+			if (mysql_query(conn8,stmt))
+    		{
+   				printf(" Error: %s\n", mysql_error(conn8));
+   				printf("Failed to execute query.");
+   			}
+    
+			else 
+ 			{
+ 				read = mysql_store_result(conn8);
+ 				int count_rows = mysql_num_rows(read);
+				if (count_rows>0)
+				{
+        			while (row = mysql_fetch_row(read)) 
+	  				{
+		  				int num_fields;
+						num_fields = mysql_num_fields(read);
+	  					int i;
+    					for(i = 0; i < num_fields; i++) 
+	    				{
+		    				printf("|");
+			       		   	if (i == 0) 
+			          		{   
+			            		while(field = mysql_fetch_field(read)) 
+		  			          	{
+		        			    	printf("%s|", field->name);
+        		    			}
+			            		printf("\n");           
+			          		}
+							printf(" %s", row[i] ? row[i] : "NULL"); 
+	    	  			}			 
+	  				}		
+					printf("\n");
+ 				}
+ 				else{
+ 					printf("\nNo Record with the query.");	
+				}
+			}
+		}
+		
+		else if (2 == choice)
+		{
+			char qry[]={"select response_number, description from grievances"};
+			sprintf(stmt,qry);
+			if (mysql_query(conn8,stmt))
+    		{
+   				printf(" Error: %s\n", mysql_error(conn8));
+   				printf("Failed to execute query.");
+   			}
+    
+			else 
+ 			{
+ 				read = mysql_store_result(conn8);
+ 				int count_rows = mysql_num_rows(read);
+				if (count_rows>0)
+				{
+        			while (row = mysql_fetch_row(read)) 
+	  				{
+		  				int num_fields;
+						num_fields = mysql_num_fields(read);
+	  					int i;
+    					for(i = 0; i < num_fields; i++) 
+	    				{
+		    				printf("|");
+			       		   	if (i == 0) 
+			          		{   
+			            		while(field = mysql_fetch_field(read)) 
+		  			          	{
+		        			    	printf("%s|", field->name);
+        		    			}
+			            		printf("\n");           
+			          		}
+							printf(" %s", row[i] ? row[i] : "NULL"); 
+	    	  			}			 
+	  				}		
+					printf("\n");
+ 				}
+ 				else{
+ 					printf("\nNo Record Found in the Grievance Table.");
+				}
+			}	
+		}
+		
+		else
+		{			
+			printf("Wrong choice.");
+	    } 
+	}
+}
+// Ending of the view raised grievances
 
 
 // Rate or Feedback the employee
