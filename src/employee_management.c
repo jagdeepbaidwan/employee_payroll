@@ -7,13 +7,13 @@
 #include "..\include\Validation.h"
 #include "..\include\employee_management.h"
 #include "..\include\admin_attendance.h"
-
+//#include "..\include\salary_management.h"
 #include "..\include\employee.h"
 #define MAX_YEAR 2020
 #define MIN_YEAR 2010
 #define MAX_MONTH 12
 #define MIN_MONTH 1
-MYSQL *conn2, *oo1,*oo3,*conn8,*connect6;
+MYSQL *conn2, *oo1,*oo3,*conn8,*connect6,*conn7;
 char query[1500];
 //start of update salary
 int port6=3306;
@@ -593,6 +593,8 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
         x=valid_phone(emp.phonenumber);
     } while(x==0);
     x=0;
+    
+    getchar();
     do{
         printf("Enter the date of joining\n");
         printf("   Enter day of joining\n");
@@ -603,6 +605,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
         scanf("%d",&emp.year);
         x=datevalid(emp.day,emp.month,emp.year);
     } while(x==0);
+    
     char stmt[1500];
     conn8=mysql_init(NULL);
     mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port6, NULL, 0);
@@ -617,17 +620,28 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
         }
         else
         {
-            printf( "\n\n\nuser details added successfully\n\n\n\n\n");
-
-        }
-    }
-
-    else
+        	conn7=mysql_init(NULL);
+   			mysql_real_connect(conn7, "localhost", "root", "1234","payroll", port6, NULL, 0);
+    		char qry2[]={"select last_insert_id()"};
+    		if(conn7)
+    		{
+        		printf( "\n\n\nuser details added successfully\n\n\n\n\n");
+        	}	
+        	
+        	else
+        	{
+        		printf(" Error: %s\n", mysql_error(conn7));
+            	return "Failed to execute query.";
+			}
+		}
+	}	
+	
+	else
     {
-        printf("not connected");
-        printf("%s\n", mysql_error(conn8));
-
-    }
+    	printf("not connected");
+	    printf("%s\n", mysql_error(conn8));
+	}
+    
     int emp_id;
     char qry2[]={"select max(emp_id) as id from emp_details"};
     if(conn8)
@@ -706,7 +720,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
             return "\n\n\nUser added successfully\n\n\n\n\n";
         }
     }
-
+    
     else
     {
         printf("not connected");
