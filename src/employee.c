@@ -15,6 +15,7 @@
 #include "..\include\employee_management.h"
 #include "..\include\validation.h"
 int port4=3306;
+
 int getch(void)
 {
     struct termios oldt,newt;
@@ -389,7 +390,7 @@ void employee(int emp_id)
 
 			else if(2 == choice)
 			{
-				//view_raised_grievances();
+				view_raised_grievances();
 			}
 
 			else
