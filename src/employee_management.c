@@ -1383,8 +1383,9 @@ int emp_management(int i,int emp_id)
             case 2:
             {
                 printf("                Press 1 Add new leave details\n");
-                printf("                Press 2 View pending requests\n");
+                printf("                Press 2 View pending requests for attendance discrepancy\n");
                 printf("                Press 3 Display leaves\n");
+                printf("                Press 4 View pending requests for leave requests\n");
                 int ch;
                 scanf("%d",&ch);
                 if(ch==1)
@@ -1401,6 +1402,12 @@ int emp_management(int i,int emp_id)
                 	printf("Please provide the employee id: ");
                 	scanf("%d",&id);
                     display_leaves(id);
+                }
+                else if(ch==4)
+                {
+                	char status[20];
+                	strcpy(status,"Pending");
+                	view_pending_leave_requests(status);
                 }
                 else
                 {
