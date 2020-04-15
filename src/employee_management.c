@@ -13,10 +13,10 @@
 #define MIN_YEAR 2010
 #define MAX_MONTH 12
 #define MIN_MONTH 1
-MYSQL *conn2, *oo1,*oo3,*conn8;
+MYSQL *conn2, *oo1,*oo3,*conn8,*connect6;
 char query[1500];
 //start of update salary
-int port6=3305;
+int port6=3306;
 
 //Increment Salary Function
 
@@ -1214,21 +1214,24 @@ int display_leaves(int emp_id)
     MYSQL_FIELD *field;
     int num,year;
     char stmt[1500];
+    connect6=mysql_init(NULL);
+	mysql_real_connect(connect6,"localhost", "root", "1234","payroll", 3306, NULL, 0);
+    
     printf("Enter the leave year you wish to see: \n");
     scanf("%d",&year);
     char qry[]={"select * from leave_details where emp_id='%d' and Leave_year='%d'"};
-    if(conn2)
+    if(connect6)
     {
         int n = sprintf(stmt,qry,emp_id,year);
-        mysql_query(conn2,stmt);
-        read = mysql_store_result(conn2);
-        if (mysql_query(conn2,stmt))
+        mysql_query(connect6,stmt);
+        read = mysql_store_result(connect6);
+        if (mysql_query(connect6,stmt))
         {
-            printf(" Error: %s\n", mysql_error(conn2));
+            printf(" Error: %s\n", mysql_error(connect6));
             printf("Failed to execute query.");
             return 0;
         }
-
+        
         else
         {
             row = mysql_fetch_row(read);
@@ -1238,7 +1241,7 @@ int display_leaves(int emp_id)
                 return 0;
             }
             else{
-
+                
                 while (row)
                 {
                     int num_fields;
@@ -1253,22 +1256,22 @@ int display_leaves(int emp_id)
                             {
                                 printf("%s |", field->name);
                             }
-
+                            
                             printf("\n");
                         }
-
+                        
                         printf("    %s    ", row[i] ? row[i] : "NULL");
                     }
                     row = mysql_fetch_row(read);
-
+                    
                 }
             }
-
-
+            
+            
             printf("\n");
         }
     }
-
+    
     return 1;
 }
 //End of leaves display
@@ -1380,8 +1383,10 @@ int emp_management(int i,int emp_id)
             case 2:
             {
                 printf("                Press 1 Add new leave details\n");
-                printf("                Press 2 View pending requests\n");
+                printf("                Press 2 View pending requests for attendance discrepancy\n");
                 printf("                Press 3 Display leaves\n");
+                printf("                Press 4 View pending requests for leave requests\n");
+                printf("                Press 5 Decison on leave requests\n");
                 int ch;
                 scanf("%d",&ch);
                 if(ch==1)
@@ -1394,8 +1399,24 @@ int emp_management(int i,int emp_id)
                 }
                 else if(ch==3)
                 {
-
+                	int id;
+                	printf("Please provide the employee id: ");
+                	scanf("%d",&id);
+                    display_leaves(id);
                 }
+                else if(ch==4)
+                {
+                	char status[20];
+                	strcpy(status,"Pending");
+                	view_pending_leave_requests(status);
+                }
+                else if(ch==5)
+                {
+                	int req_id;
+                	printf("Please provide the request id to be addressed: ");
+                	scanf("%d",&req_id);
+                	decision_leave_request(req_id);
+				}
                 else
                 {
                     printf("Wrong choice");

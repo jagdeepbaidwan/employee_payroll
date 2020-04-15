@@ -10,7 +10,7 @@ MYSQL *conn2;
 /*MYSQL *conn7;
 MYSQL *oo2;
 MYSQL *oo3;*/
-int port2=3305;
+int port2=3306;
 char* view_pending_requests(char status[]){
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res=NULL;

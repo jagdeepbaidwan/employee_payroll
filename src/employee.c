@@ -12,7 +12,9 @@
 #include "..\include\employee_personal_dtl_management.h"
 //#include "..\include\employee.h"
 #include "..\include\admin_attendance.h"
-int port4=3305;
+#include "..\include\employee_management.h"
+#include "..\include\validation.h"
+int port4=3306;
 int getch(void)
 {
     struct termios oldt,newt;
@@ -325,11 +327,49 @@ void employee(int emp_id)
 
 		case 3:
 		{
+			int i;
 	    	printf("                Press 1 Request leave\n");
             printf("                Press 2 Display leaves\n");
-	    	break;
+	    	scanf("%d",&i);
+	    	switch(i)
+	    	{
+			
+			case 1:{
+				int x=0;
+				int dd,mm,yy,r;
+				int no_of_days;
+				char leave_type[20];
+				do{
+				printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
+				scanf("%d/%d/%d",&dd,&mm,&yy);
+				r=validate_date(dd,mm,yy);
+				}while(r!=1);
+				
+				printf("Provide the number of days for the leave,(including start date): ");
+				scanf("%d",&no_of_days);
+				
+				do{
+				printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
+        		scanf("%s",leave_type);
+        		if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0)
+        		{
+            		x=1;
+            		break;
+        		}
+    			} while(x==0);
+    			x=0;
+			
+				printf("%s",leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
+				break;
+				}
+			case 2:{
+				display_leaves(emp_id);
+				break;
+				}
+			break;
+			}
+		break;
 		}
-
 		case 4:
 		{
             int k=display_salary(emp_id);
