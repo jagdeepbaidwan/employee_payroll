@@ -1386,6 +1386,7 @@ int emp_management(int i,int emp_id)
                 printf("                Press 2 View pending requests for attendance discrepancy\n");
                 printf("                Press 3 Display leaves\n");
                 printf("                Press 4 View pending requests for leave requests\n");
+                printf("                Press 5 Decison on leave requests\n");
                 int ch;
                 scanf("%d",&ch);
                 if(ch==1)
@@ -1409,6 +1410,13 @@ int emp_management(int i,int emp_id)
                 	strcpy(status,"Pending");
                 	view_pending_leave_requests(status);
                 }
+                else if(ch==5)
+                {
+                	int req_id;
+                	printf("Please provide the request id to be addressed: ");
+                	scanf("%d",&req_id);
+                	decision_leave_request(req_id);
+				}
                 else
                 {
                     printf("Wrong choice");

@@ -9,3 +9,4 @@ void view_raised_grievances();
 char* update_salary(int);
 char* leave_request(int,int,int,int,int,char []);
 char* view_pending_leave_requests(char []);
+char* decision_leave_request(int );
