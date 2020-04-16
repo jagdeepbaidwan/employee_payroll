@@ -16,7 +16,7 @@ MYSQL *oo,*conn,*conn4;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
-int port8=3306;
+int port8=3305;
 /*
 int getch(void)
 {
@@ -133,16 +133,31 @@ int main(int argc, char *argv[])
 
     if(strcmp("admin",user_type)==0)
     {
-        printf("                Press 1 Employee management\n");
-        printf("                Press 2 Leave management\n");
-        printf("                Press 3 Attendance management\n");
-        printf("                Press 4 Salary management\n");
-        printf("                Press 5 Department management\n");
-        printf("                Press 6 Increment management\n");
-        printf("                Press 7 Grievances redressal\n");
-        printf("                Press 8 To change password\n");
-        scanf("%d",&i);
-        int st=emp_management(i,id);
+        int st=1;
+        do
+        {
+            printf("                Press 1 Employee management\n");
+            printf("                Press 2 Leave management\n");
+            printf("                Press 3 Attendance management\n");
+            printf("                Press 4 Salary management\n");
+            printf("                Press 5 Department management\n");
+            printf("                Press 6 Increment management\n");
+            printf("                Press 7 Grievances redressal\n");
+            printf("                Press 8 To change password\n");
+            printf("                Press 9 To log out\n");
+            scanf("%d",&i);
+            st=emp_management(i,id);
+            if(st==0)
+            {
+                printf("Application connection Error");
+                break;
+            }
+            if(st==2)
+            {
+                printf("Successfully logged Out!");
+                break;
+            }
+        }while(st==1);
     }
 
     else if(strcmp("employee",user_type)==0){
@@ -196,10 +211,10 @@ int main(int argc, char *argv[])
             	int i;
                 printf("                Press 1 Request leave\n");
                 printf("                Press 2 Display leaves\n");
-                
+
 				scanf("%d",&i);
-				switch(i){	
-			
+				switch(i){
+
 				case 1:{
 				int x=0;
 				int dd,mm,yy,r;
@@ -210,10 +225,10 @@ int main(int argc, char *argv[])
 				scanf("%d/%d/%d",&dd,&mm,&yy);
 				r=validate_date(dd,mm,yy);
 				}while(r!=1);
-				
+
 				printf("Provide the number of days for the leave,(including start date): ");
 				scanf("%d",&no_of_days);
-				
+
 				do{
 				printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
         		scanf("%s",leave_type);
@@ -224,11 +239,11 @@ int main(int argc, char *argv[])
         		}
     			} while(x==0);
     			x=0;
-				
+
 				printf("%s",leave_request(id,dd,mm,yy,no_of_days,leave_type));
 				break;
 				}
-				
+
 				case 2:{
 					display_leaves(id);
 					break;

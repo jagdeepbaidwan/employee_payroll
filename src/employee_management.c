@@ -16,7 +16,7 @@
 MYSQL *conn2, *oo1,*oo3,*conn8,*connect6,*conn7;
 char query[1500];
 //start of update salary
-int port6=3306;
+int port6=3305;
 
 //Increment Salary Function
 
@@ -339,8 +339,8 @@ void new_leave_detail()
             scanf("%d",&paid_leave);
             printf("Enter the medical leaves\n");
             scanf("%d",&med_leave);
-            char leave_qry[]={"insert into leave_details (emp_id,medical_leave,paid_leave,leave_year,balance_ML,balance_PL) values('%d','%d','%d','%d','0','0')"};
-            sprintf(stmt,leave_qry,emp_id,med_leave,paid_leave,yr);
+            char leave_qry[]={"insert into leave_details (emp_id,medical_leave,paid_leave,leave_year,balance_ML,balance_PL) values('%d','%d','%d','%d','%d','%d')"};
+            sprintf(stmt,leave_qry,emp_id,med_leave,paid_leave,yr,med_leave,paid_leave);
             if (mysql_query(conn2,stmt))
             {
                 printf(" Error: %s\n", mysql_error(conn2));
@@ -348,7 +348,7 @@ void new_leave_detail()
             }
             else
             {
-                printf("Record entered successfully");
+                printf("\nRecord entered successfully\n");
             }
 
         }
@@ -593,7 +593,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
         x=valid_phone(emp.phonenumber);
     } while(x==0);
     x=0;
-    
+
     getchar();
     do{
         printf("Enter the date of joining\n");
@@ -605,7 +605,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
         scanf("%d",&emp.year);
         x=datevalid(emp.day,emp.month,emp.year);
     } while(x==0);
-    
+
     char stmt[1500];
     conn8=mysql_init(NULL);
     mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port6, NULL, 0);
@@ -626,22 +626,22 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
     		if(conn7)
     		{
         		printf( "\n\n\nuser details added successfully\n\n\n\n\n");
-        	}	
-        	
+        	}
+
         	else
         	{
         		printf(" Error: %s\n", mysql_error(conn7));
             	return "Failed to execute query.";
 			}
 		}
-	}	
-	
+	}
+
 	else
     {
     	printf("not connected");
 	    printf("%s\n", mysql_error(conn8));
 	}
-    
+
     int emp_id;
     char qry2[]={"select max(emp_id) as id from emp_details"};
     if(conn8)
@@ -717,10 +717,10 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
                     printf("%s\n", mysql_error(oo3));
                 }
             }
-            return "\n\n\nUser added successfully\n\n\n\n\n";
+            return "User Inserted";
         }
     }
-    
+
     else
     {
         printf("not connected");
@@ -1229,8 +1229,8 @@ int display_leaves(int emp_id)
     int num,year;
     char stmt[1500];
     connect6=mysql_init(NULL);
-	mysql_real_connect(connect6,"localhost", "root", "1234","payroll", 3306, NULL, 0);
-    
+	mysql_real_connect(connect6,"localhost", "root", "1234","payroll", port6, NULL, 0);
+
     printf("Enter the leave year you wish to see: \n");
     scanf("%d",&year);
     char qry[]={"select * from leave_details where emp_id='%d' and Leave_year='%d'"};
@@ -1245,7 +1245,7 @@ int display_leaves(int emp_id)
             printf("Failed to execute query.");
             return 0;
         }
-        
+
         else
         {
             row = mysql_fetch_row(read);
@@ -1255,7 +1255,7 @@ int display_leaves(int emp_id)
                 return 0;
             }
             else{
-                
+
                 while (row)
                 {
                     int num_fields;
@@ -1270,22 +1270,22 @@ int display_leaves(int emp_id)
                             {
                                 printf("%s |", field->name);
                             }
-                            
+
                             printf("\n");
                         }
-                        
+
                         printf("    %s    ", row[i] ? row[i] : "NULL");
                     }
                     row = mysql_fetch_row(read);
-                    
+
                 }
             }
-            
-            
+
+
             printf("\n");
         }
     }
-    
+
     return 1;
 }
 //End of leaves display
@@ -1307,259 +1307,348 @@ int emp_management(int i,int emp_id)
         {
             case 1:
             {
-                printf("                Press 1 Add Employee\n");
-                printf("                Press 2 Modify Employee\n");
-                printf("                Press 3 Deactivate Employee\n");
-                printf("                Press 4 Display Employee\n");
-                int k;
-                scanf("%d",&k);
-                switch(k)
+                int dcsn=0;
+                do
                 {
-                    case 1:
+                    printf("\n\n                Press 1 Add Employee\n");
+                    printf("                Press 2 Modify Employee\n");
+                    printf("                Press 3 Deactivate Employee\n");
+                    printf("                Press 4 Display Employee\n");
+                    printf("                Press 5 go back\n");
+                    int k;
+                    scanf("%d",&k);
+                    switch(k)
                     {
-                        printf("%s",add_employee("empty","empty",0,0));
-                        break;
-                    }
-                    case 2:
-                    {
-                        printf("Please specify the employee id: ");
-                        scanf("%d",&id);
-                        printf("%s",modify_employee(id));
-                        break;
-                    }
-                    case 3:
-                    {
-                        printf("Pleae specify the employee id: ");
-                        scanf("%d",&id);
-                        deactivate(id,emp_id);
-                        break;
-                    }
-                    case 4:
-                    {
-                        int j;
-                        int emp_id;
-                        char emp_depart_display[50];
-                        char emp_desig_display[50];
-                        printf("\n                Press 1 Display with Employee ID.");
-                        printf("\n                Press 2 Display with Departments");
-                        printf("\n                Press 3 Display with Designations");
-                        printf("\n                Press 4 Display all Employees.\n");
-                        scanf("%d",&j);
-                        if (j == 1)
+                        case 1:
                         {
-                            char stmt[1500];
-                            printf("Enter the Employee ID: ");
-                            scanf("%d",&emp_id);
-                            char qry[] = {"select * from emp_details where emp_id = %d"};
-                            int n = sprintf(stmt,qry,emp_id);
-                            emp_display_details(stmt);
-                        }
-
-                        else if (j == 2)
-                        {
-                            char stmt[1500];
-                            printf("\nEnter the department: ");
-                            scanf("%s",emp_depart_display);
-                            char qry[] = {"select * from emp_details where department= '%s'"};
-                            int n = sprintf(stmt,qry,emp_depart_display);
-                            emp_display_details(stmt);
-                        }
-
-                        else if (j == 3)
-                        {
-                            char stmt[1500];
-                            printf("\nEnter the designation: ");
-                            scanf("%s",emp_desig_display);
-                            char qry[] = {"select * from emp_details where designation = '%s'"};
-                            int n = sprintf(stmt,qry,emp_desig_display);
-                            emp_display_details(stmt);
-                        }
-
-                        else if (j == 4)
-                        {
-                            char stmt[1500];
-                            printf("\nDisplaying all employees \n");
-                            char qry[] = {"select * from emp_details"};
-                            int n = sprintf(stmt,qry);
-                            emp_display_details(stmt);
-                        }
-
-                        else
-                        {
-                            printf("Entered Incorrect number");
+                            printf("\n\n%s\n",add_employee("empty","empty",0,0));
                             break;
                         }
+                        case 2:
+                        {
+                            printf("Please specify the employee id: ");
+                            scanf("%d",&id);
+                            printf("%s",modify_employee(id));
+                            break;
+                        }
+                        case 3:
+                        {
+                            printf("Please specify the employee id: ");
+                            scanf("%d",&id);
+                            deactivate(id,emp_id);
+                            break;
+                        }
+                        case 4:
+                        {
+                            int j;
+                            int emp_id;
+                            char emp_depart_display[50];
+                            char emp_desig_display[50];
+                            printf("\n                Press 1 Display with Employee ID.");
+                            printf("\n                Press 2 Display with Departments");
+                            printf("\n                Press 3 Display with Designations");
+                            printf("\n                Press 4 Display all Employees.\n");
+                            scanf("%d",&j);
+                            if (j == 1)
+                            {
+                                char stmt[1500];
+                                printf("Enter the Employee ID: ");
+                                scanf("%d",&emp_id);
+                                char qry[] = {"select * from emp_details where emp_id = %d"};
+                                int n = sprintf(stmt,qry,emp_id);
+                                emp_display_details(stmt);
+                            }
+
+                            else if (j == 2)
+                            {
+                                char stmt[1500];
+                                printf("\nEnter the department: ");
+                                scanf("%s",emp_depart_display);
+                                char qry[] = {"select * from emp_details where department= '%s'"};
+                                int n = sprintf(stmt,qry,emp_depart_display);
+                                emp_display_details(stmt);
+                            }
+
+                            else if (j == 3)
+                            {
+                                char stmt[1500];
+                                printf("\nEnter the designation: ");
+                                scanf("%s",emp_desig_display);
+                                char qry[] = {"select * from emp_details where designation = '%s'"};
+                                int n = sprintf(stmt,qry,emp_desig_display);
+                                emp_display_details(stmt);
+                            }
+
+                            else if (j == 4)
+                            {
+                                char stmt[1500];
+                                printf("\nDisplaying all employees \n");
+                                char qry[] = {"select * from emp_details"};
+                                int n = sprintf(stmt,qry);
+                                emp_display_details(stmt);
+                            }
+
+                            else
+                            {
+                                printf("Entered Incorrect number");
+                                break;
+                            }
+                            break;
+                        }
+                        case 5:
+                            {
+                                dcsn=1;
+                                break;
+                            }
                     }
-                }
-                break;
+                }while(dcsn!=1);
+
+                return 1;
             }
 
             case 2:
             {
-                printf("                Press 1 Add new leave details\n");
-                printf("                Press 2 View pending requests for attendance discrepancy\n");
-                printf("                Press 3 Display leaves\n");
-                printf("                Press 4 View pending requests for leave requests\n");
-                printf("                Press 5 Decison on leave requests\n");
-                int ch;
-                scanf("%d",&ch);
-                if(ch==1)
+                int dcsn=0;
+                do
                 {
-                    new_leave_detail();
-                }
-                else if(ch==2)
-                {
-                    employee_reuests();
-                }
-                else if(ch==3)
-                {
-                	int id;
-                	printf("Please provide the employee id: ");
-                	scanf("%d",&id);
-                    display_leaves(id);
-                }
-                else if(ch==4)
-                {
-                	char status[20];
-                	strcpy(status,"Pending");
-                	view_pending_leave_requests(status);
-                }
-                else if(ch==5)
-                {
-                	int req_id;
-                	printf("Please provide the request id to be addressed: ");
-                	scanf("%d",&req_id);
-                	decision_leave_request(req_id);
-				}
-                else
-                {
-                    printf("Wrong choice");
-                }
-                break;
+                    printf("                Press 1 Add new leave details\n");
+                    printf("                Press 2 View pending requests for attendance discrepancy\n");
+                    printf("                Press 3 Display leaves\n");
+                    printf("                Press 4 View pending requests for leave requests\n");
+                    printf("                Press 5 Decision on leave requests\n");
+                    printf("                Press 6 Go Back\n");
+                    int ch;
+                    scanf("%d",&ch);
+                    if(ch==1)
+                    {
+                        new_leave_detail();
+                    }
+                    else if(ch==2)
+                    {
+                        employee_reuests();
+                    }
+                    else if(ch==3)
+                    {
+                        int id;
+                        printf("Please provide the employee id: ");
+                        scanf("%d",&id);
+                        display_leaves(id);
+                    }
+                    else if(ch==4)
+                    {
+                        char status[20];
+                        strcpy(status,"Pending");
+                        view_pending_leave_requests(status);
+                    }
+                    else if(ch==5)
+                    {
+                        int req_id;
+                        printf("Please provide the request id to be addressed: ");
+                        scanf("%d",&req_id);
+                        decision_leave_request(req_id);
+                    }
+                    else if(ch==6)
+                    {
+                        dcsn=1;
+                    }
+                    else
+                    {
+                        printf("\nWrong choice\n");
+                    }
+                }while(dcsn!=1);
+
+                return 1;
             }
 
             case 3:
             {
-                printf("                Press 1 create attendance month\n");
-                printf("                Press 2 to add daily attendance attendance\n");
-                printf("                Press 3 Display attendance\n");
-                printf("                Press 4 Update attendance\n");
-                int ch;
-                scanf("%d",&ch);
-                attend_mgmt(ch);
-                break;
+                int dcsn;
+                do
+                {
+                        printf("\n                Press 1 create attendance month\n");
+                        printf("                Press 2 to add daily attendance attendance\n");
+                        printf("                Press 3 Display attendance\n");
+                        printf("                Press 4 Update attendance\n");
+                        printf("                Press 5 Go back...\n");
+                        int ch;
+                        scanf("%d",&ch);
+                        if(ch==5)
+                        {
+                            dcsn=1;
+                        }
+                        else
+                        {
+                                dcsn=0;
+                                attend_mgmt(ch);
+                        }
+                }while(dcsn!=1);
+                return 1;
             }
 
             case 4:
             {
-                printf("                Press 1 Display salary\n");
-                printf("                Press 2 Update salary\n");
-                int i;
-                scanf("%d",&i);
-                switch(i)
+                int dcsn=0;
+                do
                 {
-                    case 1:
-                    break;
-                    case 2:
-                    printf("Enter employee id of employee, you wish to change salary for: \n");
+                    printf("\n                Press 1 Display salary\n");
+                    printf("                Press 2 Update salary\n");
+                    printf("                Press 3 Go Back....\n");
                     int i;
                     scanf("%d",&i);
-                    printf("%s",update_salary(i));
-                    break;
-                    default:
-                    printf("Wrong option\n");
-                    break;
-                }
-                break;
+                    switch(i)
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            printf("Enter employee id of employee, you wish to change salary for: \n");
+                            int i;
+                            scanf("%d",&i);
+                            printf("%s",update_salary(i));
+                            break;
+                        case 3:
+                            dcsn=1;
+                            break;
+                        default:
+                            printf("Wrong option\n");
+                        break;
+                    }
+                }while(dcsn!=1);
+
+                return 1;
             }
 
             case 5:{
-                int i=0;
-                printf("                Press 1 View pending requests to add employee\n");
-                printf("                Press 2 Add employee to the department\n");
-                scanf("%d",&i);
-                switch(i){
-                    case 1:{
-                        char status[10];
-                        strcpy(status,"Pending");
-                        printf("%s",view_pending_requests(status));
-                        break;
+                int dcsn=0;
+                do
+                {
+                    int i=0;
+                    printf("\n                Press 1 View pending requests to add employee\n");
+                    printf("                Press 2 Add employee to the department\n");
+                    printf("                Press 3 Go Back......\n");
+                    scanf("%d",&i);
+                    switch(i){
+                        case 1:{
+                            char status[10];
+                            strcpy(status,"Pending");
+                            printf("%s",view_pending_requests(status));
+                            break;
+                        }
+                        case 2:{
+                            int req_id;
+                            printf("Please provide the request id to be addressed: ");
+                            scanf("%d",&req_id);
+                            printf("%s",add_employee_department(req_id));
+                            break;
+                        }
+                        case 3:
+                            {
+                                dcsn=1;
+                                break;
+                            }
+                        default:
+                            {
+                                printf("\nWrong choice\n");
+                            }
                     }
-                    case 2:{
-                        int req_id;
-                        printf("Please provide the request id to be addressed: ");
-                        scanf("%d",&req_id);
-                        printf("%s",add_employee_department(req_id));
-                        break;
-                    }
-                    break;
-                }
-
-                break;
+                }while(dcsn!=1);
+                return 1;
             }
             case 6:
             {
-                printf("                Press 1 Increment Salary\n");
-                int cho;
-                scanf("%d",&cho);
-			    if(cho==1)
+                int dcsn=0;
+                do
                 {
-                    sal_inc();
-                }
-                else
-                {
+                    printf("                Press 1 Increment Salary\n");
+                    printf("                Press 2 Go Back......\n");
+                    int cho;
+                    scanf("%d",&cho);
+                    if(cho==1)
+                    {
+                        sal_inc();
+                    }
+                    else if(cho==2)
+                    {
+                        dcsn=1;
+                    }
+                    else
+                    {
                         printf("Wrong input");
-                }
-                break;
+                    }
+                }while(dcsn!=1);
+                return 1;
             }
             case 7:
             {
-                int gri_choice;
-                printf("                Press 1 Grievances Redressal\n");
-                scanf("%d",&gri_choice);
-                if (1 == gri_choice)
+                int dcsn=0;
+                do
                 {
-                    int choice;
-                    printf("		Press 1 Raise Grievance\n");
-                    printf("		Press 2 View Grievances\n");
-                    scanf("%d",&choice);
-
-                    if (1 == choice)
+                    int gri_choice;
+                    printf("                Press 1 Grievances Readressal\n");
+                    printf("                Press 2 Go back.....\n");
+                    scanf("%d",&gri_choice);
+                    if (1 == gri_choice)
                     {
-                        printf("%s",raise_grievances(emp_id));
-                    }
+                        int choice;
+                        int dcsn1=0;
+                        do
+                        {
+                            printf("		Press 1 Raise Grievance\n");
+                            printf("		Press 2 View Grievances\n");
+                            printf("		Press 3 Go back...\n");
+                            scanf("%d",&choice);
 
-                    else if(2 == choice)
+                            if (1 == choice)
+                            {
+                                printf("%s",raise_grievances(emp_id));
+                            }
+
+                            else if(2 == choice)
+                            {
+                                view_raised_grievances();
+                            }
+                            else if(3 == choice)
+                            {
+                                dcsn1=1;
+                            }
+
+                            else
+                            {
+                                printf("\t\t Wrong Choice Entered.\n");
+                            }
+                        }while(dcsn1!=1);
+                    }
+                    else if(2 == gri_choice)
                     {
-                        view_raised_grievances();
+                        dcsn=1;
                     }
-
                     else
                     {
-                        printf("\t\t Wrong Choice Entered.\n");
+                        printf("\t\t Wrong Choice entered.\n");
                     }
-                }
+                }while(dcsn!=1);
+                return 1;
 
-                else
-                {
-                    printf("\t\t Wrong Choice entered.\n");
-                }
-                break;
             }
 
             case 8:
             {
                 change_password(emp_id);
-                break;
+                return 1;
+
+            }
+            case 9:
+            {
+                return 2;
+
             }
 
             default:
             {
                 printf("wrong input");
-                break;
+                return 1;
+
             }
         }
-        return 1;
     }
 
 }
