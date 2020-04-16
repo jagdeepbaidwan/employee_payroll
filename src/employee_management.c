@@ -7,7 +7,7 @@
 #include "..\include\Validation.h"
 #include "..\include\employee_management.h"
 #include "..\include\admin_attendance.h"
-//#include "..\include\salary_management.h"
+#include "..\include\salary_management.h"
 #include "..\include\employee.h"
 #define MAX_YEAR 2020
 #define MIN_YEAR 2010
@@ -663,16 +663,13 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
             emp_id=atoi(row[0]);
             printf("%d\n",emp_id);
             mysql_free_result(read);
-
         }
-
-
+        
     }
     else
     {
         printf("not connected");
         printf("%s\n", mysql_error(conn8));
-
     }
 
     oo1=mysql_init(NULL);
@@ -717,6 +714,8 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
                     printf("%s\n", mysql_error(oo3));
                 }
             }
+            
+        	printf("%s",add_salary(emp_id));
             return "User Inserted";
         }
     }
@@ -1490,22 +1489,26 @@ int emp_management(int i,int emp_id)
                 int dcsn=0;
                 do
                 {
-                    printf("\n                Press 1 Display salary\n");
-                    printf("                Press 2 Update salary\n");
-                    printf("                Press 3 Go Back....\n");
+                	printf("\n                Press 1 Display salary\n");
+                    printf("\n                Press 2 Display salary\n");
+                    printf("                Press 3 Update salary\n");
+                    printf("                Press 4 Go Back....\n");
                     int i;
                     scanf("%d",&i);
                     switch(i)
                     {
                         case 1:
+                        	emp_sal_mgmt();
                             break;
                         case 2:
+                        	break;
+                        case 3:
                             printf("Enter employee id of employee, you wish to change salary for: \n");
                             int i;
                             scanf("%d",&i);
                             printf("%s",update_salary(i));
                             break;
-                        case 3:
+                        case 4:
                             dcsn=1;
                             break;
                         default:
