@@ -29,6 +29,8 @@ int getch(void)
     return ch;
 }
 
+
+
 //start of display_salary
 int display_salary(int emp_id)
 {
@@ -44,18 +46,29 @@ MYSQL *conn2;
     int num;
     char stmt[1500];
     int option;
-    printf("                Press 1 if you want to see all pay slips\n");
+    printf("\n                Press 1 if you want to see all pay slips\n");
 	printf("                Press 2 if you want to see pay slips for particular pay period\n");
+	printf("                Press 3 Go back...\n");
 	scanf("%d",&option);
 	char qry[300];
 	if(option==1)
 	{
-	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc , week desc");
+	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc");
 	}
 	else if(option==2)
 	{
-	    strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'and week ='%d'");
+	    strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'");
 	}
+	else if(option==3)
+    {
+        return 1;
+    }
+    else
+    {
+        printf("Wrong Input");
+        return 0;
+    }
+
     if(conn2)
     {
     	int n;
@@ -65,7 +78,7 @@ MYSQL *conn2;
 		}
 		else if(option==2)
 		{
-			int year,month,week;
+			int year,month;
 			int x=0;
 			do{
 			printf("Enter the  year you wish to see: \n");
@@ -91,19 +104,8 @@ MYSQL *conn2;
 			}
             }while(x==0);
             x=0;
-            do{
-            printf("Enter the pay week you wish to see :\n Select 1 for first half of month \n Select 2 for second half of month\n");
-            scanf("%d",&week);
-            if(week==1 || week==2)
-            {
-            	x=1;
-			}
-			else{
-				printf("INVALID week, enter again\n");
-			}
-            }while(x==0);
 
-            n = sprintf(stmt,qry,emp_id,year,month,week);
+            n = sprintf(stmt,qry,emp_id,year,month);
 		}
 
         mysql_query(conn2,stmt);
@@ -151,10 +153,11 @@ MYSQL *conn2;
 		}
     }
 
-    return 1;
+    return 0;
 }
 
 //end of display_salary
+
 
 char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_pass[45])
 {
@@ -303,7 +306,7 @@ void change_password(int id)
     printf("%s\n",change_pass(id,new_pass,confirm_pass,old_pass));
 }
 
-void employee(int emp_id)
+int employee(int emp_id)
 {
     int i;
     printf("                Press 1 Personal details management\n");
@@ -311,99 +314,135 @@ void employee(int emp_id)
     printf("                Press 3 Leave management\n");
     printf("                Press 4 Salary management\n");
     printf("                Press 5 Grievances redressal\n");
+    printf("                Press 6 to Log Out!!\n");
     scanf("%d",&i);
     switch(i)
     {
 		case 1:
 		{
-	    	emp_detail_mgmt(emp_id);
+		    int dcsn=0;
+            do
+            {
+              dcsn=emp_detail_mgmt(emp_id);
+            }while(dcsn!=1);
+
             break;
 		}
 
 		case 2:
 		{
-	    	emp_attendance_mgmt(emp_id);
+		    int dcsn=0;
+            do
+            {
+              dcsn=emp_attendance_mgmt(emp_id);
+            }while(dcsn!=1);
+
 	    	break;
         }
 
 		case 3:
 		{
-			int i;
-	    	printf("                Press 1 Request leave\n");
-            printf("                Press 2 Display leaves\n");
-	    	scanf("%d",&i);
-	    	switch(i)
-	    	{
+		    int dcsn=0;
+            do
+            {
+                int i;
+                printf("                Press 1 Request leave\n");
+                printf("                Press 2 Display leaves\n");
+                printf("                Press 3 To Go Back...\n");
+                scanf("%d",&i);
+                switch(i)
+                {
+                    case 1:{
+                        int x=0;
+                        int dd,mm,yy,r;
+                        int no_of_days;
+                        char leave_type[20];
+                        do{
+                            printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
+                            scanf("%d/%d/%d",&dd,&mm,&yy);
+                            r=validate_date(dd,mm,yy);
+                        }while(r!=1);
+                        printf("Provide the number of days for the leave,(including start date): ");
+                        scanf("%d",&no_of_days);
+                        do{
+                            printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
+                            scanf("%s",leave_type);
+                            if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0)
+                            {
+                                x=1;
+                                break;
+                            }
+                        } while(x==0);
+                        x=0;
+                        printf("%s",leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
+                        break;
+                    }
+                    case 2:{
+                        display_leaves(emp_id);
+                        break;
+                    }
+                    case 3:
+                        {
+                                dcsn=1;
+                                break;
+                        }
+                }
+            }while(dcsn!=1);
 
-			case 1:{
-				int x=0;
-				int dd,mm,yy,r;
-				int no_of_days;
-				char leave_type[20];
-				do{
-				printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
-				scanf("%d/%d/%d",&dd,&mm,&yy);
-				r=validate_date(dd,mm,yy);
-				}while(r!=1);
 
-				printf("Provide the number of days for the leave,(including start date): ");
-				scanf("%d",&no_of_days);
-
-				do{
-				printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
-        		scanf("%s",leave_type);
-        		if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0)
-        		{
-            		x=1;
-            		break;
-        		}
-    			} while(x==0);
-    			x=0;
-
-				printf("%s",leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
-				break;
-				}
-			case 2:{
-				display_leaves(emp_id);
-				break;
-				}
-			break;
-			}
 		break;
 		}
 		case 4:
 		{
-            int k=display_salary(emp_id);
+            int dcsn=0;
+            do
+            {
+              dcsn=display_salary(emp_id);
+            }while(dcsn!=1);
             break;
 		}
 
         case 5:
 		{
-	    	int choice;
-	    	printf("		Press 1 Raise Grievance\n");
-	    	printf("		Press 2 View Grievances\n");
-	    	scanf("%d",&choice);
-	    	if (1 == choice)
-	    	{
-	    		printf("%s",raise_grievances(emp_id));
-			}
+		    int dcsn=0;
+            do
+            {
+                int choice;
+                printf("		Press 1 Raise Grievance\n");
+                printf("		Press 2 View Grievances\n");
+                printf("		Press 3 Go back....\n");
+                scanf("%d",&choice);
+                if (choice==1)
+                {
+                    printf("%s",raise_grievances(emp_id));
+                }
 
-			else if(2 == choice)
-			{
-				view_raised_grievances();
-			}
-
-			else
-			{
-				printf("\t\t Wrong Choice Entered.\n");
-			}
-	     	break;
-		}
-
-		default:
+                else if(choice==2)
+                {
+                    view_raised_grievances();
+                }
+                else if(choice==3)
+                {
+                    dcsn=1;
+                }
+                else
+                {
+                    printf("\t\t Wrong Choice Entered.\n");
+                }
+                break;
+             }while(dcsn!=1);
+             break;
+        }
+        case 6:
+        {
+            printf("\n Thank you! Have Good Day....");
+            return 1;
+        }
+        default:
         {
             printf("wrong input");
-	    	break;
-		}
+            break;
+        }
     }
+    return 0;
 }

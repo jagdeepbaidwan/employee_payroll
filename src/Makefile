@@ -20,7 +20,9 @@ Main: Main.c
 	gcc -g -O -c attendance_display.c -fPIC -DPIC -o ../build/attendance_display.o
 
 	gcc -g -O -c leave_request.c -fPIC -DPIC -o ../build/leave_request.o
+
+	gcc -g -O -c salary_management.c -fPIC -DPIC -o ../build/salary_management.o
 	
-	gcc -o ../bin/Payroll ../build/Main.o ../build/employee_management.o ../build/Validation.o ../build/employee.o ../build/employee_personal_dtl_management.o ../build/employee_attdnce_management.o ../build/admin_attend_mgmt.o ../build/manager_dept_management.o ../build/admin_dept_management.o ../build/attendance_display.o ../build/leave_request.o libmysql.dll
+	gcc -o ../bin/Payroll ../build/Main.o ../build/employee_management.o ../build/Validation.o ../build/employee.o ../build/employee_personal_dtl_management.o ../build/employee_attdnce_management.o ../build/admin_attend_mgmt.o ../build/manager_dept_management.o ../build/admin_dept_management.o ../build/attendance_display.o ../build/leave_request.o ../build/salary_management.o libmysql.dll
 
 	../bin/Payroll

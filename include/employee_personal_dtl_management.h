@@ -1,4 +1,4 @@
-void emp_detail_mgmt(int );
+int emp_detail_mgmt(int );
 char* raise_grievances(int);
 char* update_employee(int );
 void view_raised_grievances();

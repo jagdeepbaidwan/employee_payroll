@@ -11,7 +11,7 @@ MYSQL *conn3;
 MYSQL *conn8;
 MYSQL *conn9;
 
-int port7=3306;
+int port7=3305;
 
 // In this function, it will display the detail of the employee and doesnot return nothing but instead printing the messages on the console screen.
 void emp_display(char stmt[]){
@@ -328,28 +328,28 @@ char* raise_grievances(int e_id)
 
 // For viewing the grievances: view_raise_grievances();
 void view_raised_grievances()
-{   
+{
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res=NULL;
 	MYSQL_ROW row=NULL;
 	MYSQL_FIELD *field;
-	
+
 	conn8 = mysql_init(NULL);
 	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
-	
+
 	if(!conn8)
 	{
 		printf("Connection error");
 		printf("%s\n", mysql_error(conn8));
 	}
-	
+
 	else
 	{	char stmt[1500];
 		int choice;
 		printf("		Press 1 View Grievances by employee id\n");
 		printf("		Press 2 View all Grievances\n");
 		scanf("%d",&choice);
-		
+
 		if (1 == choice)
 		{
 			int gri_choice;
@@ -362,40 +362,40 @@ void view_raised_grievances()
    				printf(" Error: %s\n", mysql_error(conn8));
    				printf("Failed to execute query.");
    			}
-    
-			else 
+
+			else
  			{
  				read = mysql_store_result(conn8);
  				int count_rows = mysql_num_rows(read);
 				if (count_rows>0)
 				{
-        			while (row = mysql_fetch_row(read)) 
+        			while (row = mysql_fetch_row(read))
 	  				{
 		  				int num_fields;
 						num_fields = mysql_num_fields(read);
 	  					int i;
-    					for(i = 0; i < num_fields; i++) 
+    					for(i = 0; i < num_fields; i++)
 	    				{
 		    				printf("|");
-			       		   	if (i == 0) 
-			          		{   
-			            		while(field = mysql_fetch_field(read)) 
+			       		   	if (i == 0)
+			          		{
+			            		while(field = mysql_fetch_field(read))
 		  			          	{
 		        			    	printf("%s|", field->name);
         		    			}
-			            		printf("\n");           
+			            		printf("\n");
 			          		}
-							printf(" %s", row[i] ? row[i] : "NULL"); 
-	    	  			}			 
-	  				}		
+							printf(" %s", row[i] ? row[i] : "NULL");
+	    	  			}
+	  				}
 					printf("\n");
  				}
  				else{
- 					printf("\nNo Record with the query.");	
+ 					printf("\nNo Record with the query.");
 				}
 			}
 		}
-		
+
 		else if (2 == choice)
 		{
 			char qry[]={"select response_number, description from grievances"};
@@ -405,44 +405,44 @@ void view_raised_grievances()
    				printf(" Error: %s\n", mysql_error(conn8));
    				printf("Failed to execute query.");
    			}
-    
-			else 
+
+			else
  			{
  				read = mysql_store_result(conn8);
  				int count_rows = mysql_num_rows(read);
 				if (count_rows>0)
 				{
-        			while (row = mysql_fetch_row(read)) 
+        			while (row = mysql_fetch_row(read))
 	  				{
 		  				int num_fields;
 						num_fields = mysql_num_fields(read);
 	  					int i;
-    					for(i = 0; i < num_fields; i++) 
+    					for(i = 0; i < num_fields; i++)
 	    				{
 		    				printf("|");
-			       		   	if (i == 0) 
-			          		{   
-			            		while(field = mysql_fetch_field(read)) 
+			       		   	if (i == 0)
+			          		{
+			            		while(field = mysql_fetch_field(read))
 		  			          	{
 		        			    	printf("%s|", field->name);
         		    			}
-			            		printf("\n");           
+			            		printf("\n");
 			          		}
-							printf(" %s", row[i] ? row[i] : "NULL"); 
-	    	  			}			 
-	  				}		
+							printf(" %s", row[i] ? row[i] : "NULL");
+	    	  			}
+	  				}
 					printf("\n");
  				}
  				else{
  					printf("\nNo Record Found in the Grievance Table.");
 				}
-			}	
+			}
 		}
-		
+
 		else
-		{			
+		{
 			printf("Wrong choice.");
-	    } 
+	    }
 	}
 }
 // Ending of the view raised grievances
@@ -534,7 +534,7 @@ char* employee_rating()
 			gets(description);
 			x=notempty(description);
     	}while(x==0);
-    	
+
     	getchar();
     	do
 		{
@@ -547,7 +547,7 @@ char* employee_rating()
 			else{
 				printf("\t\t INVALID year\n");
 			}
-    	}while(x==0); 
+    	}while(x==0);
 
 		conn9 = mysql_init(NULL);
 		mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port7, NULL, 0);
@@ -562,7 +562,7 @@ char* employee_rating()
 		{
 			char qry4[]={"select ep.emp_id,ep.rating,ep.description,ep.year,ed.emp_id from emp_perfor ep inner join emp_details ed on (ep.emp_id=ed.emp_id)"};
 			sprintf(stmt,qry4);
-			
+
 			if (mysql_query(conn9,stmt))
 			{
         		printf("		Error: %s\n", mysql_error(conn9));
@@ -577,8 +577,8 @@ char* employee_rating()
 				if(num_rows<0 )
 				{
 					char qry2[]={"insert into emp_perfor (emp_id,rating,description,year) VALUES('%d','%d','%s','%d')"};
-					sprintf(stmt,qry2,rate,description,e_id,year);		
-					
+					sprintf(stmt,qry2,rate,description,e_id,year);
+
 					if (mysql_query(conn9,stmt))
 					{
 						printf("		Error: %s\n", mysql_error(conn9));
@@ -590,7 +590,7 @@ char* employee_rating()
    						printf ("\n\n Rating Added. \n");
 					}
 				}
-				
+
 				else
 				{
 					printf("\t Already in database so going to update it.\n");
@@ -615,7 +615,7 @@ char* employee_rating()
 // End of the rating of the employee.
 
 
-void emp_detail_mgmt(int emp_id)
+int emp_detail_mgmt(int emp_id)
 {
     conn3=mysql_init(NULL);
     int id;
@@ -625,6 +625,7 @@ void emp_detail_mgmt(int emp_id)
     printf("                Press 2 Update employee details\n");
     printf("                Press 3 View employee feedback\n");
     printf("                Press 4 Change password\n");
+    printf("                Press 5 Log out\n");
     scanf("%d",&i);
     switch (i)
     {
@@ -652,7 +653,15 @@ void emp_detail_mgmt(int emp_id)
             change_password(emp_id);
             break;
         }
+        case 5:
+            {
+                return 1;
+            }
         default:
+            {
+                printf("\nInvalid Input\n");
+            }
         break;
     }
+    return 0;
 }

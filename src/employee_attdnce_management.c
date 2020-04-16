@@ -98,7 +98,7 @@ void reuest_status(int emp_id)
 
 
 // Attendance request change...
-void emp_attendance_mgmt(int emp_id)
+int emp_attendance_mgmt(int emp_id)
 {
 	conn3=mysql_init(NULL);
 	mysql_real_connect(conn3, "localhost", "root", "1234","payroll", port5, NULL, 0);
@@ -112,6 +112,7 @@ void emp_attendance_mgmt(int emp_id)
 		printf("                Press 1 Display attendance \n");
 		printf("                Press 2 Display attendance change request\n");
 		printf("                Press 3 Request attendance change\n");
+		printf("                Press 4 to Go Back...\n");
 		int ch;
 		scanf("%d",&ch);
 		if(ch==1)
@@ -126,9 +127,14 @@ void emp_attendance_mgmt(int emp_id)
 		{
             printf("%s",attendance_change(emp_id));
 		}
+		else if(ch==4)
+        {
+            return 1;
+        }
 		else
 		{
 			printf("wrong choice");
 		}
 	}
+	return 0;
 }
