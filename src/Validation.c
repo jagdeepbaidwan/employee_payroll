@@ -9,7 +9,7 @@
 MYSQL *conn9;
 char query[1500];
 
-int port9=3306;
+int port9=3305;
 char *rtrim(char *s)
 {
     char* back = s + strlen(s);

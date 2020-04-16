@@ -14,7 +14,7 @@
 #include "..\include\admin_attendance.h"
 #include "..\include\employee_management.h"
 #include "..\include\validation.h"
-int port4=3306;
+int port4=3305;
 
 int getch(void)
 {
@@ -334,7 +334,7 @@ void employee(int emp_id)
 	    	scanf("%d",&i);
 	    	switch(i)
 	    	{
-			
+
 			case 1:{
 				int x=0;
 				int dd,mm,yy,r;
@@ -345,10 +345,10 @@ void employee(int emp_id)
 				scanf("%d/%d/%d",&dd,&mm,&yy);
 				r=validate_date(dd,mm,yy);
 				}while(r!=1);
-				
+
 				printf("Provide the number of days for the leave,(including start date): ");
 				scanf("%d",&no_of_days);
-				
+
 				do{
 				printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
         		scanf("%s",leave_type);
@@ -359,7 +359,7 @@ void employee(int emp_id)
         		}
     			} while(x==0);
     			x=0;
-			
+
 				printf("%s",leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
 				break;
 				}

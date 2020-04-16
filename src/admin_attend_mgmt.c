@@ -9,7 +9,7 @@ MYSQL *conn4;
 char query[1500];
 
 // Check record availability in attendance
-int port1=3306;
+int port1=3305;
 int attendance_month_availability(int mm, int yy)
 {
 	MYSQL_RES *read=NULL;
@@ -216,6 +216,7 @@ void add_attendance()
 //hourly_attendance function
 void hourly_attendance()
 {
+    char response[55];
 	MYSQL_RES *read=NULL, *res2;
 	MYSQL_RES *res=NULL;
 	MYSQL_ROW row=NULL, *row1=NULL, *row2=NULL;
@@ -284,7 +285,7 @@ void hourly_attendance()
         	int count_row = mysql_num_rows(res2);
 	        if(count_row>=1)
 	        {
-	        	printf("Attendance is already in the database\n");
+	        	strcpy(response,"Attendance is already in the database\n");
 			}
 			else
 			{
@@ -297,12 +298,14 @@ void hourly_attendance()
 		    	}
 		    	else
 		    	{
+		    	    strcpy(response,"");
 		    		printf("\nAdded attendance of employee:%d",attnd[tmp].emp_att_id);
 				}
 			}
 	    }
 		tmp=tmp+1;
 	}
+	printf("%s",response);
 }
 //End Hourly attendance function
 

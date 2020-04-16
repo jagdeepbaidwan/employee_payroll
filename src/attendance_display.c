@@ -4,7 +4,7 @@
 #include "..\include\Validation.h"
 
 MYSQL *conn10;
-int port3=3306;
+int port3=3305;
 void view_attendance(int emp_id)
 {
 	int dd,mm,yy,r,num;
