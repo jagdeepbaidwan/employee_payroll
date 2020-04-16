@@ -161,177 +161,257 @@ int main(int argc, char *argv[])
     }
 
     else if(strcmp("employee",user_type)==0){
-        employee(id);
+         int dcsn=0;
+            do
+            {
+              dcsn=employee(id);
+            }while(dcsn!=1);
+
+
     }
 
     else if(strcmp("manager",user_type)==0){
-        printf("                Press 1 Personal details management\n");
-        printf("                Press 2 Attendance management\n");
-        printf("                Press 3 Leave management\n");
-        printf("                Press 4 Salary management\n");
-        printf("                Press 5 Grievances redressal\n");
-        printf("                Press 6 Department management\n");
-
-        scanf("%d",&i);
-
-        switch(i){
-            case 1:
+        int dcsn=0;
+            do
             {
-                printf("                Press 1 Display personal details \n");
-                printf("                Press 2 Update details\n");
-                printf("                Press 3 Change password\n");
+                printf("\n                Press 1 Personal details management\n");
+                printf("                Press 2 Attendance management\n");
+                printf("                Press 3 Leave management\n");
+                printf("                Press 4 Salary management\n");
+                printf("                Press 5 Grievances redressal\n");
+                printf("                Press 6 Department management\n");
+                printf("                Press 7 Log Out!!\n");
                 scanf("%d",&i);
-                switch (i)
+                switch(i)
                 {
                     case 1:
-                    break;
+                    {
+                        int dcsn1=0;
+                        do
+                        {
+                            printf("                Press 1 Display personal details \n");
+                            printf("                Press 2 Update details\n");
+                            printf("                Press 3 Change password\n");
+                            printf("                Press 4 Go back....\n");
+                            scanf("%d",&i);
+                            switch (i)
+                            {
+                                case 1:
+                                    break;
+                                case 2:
+                                {
+                                    printf("%s",update_employee(id));
+                                    break;
+                                }
+                                case 3:
+                                {
+                                    change_password(id);
+                                    break;
+                                }
+                                case 4:
+                                {
+                                  dcsn1=1;
+                                }
+                                default:
+                                    break;
+                            }
+                        }while(dcsn1!=1);
+                        break;
+                    }
                     case 2:
-		    {
-			 printf("%s",update_employee(id));
-                         break;
-		    }
-                    case 3:
                     {
-                        change_password(id);
+                        int choice;
+                        int dcsn1=0;
+                        do
+                        {
+                            printf("                Press 1 Display attendance\n");
+                            printf("                Press 2 Request attendance change\n");
+                            printf("                Press 3 To Go back.....\n");
+                            scanf("%d",&choice);
+                            if(choice==1)
+                            {
+
+                            }
+                            else if(choice==2)
+                            {
+
+                            }
+                            else if(choice==3)
+                            {
+                                dcsn1=1;
+                            }
+                            else
+                            {
+                                printf("\nWrong Input");
+                            }
+                        }while(dcsn1!=1);
                         break;
                     }
-                    default:
-                    break;
-                }
-                break;
-            }
+                    case 3:{
+                        int dcsn1=0;
+                        do
+                        {
+                            int i;
+                            printf("                Press 1 Request leave\n");
+                            printf("                Press 2 Display leaves\n");
+                            printf("                Press 3 Go back..\n");
+                            scanf("%d",&i);
+                            switch(i)
+                            {
+                                case 1:
+                                {
+                                    int x=0;
+                                    int dd,mm,yy,r;
+                                    int no_of_days;
+                                    char leave_type[20];
+                                    do
+                                    {
+                                        printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
+                                        scanf("%d/%d/%d",&dd,&mm,&yy);
+                                        r=validate_date(dd,mm,yy);
+                                    }while(r!=1);
+                                    printf("Provide the number of days for the leave,(including start date): ");
+                                    scanf("%d",&no_of_days);
+                                    do
+                                    {
+                                        printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
+                                        scanf("%s",leave_type);
+                                        if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0)
+                                        {
+                                            x=1;
+                                            break;
+                                        }
+                                    } while(x==0);
+                                    x=0;
+                                    printf("%s",leave_request(id,dd,mm,yy,no_of_days,leave_type));
+                                    break;
+                                }
+                                case 2:
+                                {
+                                    display_leaves(id);
+                                    break;
+                                }
+                                case 3:
+                                    {
+                                        dcsn1=1;
+                                        break;
+                                    }
+                            }
 
-            case 2:{
-                printf("                Press 1 Display attendance\n");
-                printf("                Press 2 Request attendance change\n");
-                break;
-            }
+                        }while(dcsn1!=1);
+                        break;
+                    }
+                        case 4:
+                        {
+                            int dcsn1=0;
+                            do
+                            {
+                                dcsn1=display_salary(id);
 
-            case 3:{
-            	int i;
-                printf("                Press 1 Request leave\n");
-                printf("                Press 2 Display leaves\n");
+                            }while(dcsn1!=1);
 
-				scanf("%d",&i);
-				switch(i){
-
-				case 1:{
-				int x=0;
-				int dd,mm,yy,r;
-				int no_of_days;
-				char leave_type[20];
-				do{
-				printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
-				scanf("%d/%d/%d",&dd,&mm,&yy);
-				r=validate_date(dd,mm,yy);
-				}while(r!=1);
-
-				printf("Provide the number of days for the leave,(including start date): ");
-				scanf("%d",&no_of_days);
-
-				do{
-				printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
-        		scanf("%s",leave_type);
-        		if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0)
-        		{
-            		x=1;
-            		break;
-        		}
-    			} while(x==0);
-    			x=0;
-
-				printf("%s",leave_request(id,dd,mm,yy,no_of_days,leave_type));
-				break;
-				}
-
-				case 2:{
-					display_leaves(id);
-					break;
-				}
-				break;
-				}
-                break;
-            }
-
-            case 4:{
-                int i=display_salary(id);
-                break;
-            }
-
-            case 5:{
-                int choice;
-	    		printf("		Press 1 Raise Grievance\n");
-	    		printf("		Press 2 View Grievances\n");
-	    		scanf("%d",&choice);
-	    		if (1 == choice)
-	    		{
-	    			printf("%s",raise_grievances(id));
-				}
-
-				else if(2 == choice)
-				{
-					view_raised_grievances();
-				}
-
-				else
-				{
-					printf("\t\t Wrong Choice Entered.\n");
-				}
-                break;
-            }
-
-            case 6:{
-                int j=0;
-                printf("                Press 1 Request Employee\n");
-                printf("                Press 2 Rate employee\n");
-                printf("                Press 3 Display employee rating \n");
-                scanf("%d",&j);
-
-                switch(j){
-                    case 1:{
-                        char stmt[1500];
-                        char dept[10];
-                        conn4=mysql_init(NULL);
-                        mysql_real_connect(conn4, "localhost", "root", "1234","payroll", port8, NULL, 0);
-                        char qry_dep[]={"select department from emp_details where emp_id='%d'"};
-                        if(conn4){
-                            int n=sprintf(stmt,qry_dep,id);
-                            mysql_query(conn4,stmt);
-                            read1=mysql_store_result(conn4);
-                            row=mysql_fetch_row(read1);
-                            strcpy(dept,row[0]);
-                            printf("%s",employee_request(id,dept));
-                        }else{
-                            printf("not connected");
-                            printf("%s\n", mysql_error(oo));
+                            break;
                         }
+                        case 5:
+                        {
+                            int dcsn1=0;
+                            do
+                            {
+                                int choice;
+                                printf("\n		Press 1 Raise Grievance\n");
+                                printf("		Press 2 View Grievances\n");
+                                printf("		Press 3 To Go back....\n");
+                                scanf("%d",&choice);
+                                if (choice==1)
+                                {
+                                    printf("%s",raise_grievances(id));
+                                }
+                                else if(choice==2)
+                                {
+                                    view_raised_grievances();
+                                }
+                                else if(choice==3)
+                                {
+                                    dcsn1=1;
+                                }
+                                else
+                                {
+                                    printf("\t\t Wrong Choice Entered.\n");
+                                }
+                            }while(dcsn1!=1);
+                            break;
 
-                        break;
-                    }
-
-					case 2:
-		            {
-		               	printf("%s",employee_rating());
-		               	break;
-					}
-
-                    case 3:
-                    {
-	    	        	char stmt[1500];
-    	    		    char qry[] = {"select * from emp_perfor where emp_id = %d"};
-			            int n = sprintf(stmt,qry,id);
-            			emp_display(stmt);
-            			break;
-					}
-
-            		default:{
-                		printf("Wrong Input");
-                		break;
-            		}
-                	break;
-            	}
+                        }
+                        case 6:
+                        {
+                            int dcsn1=0;
+                            do
+                            {
+                                int j=0;
+                                printf("\n                Press 1 Request Employee\n");
+                                printf("                Press 2 Rate employee\n");
+                                printf("                Press 3 Display employee rating \n");
+                                printf("                Press 4 To Go back... \n");
+                                scanf("%d",&j);
+                                switch(j)
+                                {
+                                    case 1:
+                                    {
+                                        char stmt[1500];
+                                        char dept[10];
+                                        conn4=mysql_init(NULL);
+                                        mysql_real_connect(conn4, "localhost", "root", "1234","payroll", port8, NULL, 0);
+                                        char qry_dep[]={"select department from emp_details where emp_id='%d'"};
+                                        if(conn4)
+                                        {
+                                            int n=sprintf(stmt,qry_dep,id);
+                                            mysql_query(conn4,stmt);
+                                            read1=mysql_store_result(conn4);
+                                            row=mysql_fetch_row(read1);
+                                            strcpy(dept,row[0]);
+                                            printf("%s",employee_request(id,dept));
+                                        }
+                                        else
+                                        {
+                                            printf("not connected");
+                                            printf("%s\n", mysql_error(oo));
+                                        }
+                                        break;
+                                    }
+                                    case 2:
+                                    {
+                                        printf("%s",employee_rating());
+                                        break;
+                                    }
+                                    case 3:
+                                    {
+                                        char stmt[1500];
+                                        char qry[] = {"select * from emp_perfor where emp_id = %d"};
+                                        int n = sprintf(stmt,qry,id);
+                                        emp_display(stmt);
+                                        break;
+                                    }
+                                    case 4:
+                                        {
+                                            dcsn1=1;
+                                        }
+                                    default:
+                                    {
+                                        printf("\nWrong Input\n");
+                                        break;
+                                    }
+                                }
+                            }while(dcsn1!=1);
+                            break;
+                        }
+                        case 7:
+                        {
+                            printf("Thank You! Have a nice Day!");
+                            dcsn=1;
+                            break;
+                        }
             }
-        }
+        }while(dcsn!=1);
     }
 
     else{
