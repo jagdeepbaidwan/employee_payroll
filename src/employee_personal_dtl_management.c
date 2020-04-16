@@ -4,9 +4,13 @@
 #include "..\include\Validation.h"
 #include "..\include\employee_personal_dtl_management.h"
 #include "..\include\employee.h"
+#define YEAR 2020
+#define MIN_YEAR 2018
 
 MYSQL *conn3;
 MYSQL *conn8;
+MYSQL *conn9;
+
 int port7=3306;
 
 // In this function, it will display the detail of the employee and doesnot return nothing but instead printing the messages on the console screen.
@@ -449,6 +453,8 @@ char* employee_rating()
 {
 	MYSQL_RES *read=NULL;
 	MYSQL_ROW row=NULL;
+	MYSQL_RES *read1=NULL;
+	MYSQL_ROW rows=NULL;
 
 	conn8 = mysql_init(NULL);
 	mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port7, NULL, 0);
@@ -456,18 +462,15 @@ char* employee_rating()
 	if(!conn8)
 	{
 		printf("Connection error");
-		return 0;
+		return "0";
 	}
 
 	else
 	{
 		char stmt[1500];
 		char description[200];
-		int e_id=0;
-		int rate=0;
-		int x=0;
+		int temp,x=0,year=0,rate=0,e_id=0;
 		char *choice;
-		int temp;
 
 		do
 		{
@@ -486,7 +489,8 @@ char* employee_rating()
     		{
     			read = mysql_store_result(conn8);
 				row = mysql_fetch_row(read);
-				if(row==NULL)
+				int num_rows = mysql_num_rows(read);
+				if(num_rows<0)
 				{
 					printf("		Employee ID not found\n");
 					temp=0;
@@ -530,22 +534,83 @@ char* employee_rating()
 			gets(description);
 			x=notempty(description);
     	}while(x==0);
-
-    	char qry2[]={"update emp_perfor set rating = '%d',description ='%s' where emp_id= '%d'"};
-		sprintf(stmt,qry2,rate,description,e_id);
-
-		if (mysql_query(conn8,stmt))
+    	
+    	getchar();
+    	do
 		{
-			printf("		Error: %s\n", mysql_error(conn8));
-			return ("		Failed to execute query.");
+    		printf("Enter the year for rating\n");
+			scanf("%d",&year);
+			if(year<=YEAR && year>=MIN_YEAR)
+            {
+            	x=1;
+			}
+			else{
+				printf("\t\t INVALID year\n");
+			}
+    	}while(x==0); 
+
+		conn9 = mysql_init(NULL);
+		mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port7, NULL, 0);
+
+		if(!conn9)
+		{
+			printf("Connection error");
+			return "0";
 		}
 
 		else
 		{
-   			printf ("\n\n Rating Added. \n");
+			char qry4[]={"select ep.emp_id,ep.rating,ep.description,ep.year,ed.emp_id from emp_perfor ep inner join emp_details ed on (ep.emp_id=ed.emp_id)"};
+			sprintf(stmt,qry4);
+			
+			if (mysql_query(conn9,stmt))
+			{
+        		printf("		Error: %s\n", mysql_error(conn9));
+        		return ("		Failed to execute query.");
+    		}
+
+    		else
+    		{
+    			read1 = mysql_store_result(conn9);
+				rows = mysql_fetch_row(read);
+				int num_rows = mysql_num_rows(read);
+				if(num_rows<0 )
+				{
+					char qry2[]={"insert into emp_perfor (emp_id,rating,description,year) VALUES('%d','%d','%s','%d')"};
+					sprintf(stmt,qry2,rate,description,e_id,year);		
+					
+					if (mysql_query(conn9,stmt))
+					{
+						printf("		Error: %s\n", mysql_error(conn9));
+						return ("		Failed to execute query.");
+					}
+
+					else
+					{
+   						printf ("\n\n Rating Added. \n");
+					}
+				}
+				
+				else
+				{
+					printf("\t Already in database so going to update it.\n");
+    				char qry2[]={"update emp_perfor set rating = '%d',description ='%s',year='%d' where emp_id= '%d'"};
+					sprintf(stmt,qry2,rate,description,year,e_id);
+
+					if (mysql_query(conn8,stmt))
+					{
+						printf("		Error: %s\n", mysql_error(conn8));
+						return ("		Failed to execute query.");
+					}
+
+					else
+					{
+   						printf ("\n\n Rating Updated. \n");
+					}
+				}
+			}
 		}
 	}
-	return 1;
 }
 // End of the rating of the employee.
 
