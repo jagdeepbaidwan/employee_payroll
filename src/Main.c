@@ -1,3 +1,14 @@
+/** 
+ * @file Main.c
+ *
+ * Contains the main function from which different functions
+ * located in other files are called to perform different
+ * tasks assigned for admin,employee and manager based on 
+ * user inputs.
+ *
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include<windows.h>
@@ -5,6 +16,8 @@
 #include<string.h>
 #include <termios.h>
 #include <unistd.h>
+
+/* Including all dependencies */
 #include "..\include\employee_management.h"
 #include "..\include\employee.h"
 #include "..\include\manager_dept_management.h"
@@ -12,32 +25,43 @@
 #include "..\include\employee.h"
 #include "..\include\validation.h"
 
+/* Declaration of connection to MYSQL Database pointers */ 
 MYSQL *oo,*conn,*conn4;
+
+/* Initializing the pointers to access data from MYSQL database*/ 
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
-int port8=3305;
-/*
-int getch(void)
-{
-    struct termios oldt,newt;
-    int   ch;
-    tcgetattr( STDIN_FILENO, &oldt );
-    newt = oldt;
-    newt.c_lflag &= ~( ICANON | ECHO );
-    tcsetattr( STDIN_FILENO, TCSANOW, &newt );
-    ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
-    return ch;
-}*/
 
+/* Database connection port number*/
+int port8=3305;
+
+
+/** 
+ * \brief Checks the login credentials from database to assign the user type: Admin,Employee,Manager.
+ *
+ * Accesses the login_details table from database and matches
+ * login credentials provided by the user corresponding to the 
+ * data entry in the database
+ * 
+ * @param[in] id Unique login id for the user 
+ * @param[in] pwd Password for the user
+ *
+ * \return User_Type: admin,employee or manager for successful login
+ *		   Wrong username/password for incorrect login credentials
+ *		   User deactivated if the user is deactivated in database
+ *
+ */
 
 char* login(int id, char pwd[25])
 {
 	char stmt[1500];
+	/* SQL query to access login_details table from database */
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
 	mysql_real_connect(oo, "localhost", "root", "1234","payroll", port8, NULL, 0);
+	
+	/* checks for the database connectivity */
 	if(oo)
     {
 
@@ -71,6 +95,19 @@ char* login(int id, char pwd[25])
         printf("%s\n", mysql_error(oo));
     }
 }
+
+
+
+
+/** 
+ * \brief The main function which distributes various tasks to other functions.
+ *
+ * Expects a user type from the login function
+ * Based on the functionalities provided for the user type 
+ * and corresponding user inputs calls the other functions.
+ *
+ */
+
 int main(int argc, char *argv[])
 {
     int i,id;
@@ -87,6 +124,7 @@ int main(int argc, char *argv[])
     scanf("%d",&i);
     switch(i)
     {
+    	/* Expecting user id and password from the user for login*/
         case 1:{
             printf("\nEnter your employee id:");
             scanf("%d",&id);
@@ -114,6 +152,8 @@ int main(int argc, char *argv[])
                 p++;
             }while(pwd[p-1]!='\r'||pwd[p-1]!=13);
             pwd[p-1]='\0';
+            
+            /* Calls the login function and stores the user type in user_type*/
             strcpy(user_type,login(id,pwd));
             printf("%s\n",user_type);
             break;
@@ -131,6 +171,9 @@ int main(int argc, char *argv[])
         }
     }
 
+
+	/* Display the functionalities available corresponding to the user_type */
+	
     if(strcmp("admin",user_type)==0)
     {
         int st=1;

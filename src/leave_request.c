@@ -4,17 +4,45 @@
 #include<mysql.h>
 #include<stdlib.h>
 int port10=3305;
+
+/* Declaration of connection to MYSQL Database pointers */ 
 MYSQL *connect7,*connect8,*connect9,*connect10,*connect2,*connect1;
+
+/* Start of Function: char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[])*/
+
+/** 
+ * \brief Allows the user to raise a leave request.
+ *
+ * The user can raise a request for a planned leave for the admin to review.
+ *
+ * @param[in] int emp_id employee id of the user who wants to raise leave request 
+ * @param[in] int dd     start day for the leave request
+ * @param[in] int mm     month of the start day for the leave request
+ * @param[in] int yy     year of the start day for the leave request
+ * @param[in] int no_of_days number of days for the leave required
+ * @param[in] char leave_type[] the type of leave required(ML/PL/LWP)
+ 
+ * \return "Request raised successfully" for successful execution of the function
+ 		   "Failed to execute query" for failure in query execution
+ */
+
 char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[]){
+	
+	/* Initializing the pointers to access data from MYSQL database*/
 	MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     char stmt[1500];
     connect7=mysql_init(NULL);
+    
+    /*setting up the connection for *connect7*/
 	mysql_real_connect(connect7,"localhost", "root", "1234","payroll", port10, NULL, 0);
 	char status[15];
-
+	
+	/* Inserting the leave request in the leave_request table for the employee*/
 	char qry_leave_request[]={"insert into leave_request (emp_id,start_day,leave_month,leave_year,no_of_days,leave_type,status) values ('%d','%d','%d','%d','%d','%s','%s')"};
+	
+	/* leave_request status will be pending when request is raised*/
 	strcpy(status,"Pending");
 
 	if(connect7){
@@ -30,6 +58,20 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
     return "Success";
 }
 
+
+/* Start of Function: char* view_pending_leave_requests(char status[])*/
+
+/** 
+ * \brief Allows the admin to view all the leave requests that are still pending 
+ *
+ * The admin can view the leave requests on which no action has been taken yet.
+ *
+ * @param[in] char status[] status of the requests which are pending as no action taken 
+ *
+ * \return "Request raised successfully" for successful execution of the function
+ *
+ */
+ 
 char* view_pending_leave_requests(char status[]){
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res=NULL;
@@ -55,6 +97,8 @@ char* view_pending_leave_requests(char status[]){
             printf("REQ_ID  |	EMP_ID	|   START_DAY   |   LEAVE_MONTH |  LEAVE_YEAR   |   NO_OF_DAYS  |  Leave_Type  |	STATUS");
             printf("\n");
 			printf("\n");
+			
+			/* Displaying all the pending requests*/
 			while((row = mysql_fetch_row(read))){
             	num = mysql_num_fields(read);
             	for(i = 0; i < num; i++){
@@ -72,6 +116,18 @@ char* view_pending_leave_requests(char status[]){
 return "\n\n\nRequests displayed successfully";
 }
 
+
+/* Start of Function: char* decision_leave_request(int req_id)*/
+
+/** 
+ * \brief Allows the admin to take can action on pending leave requests.
+ *
+ * @param[in] int req_id refers to the unique request id of the leave request 
+ *
+ * \return 
+ *
+ */
+ 
 char* decision_leave_request(req_id)
 {
 	int k;
@@ -80,6 +136,7 @@ char* decision_leave_request(req_id)
 	printf("-------------------------Press 2: To Reject----------------------\n");
 	scanf("%d",&k);
 
+	/* admin input to approve or reject the leave request */
 	switch(k)
 	{
 		case 1:
@@ -112,7 +169,13 @@ char* decision_leave_request(req_id)
 					char leave_type[20];
 					strcpy(leave_type,row[6]);
 					printf("\n");
-
+					
+					
+					/* retrieving the leaves balance for the employee 
+					 * if admin decided to approve the request
+					 * and there is not enough leave balance
+					 * employee will get leave without pay
+					*/
 					char qry_retrieve_leaves[]={"select * from leave_details where Emp_id='%d' and Leave_year='%d'"};
 					connect10=mysql_init(NULL);
 					mysql_real_connect(connect10, "localhost", "root", "1234","payroll", port10, NULL, 0);
@@ -162,6 +225,7 @@ char* decision_leave_request(req_id)
 						}
 					}
 
+					/* updating the leave balance for the employee after availing the leaves as per leave request*/
 					char qry_update_balance[]={"update leave_details set Balance_ML='%d',Balance_PL='%d' where Emp_id='%d'"};
 					connect2=mysql_init(NULL);
 					mysql_real_connect(connect2, "localhost", "root", "1234","payroll", port10, NULL, 0);
@@ -175,7 +239,8 @@ char* decision_leave_request(req_id)
  	   					printf("Leave balance updated successfully\n");
 						}
     				}
-
+    				
+    				/* changes the status of the leave request to Approved*/
     				char status[20]="Approved";
     				char qry_status_update[]={"update leave_request set status='%s' where emp_id='%d'"};
 					connect1=mysql_init(NULL);
