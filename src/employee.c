@@ -14,7 +14,7 @@
 #include "..\include\admin_attendance.h"
 #include "..\include\employee_management.h"
 #include "..\include\validation.h"
-int port4=3305;
+int port4=3306;
 
 int getch(void)
 {
@@ -142,7 +142,7 @@ MYSQL *conn2;
                         printf("\n");
                     }
 
-                    printf("    %s    ", row[i] ? row[i] : "NULL");
+                    printf("  %s  ", row[i] ? row[i] : "NULL");
                 }
                 row = mysql_fetch_row(read);
 

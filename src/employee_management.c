@@ -23,7 +23,7 @@ MYSQL *conn2, *oo1,*oo3,*conn8,*connect6,*conn7;
 char query[1500];
 
 /* Database connection port number*/
-int port6=3305;
+int port6=3306;
 
 /* Start of Function: void sal_inc()*/
 
@@ -158,10 +158,12 @@ char* update_salary(int emp_id)
         return "Connection error";
     }
     else
-
+        
     {
         int option;
-        int salary;
+        float salary;
+        float  deductions;
+        float net_pay;
         printf("To increment the salary of employee press 1. \nTo make changes to calculated salary press 2\n");
         scanf("%d",&option);
         if(option==1)
@@ -180,7 +182,7 @@ char* update_salary(int emp_id)
                 if(row==NULL)
                 {
                     return("		No data found for this id\n");
-
+                    
                 }
                 if(strcasecmp(row[0],"salaried")==0)
                 {
@@ -190,24 +192,24 @@ char* update_salary(int emp_id)
                 {
                     printf("%d is a hourly employee, enter  per hour salary\n ",emp_id);
                 }
-                scanf("%d",&salary);
-                char qry2[]={"update salary set salary='%d' where emp_id='%d' and sal_year='%d'"};
+                scanf("%f",&salary);
+                char qry2[]={"update salary set salary='%f' where emp_id='%d' and sal_year='%d'"};
                 sprintf(stmt,qry2,salary,emp_id,sal_year);
-
+                
                 if (mysql_query(conn2,stmt))
                 {
                     printf("		Error: %s\n", mysql_error(conn8));
                     return ("		Failed to execute query.");
                 }
-
+                
                 else
                 {
                     return ("\n\n Salary updated. \n");
                 }
-
+                
             }
-
-
+            
+            
         }
         else if(option==2)
         {
@@ -236,23 +238,19 @@ char* update_salary(int emp_id)
                     printf("INVALID month, enter again\n");
                 }
             }while(x==0);
-            x=0;
             do{
-                printf("Enter the pay week you wish to update :\n Select 1 for first half of month \n Select 2 for second half of month\n");
-                scanf("%d",&week);
-                if(week==1 || week==2)
+                printf("Enter salary you wish to update\n");
+                scanf("%f",&salary);
+                printf("Enter deductions for employee\n");
+                scanf("%f",&deductions);
+                net_pay=salary-deductions;
+                if(net_pay<=0)
                 {
-                    x=1;
+                    printf("Invalid try again");
                 }
-                else{
-                    printf("INVALID week, enter again\n");
-                }
-            }while(x==0);
-
-            printf("Enter salary you wish to update\n");
-            scanf("%d",&salary);
+            }while(net_pay<=0);
             char qry[200];
-            char qry2[]={"select salary_type from salary_cal where emp_id='%d' and year='%d'and month='%d'and week ='%d'"};
+            char qry2[]={"select salary_type from salary_cal where emp_id='%d' and year='%d'and month='%d'"};
             sprintf(stmt,qry2,emp_id,year,month,week);
             if (mysql_query(conn2,stmt))
             {
@@ -266,27 +264,27 @@ char* update_salary(int emp_id)
                 if(row==NULL)
                 {
                     return("	No data found to update\n");
-
+                    
                 }
-
-                strcpy(qry,"update salary_cal set calculated_salary='%d' where emp_id='%d' and year='%d'and month='%d'and week ='%d'");
-                int n = sprintf(stmt,qry,salary,emp_id,year,month,week);
+                
+                strcpy(qry,"update salary_cal set calculated_salary='%f',deductions='%f' ,net_pay='%f' where emp_id='%d' and year='%d'and month='%d'");
+                int n = sprintf(stmt,qry,salary,deductions,net_pay,emp_id,year,month);
                 if (mysql_query(conn2,stmt))
                 {
                     printf("		Error: %s\n", mysql_error(conn2));
                     return ("		Failed to execute query.");
                 }
-
+                
                 else
                 {
                     return ("\n\n Salary updated. \n");
                 }
             }
-
+            
         }
-
-
-
+        
+        
+        
     }
 }
 //End of update salary
@@ -1613,34 +1611,36 @@ int emp_management(int i,int emp_id)
                 int dcsn=0;
                 do
                 {
-                	printf("\n                Press 1 Display salary\n");
-                    printf("\n                Press 2 Display salary\n");
-                    printf("                Press 3 Update salary\n");
-                    printf("                Press 4 Go Back....\n");
+                    
+                    printf("\n              Press 1 Display salary\n");
+                    printf("                Press 2 Update salary\n");
+                    printf("                Press 3 Go Back....\n");
                     int i;
                     scanf("%d",&i);
                     switch(i)
                     {
+                        
                         case 1:
-                        	emp_sal_mgmt();
-                            break;
+                        printf("Enter id of the employee\n");
+                        int e_id;
+                        scanf("%d",&e_id);
+                        int k=display_salary(e_id);
+                        break;
                         case 2:
-                        	break;
+                        printf("Enter employee id of employee, you wish to change salary for: \n");
+                        int i;
+                        scanf("%d",&i);
+                        printf("%s",update_salary(i));
+                        break;
                         case 3:
-                            printf("Enter employee id of employee, you wish to change salary for: \n");
-                            int i;
-                            scanf("%d",&i);
-                            printf("%s",update_salary(i));
-                            break;
-                        case 4:
-                            dcsn=1;
-                            break;
+                        dcsn=1;
+                        break;
                         default:
-                            printf("Wrong option\n");
+                        printf("Wrong option\n");
                         break;
                     }
                 }while(dcsn!=1);
-
+                
                 return 1;
             }
 
