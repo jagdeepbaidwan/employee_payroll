@@ -7,7 +7,7 @@ MYSQL *conn3;
 
 // Attendance request change...
 int port5=3305;
-char* attendance_change(int emp_id, int dd,int mm,int yy, char description[150])
+char* attendance_change(int emp_id, int dd,int mm,int yy, char description[200])
 {
 	int r;
 	char date[15];
@@ -17,8 +17,20 @@ char* attendance_change(int emp_id, int dd,int mm,int yy, char description[150])
 		printf("\nInvalid Date\n");
 		return "Invalid Date";
 	}
+	else if(strlen(description)>=150)
+    {
+        printf("\n Description must not be greater than 150 characters\n");
+        return "Invalid description";
+    }
+    else if(emp_id==0)
+    {
+        printf("\nEmployee not exists\n");
+        return "User not found";
+    }
 	else
 	{
+	    conn3=mysql_init(NULL);
+        mysql_real_connect(conn3, "localhost", "root", "1234","payroll", port5, NULL, 0);
 		sprintf(date,"%d/%d/%d", dd,mm,yy);
 		char stmt[1500];
     	char qry[]={"insert into request_form (emp_id,date,descript,req_status) VALUES('%d','%s','%s','0')"};
@@ -26,7 +38,7 @@ char* attendance_change(int emp_id, int dd,int mm,int yy, char description[150])
     	if (mysql_query(conn3,stmt))
     	{
 	   		printf(" Error: %s\n", mysql_error(conn3));
-	   		return "Database Error";
+	   		return "Database Error\n";
 	   	}
 	    else
 	 	{
@@ -34,6 +46,7 @@ char* attendance_change(int emp_id, int dd,int mm,int yy, char description[150])
 	 	}
 	}
 }
+
 //Function attendance request change
 
 void reuest_status(int emp_id)
@@ -123,20 +136,34 @@ int emp_attendance_mgmt(int emp_id)
 		{
             char decs11[50];
 			int r,dd,mm,yy;
-			char description[150];
-    		int x;
+			char description[200];
+    		int x=1;
+    		printf("Enter the date on which you have problem (mm/dd/yyyy)\n");
+            scanf("%d/%d/%d",&dd,&mm,&yy);
+            do{
+                printf("Explain your problem in 150 characters\n");
+                gets(description);
+                x=notempty(description);
+            }while(x==0);
 			do
 			{
+                if((strcmp(decs11,"Invalid Date")==0))
+                {
+                    printf("Enter the date on which you have problem (mm/dd/yyyy)\n");
+                    scanf("%d/%d/%d",&dd,&mm,&yy);
 
-				printf("Enter the date on which you have problem (mm/dd/yyyy)\n");
-				scanf("%d/%d/%d",&dd,&mm,&yy);
-				do{
-    				printf("Explain your problem in 150 characters\n");
-    				gets(description);
-    				x=notempty(description);
-    			}while(x==0);
+                }
+				if(strcmp(decs11,"Invalid description")==0)
+                {
+                    do{
+                        printf("\nExplain your problem in 150 characters\n");
+                        gets(description);
+                        x=notempty(description);
+                    }while(x==0);
+                }
+
 				strcpy(decs11,attendance_change(emp_id,dd,mm,yy,description));
-			}while(strcmp(decs11,"Invalid Date")==0);
+			}while(strcmp(decs11,"Request submitted")!=0);
 			if(strcmp(decs11,"Database Error")==0)
 			{
 				printf("Database Error");
