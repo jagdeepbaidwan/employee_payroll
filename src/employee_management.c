@@ -800,57 +800,79 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
  *
  */
 
-void deactivate (int emp_id, int login_id){
-    MYSQL_RES *read=NULL;
-    MYSQL_RES *res=NULL;
-    MYSQL_ROW row=NULL;
-    char status[20]="0" ;
-    snprintf(query,1500,"select emp_id,status FROM login_details where emp_id = '%d'",emp_id) ;
 
-    if (mysql_query(conn2, query)){
-        printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
-    }
-    else{
-        res = mysql_store_result(conn2);
-        row = mysql_fetch_row(res);
-        if (row == NULL){
-            printf("Username Not Found");
-        }
-        else{
-            //strcpy(status,row[0]);
+/* De-activating emplyee*/
+char* deactivate (int emp_id, int login_id)
+{
 
-            if(strcmp("A",row[1])){
-                printf("Already deactivated");
-            }
-            else{
-                if(atoi(row[0])!=login_id){
-                    int dd,mm,yy;
-                    int r;
-                    do
-                    {
-                        printf("\nEnter the date of leave of an employee:Format(dd/mm/yyyy)");
-                        scanf("%d/%d/%d",&dd,&mm,&yy);
-                        r=validate_date(dd,mm,yy);
-                    }while(r!=1);
-                    char date[15];
-                    sprintf(date,"%d/%d/%d", dd,mm,yy);
-                    char qry[]="update  login_details set status='I', DOL='%s' where emp_id='%d'";
-                    sprintf(query,qry,date,emp_id);
-                    if (mysql_query(conn2, query)){
-                        printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
-                    }
-                    else{
-                        printf("User Successfully deactivated");
-                    }
-                }
-                else{
-                    printf("Sorry! You can not deactivate the logged in account");
-                }
-            }
-        }
-    }
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	char status[20]="0" ;
+	conn2=mysql_init(NULL);
+    mysql_real_connect(conn2, "localhost", "root", "1234","payroll", port6, NULL, 0);
+ 	snprintf(query,1500,"select emp_id,status FROM login_details where emp_id = '%d'",emp_id);
+ 	/* send SQL query */
+ 	if (mysql_query(conn2, query))
+ 	{
+   	printf("Failed to execute quesry. Error: %s\n", mysql_error(conn2));
+   	return "Database Error";
+ 	}
+ 	else
+ 	{
+	 res = mysql_store_result(conn2);
+
+	 row = mysql_fetch_row(res);
+	 if (row == NULL)
+	 {
+	   return "No employee exists";
+	 }
+	 else
+	 {
+	 	//strcpy(status,row[0]);
+
+	 	if(strcmp("A",row[1]))
+	 	{
+		 	return "Already de-activated";
+		 }
+		 else
+		 {
+		 	 if(atoi(row[0])!=login_id)
+		 	 {
+		 	 	int dd,mm,yy;
+				int r;
+				do
+				{
+					printf("\nEnter the date of leave of an employee:Format(dd/mm/yyyy)");
+					scanf("%d/%d/%d",&dd,&mm,&yy);
+					r=validate_date(dd,mm,yy);
+				}while(r!=1);
+				char date[15];
+		 	 	sprintf(date,"%d/%d/%d", dd,mm,yy);
+
+
+			 	char qry[]="update  login_details set status='I', DOL='%s' where emp_id='%d'";
+				sprintf(query,qry,date,emp_id) ;
+				if (mysql_query(conn2, query))
+		 		{
+			   		printf("Failed to execute query. Error: %s\n", mysql_error(conn2));
+			   	}
+			   	else
+			   	{
+				   return "Employee deactivated";
+				}
+		 	}
+		 	else
+		 	{
+		 		printf("Sorry! You can not deactivate the logged in account\n");
+		 		return "Same logged in user";
+			}
+		 }
+	 }
+	}
 }
 /*End de-activating employee function*/
+
 
 
 
@@ -1319,19 +1341,21 @@ char* modify_employee(int emp_id)
  *
  */
 
-int display_leaves(int emp_id)
+int display_leaves(int emp_id,int year)
 {
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
-    int num,year;
+    int num;
     char stmt[1500];
     connect6=mysql_init(NULL);
+    if(year<1900 || year>9999)
+    {
+        printf("Invalid year\n");
+        return 2;
+    }
 	mysql_real_connect(connect6,"localhost", "root", "1234","payroll", port6, NULL, 0);
-
-    printf("Enter the leave year you wish to see: \n");
-    scanf("%d",&year);
     char qry[]={"select * from leave_details where emp_id='%d' and Leave_year='%d'"};
     if(connect6)
     {
@@ -1351,7 +1375,7 @@ int display_leaves(int emp_id)
             if(row==NULL)
             {
                 printf("No data found for employee id %d ",emp_id);
-                return 0;
+                return 3;
             }
             else{
 
@@ -1378,14 +1402,17 @@ int display_leaves(int emp_id)
                     row = mysql_fetch_row(read);
 
                 }
+                return 1;
             }
 
 
-            printf("\n");
+
         }
     }
-
-    return 1;
+    else
+    {
+        return 0;
+    }
 }
 //End of leaves display
 
@@ -1453,7 +1480,7 @@ int emp_management(int i,int emp_id)
                         {
                             printf("Please specify the employee id: ");
                             scanf("%d",&id);
-                            deactivate(id,emp_id);
+                            printf("%s",deactivate(id,emp_id));
                             break;
                         }
                         case 4:
@@ -1530,7 +1557,7 @@ int emp_management(int i,int emp_id)
                 int dcsn=0;
                 do
                 {
-                    printf("                Press 1 Add new leave details\n");
+                    printf("\n                Press 1 Add new leave details\n");
                     printf("                Press 2 View pending requests for attendance discrepancy\n");
                     printf("                Press 3 Display leaves\n");
                     printf("                Press 4 View pending requests for leave requests\n");
@@ -1551,7 +1578,14 @@ int emp_management(int i,int emp_id)
                         int id;
                         printf("Please provide the employee id: ");
                         scanf("%d",&id);
-                        display_leaves(id);
+                        int dcsn1=1,year1;
+                        do
+                        {
+                            printf("Enter the leave year you wish to see: \n");
+                            scanf("%d",&year1);
+                            dcsn1=display_leaves(id,year1);
+                        }while(dcsn1==2);
+
                     }
                     else if(ch==4)
                     {

@@ -22,11 +22,11 @@ MYSQL_ROW row=NULL;
     {                                         \
         if (x)                                \
         {                                     \
-            printf("PASSED\n");               \
+            printf("\n\nPASSED\n\n\n");               \
         }                                     \
         else                                  \
         {                                     \
-            printf("FAILED\n"); \
+            printf("\n\nFAILED\n\n\n"); \
         }                                     \
     }
 
@@ -171,11 +171,63 @@ int main(int argc, char *argv[])
         }
     case 2:
         {
-            printf("\n\n\n\n*********************************TEST 1 for attendance change request**********************************************\n");
-            printf("***********************************TEST 1A*****************************************************\n");
+            printf("\n\n\n\n*********************************TEST 3 for attendance change request**********************************************\n");
+            printf("***********************************TEST 3A*****************************************************\n");
             printf("We are first going to raise a request with wrong date 123/123/1243 and a random description\n");
             printf("Expected result is it should return Invalid date format\n ");
             ASSERT_TEST(strcmp("Invalid Date",attendance_change(2,123,123,1243,"abcd"))==0);
+            printf("\n\n***********************************TEST 3B*****************************************************\n");
+            printf("Function call with a description with more than 150 character\n");
+            printf("Expected result is it should return Description must not be greater than 150 characters 'C is a procedural programming language. It was initially developed by Dennis Ritchie in the year 1972. It was mainly developed as a system programming language to write an operating system' \n ");
+            ASSERT_TEST(strcmp("Invalid description",attendance_change(2,01,04,2020,"C is a procedural programming language. It was initially developed by Dennis Ritchie in the year 1972. It was mainly developed as a system programming language to write an operating system"))==0);
+            printf("\n\n***********************************TEST 3C*****************************************************\n");
+            printf("Function call without employee id \n");
+            printf("Expected result is it should return Employee not exists\n ");
+            ASSERT_TEST(strcmp("User not found",attendance_change(0,01,04,2020,"abcd"))==0);
+            printf("\n\n***********************************TEST 3D*****************************************************\n");
+            printf("Function call with a correct parameters empID=2, date= 17/04/2020 and description='change Absent with ML'\n");
+            printf("Expected result is it should return Request submitted\n ");
+            ASSERT_TEST(strcmp("Request submitted",attendance_change(2,17,04,2020,"change Absent with ML"))==0);
+        }
+    case 3:
+        {
+            printf("\n\n\n\n*********************************TEST 4 for employee deactivation**********************************************\n");
+            printf("***********************************TEST 4A*****************************************************\n");
+            printf("We are first going to raise a request with a wrong emp_id to deactivate\n");
+            printf("Expected result is it should return Employee does not exists\n ");
+            ASSERT_TEST(strcmp("No employee exists",deactivate(92344,1))==0);
+            printf("***********************************TEST 4B*****************************************************\n");
+            printf("Now we raise a request to deactivate the same logged in user id\n");
+            printf("Expected result is it should return: Same logged in user can not deactivate himself\n ");
+            ASSERT_TEST(strcmp("Same logged in user",deactivate(1,1))==0);
+            printf("***********************************TEST 4C*****************************************************\n");
+            printf("Now we raise a request to deactivate the already deactivated account\n");
+            printf("Expected result is it should return: User already deactivated\n ");
+            ASSERT_TEST(strcmp("Already de-activated",deactivate(8,1))==0);
+            printf("***********************************TEST 4D*****************************************************\n");
+            printf("Now we raise a request to deactivate right employee\n");
+            printf("Expected result is it should return: Employee deactivated\n ");
+            ASSERT_TEST(strcmp("Employee deactivated",deactivate(2,1))==0);
+        }
+    case 4:
+        {
+            printf("\n\n\n\n*********************************TEST 5 for employee display leaves**********************************************\n");
+            printf("***********************************TEST 5A*****************************************************\n");
+            printf("We are first going to raise a display leave request with a wrong year\n");
+            printf("Expected result is it should return Wrong year chosen\n ");
+            ASSERT_TEST(display_leaves(2,22)==2);
+            printf("***********************************TEST 5B*****************************************************\n");
+            printf("Now if the data is not available in the data base \n");
+            printf("Expected result is it should return: No data found \n ");
+            ASSERT_TEST(display_leaves(555,2020)==3);
+            printf("***********************************TEST 5C*****************************************************\n");
+            printf("Now we show the data available in the database...\n");
+            printf("Expected result is it should return: table show the data of leave\n ");
+            ASSERT_TEST(display_leaves(2,2020)==1);
+            printf("***********************************TEST 5D*****************************************************\n");
+            printf("Now if the the employee does not exist \n");
+            printf("Expected result is it should return: No data found \n ");
+            ASSERT_TEST(display_leaves(1234,2020)==3);
         }
     }
 

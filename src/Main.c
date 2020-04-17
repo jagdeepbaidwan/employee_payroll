@@ -331,7 +331,14 @@ int main(int argc, char *argv[])
                                 }
                                 case 2:
                                 {
-                                    display_leaves(id);
+
+                                    int dcsn1=1,year;
+                                    do
+                                    {
+                                        printf("Enter the leave year you wish to see: \n");
+                                        scanf("%d",&year);
+                                        dcsn1=display_leaves(id,year);
+                                    }while(dcsn1==2);
                                     break;
                                 }
                                 case 3:

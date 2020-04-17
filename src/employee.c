@@ -309,7 +309,7 @@ void change_password(int id)
 int employee(int emp_id)
 {
     int i;
-    printf("                Press 1 Personal details management\n");
+    printf("\n                Press 1 Personal details management\n");
     printf("                Press 2 Attendance management\n");
     printf("                Press 3 Leave management\n");
     printf("                Press 4 Salary management\n");
@@ -346,7 +346,7 @@ int employee(int emp_id)
             do
             {
                 int i;
-                printf("                Press 1 Request leave\n");
+                printf("\n                Press 1 Request leave\n");
                 printf("                Press 2 Display leaves\n");
                 printf("                Press 3 To Go Back...\n");
                 scanf("%d",&i);
@@ -378,7 +378,13 @@ int employee(int emp_id)
                         break;
                     }
                     case 2:{
-                        display_leaves(emp_id);
+                        int year1,dcsn1=1;
+                        do
+                        {
+                            printf("Enter the leave year you wish to see: \n");
+                            scanf("%d",&year1);
+                            dcsn1=display_leaves(emp_id,year1);
+                        }while(dcsn1==2);
                         break;
                     }
                     case 3:
