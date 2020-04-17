@@ -1,3 +1,11 @@
+/** 
+ * @file salary_management.c 
+ *
+ * Perform the Add salary function and computation of the salary for all users.
+ *
+ */
+
+
 #include<windows.h>
 #include<mysql.h>
 #include<string.h>
@@ -7,6 +15,24 @@
 
 MYSQL *conn7, *conn8, *conn9;
 int port11 =3306;
+
+/** 
+ * \brief Add the salary in database with table name 'salary' by taking the inputs given 
+ * by the admin.
+ *
+ * It will add the salary of the employee in the database, but before inserting, 
+ * validate for salary_type was checked that manager is of type salaried (S) and
+ * employee is of hourly basis in the database.
+ * 
+ * @param[in] int e_id Employee ID of the user.
+ *
+ * \return User_Type: Salary added successfully: For positive case
+ *		   Wrong Salary type: For incorrect salary_type of the user
+ *		   Wrong choice entered: When neither (H) or (S) is entered in the database
+ *		   Not connected : Fail to establish the connection with database
+ *		   Failed to execute the query: Connection problem for execution of the query
+ *
+ */
 
 char* add_salary(int e_id)
 {
@@ -84,6 +110,22 @@ char* add_salary(int e_id)
 	}
 }
 
+/** 
+ * \brief Compute the salary for the users in the database by admin.
+ *
+ * Compute the salary of the employee by accessing salary_type from database
+ * Employee users will use "hourly_attendance" table to get the hours of them
+ * Other(Admin, Manager) users will use "daily_attendance" table to get their salary.
+ *
+ * @param[in] char stmt: Query passed from emp_sal_mgmt to distinguish between
+ * hourly and salared user
+ *
+ * \return User_Type: Salary is computed: For positive case
+ *		   No Record found: For not finding the employee in the database
+ *		   Not connected : Fail to establish the connection with database
+ *		   Failed to execute the query: Connection problem for execution of the query
+ *
+ */
 
 
 char* count_attendances_and_compute_salary(char stmt[1500])
@@ -98,6 +140,13 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 	s = time(NULL);
 	current_time=localtime(&s);
     
+    /** 
+	* Initially, Connection is verified that, it is established or not
+	* Query: Access number of hours of the employee in "hourly_attendance" table according to month,year and employee id
+	* If employee works more than 40 hours than it will paid as overtime, otherwise normal pay
+	* For Admin and Manager, absent will be concluded 
+	*/
+	
 	if (conn7)
 	{    
 		mysql_query(conn7,stmt);
@@ -297,7 +346,16 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 	}
 }
 
-
+/** 
+ * \brief Create connection and basically calls the function from here 
+ *
+ * It will initialize the connection and calls the other function from this function.
+ *
+ * \return 0: Unsuccessful connection
+ * 1: Successful connection
+ *
+ */
+ 
 int emp_sal_mgmt()
 {
 	conn7 = mysql_init(NULL);

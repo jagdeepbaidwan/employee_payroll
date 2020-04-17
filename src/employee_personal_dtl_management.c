@@ -1,3 +1,13 @@
+/** 
+ * @file employee_personal_dtl_management.c 
+ *
+ * It will display the details of the employee such as employee personal detail
+ * Employee feedback given by manager which help in increments or promotions
+ * Raised and View Grievances by the Admin,Manager and Employee and 
+ * User have the option to be anonymous or not.
+ *
+ */
+
 #include<stdio.h>
 #include<windows.h>
 #include<mysql.h>
@@ -10,10 +20,20 @@
 MYSQL *conn3;
 MYSQL *conn8;
 MYSQL *conn9;
-
 int port7=3305;
 
-// In this function, it will display the detail of the employee and doesnot return nothing but instead printing the messages on the console screen.
+/** 
+ * \brief Access the database and display the details of the employee. 
+ *
+ * It will display the details of the employees.
+ *
+ * @param[in] char stmt: Query passed from emp_detail_mgmt to display the employee details 
+ * and their rating given by the manager.
+ * 
+ * \return Nothing because the data retrieved from the database is printing on the console screen.
+ *
+ */
+ 
 void emp_display(char stmt[]){
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
@@ -65,10 +85,20 @@ void emp_display(char stmt[]){
 
 }
 
-//end of displaying a employee detail.
-
-
-//Start of update employee function.
+/** 
+ * \brief Access the database for their details to be modified by the employee  
+ *
+ * The details of the employees can be modified by calling this function
+ * Use "emp_detail" table to fetch and modify the records
+ *
+ * @param[in] int emp_id: Employee ID of the user.
+ * 
+ * \return User Type: User modified successfully: For positive case
+ *		   Not connected : Fail to establish the connection with database
+ *		   Failed to execute the query: Connection problem for execution of the query
+ *
+ */
+ 
 char* update_employee(int emp_id)
 {
     conn3=mysql_init(NULL);
@@ -250,10 +280,22 @@ char* update_employee(int emp_id)
         }
     }
 }
-// end of update employee
 
-
-// Starting of the raise grievance function.
+/** 
+ * \brief Raise grievances or complaints aginst others by Admin,Manager and EMployee
+ *
+ * It will raise a grievance or complaints against each other by Admin, Manager and Employee.
+ * User want to be anonymous, then emp_id is not inserted in the database.
+ * Description can be provided upto 200 characters for the grievances redressal.
+ *
+ * @param[in] int emp_id: Employee ID of the user.
+ * 
+ * \return User Type: Grivance Raised: For positive case
+ *		   No Record found: For not finding the employee in the database
+ *		   Not connected or Failed to execute the query: For failure with the database
+ *
+ */
+ 
 char* raise_grievances(int e_id)
 {
 	conn8 = mysql_init(NULL);
@@ -282,7 +324,12 @@ char* raise_grievances(int e_id)
 
     	printf("Do you want to anonymous? y/n: ");
     	scanf("%s",choice);
-
+   		
+		/** 
+		* Query: Insert into "grievances" table according to auto-generated response number
+		* It will add emp_id in the database by asking the permission from the user
+		*/
+		
     	if ( 0 == strcasecmp(choice,"y"))
 		{
 			char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL,NULL,'%s')"};
@@ -323,10 +370,17 @@ char* raise_grievances(int e_id)
 	    }
 	}
 }
-// Ending of the raise grievance function.
 
+/** 
+ * \brief Access the database to display the raised grievances by the users. 
+ *
+ * It will display the raised grievances by the users. Admin,Manager,Employee have the option
+ * to view the grievances by employee id or see all raised grievances.
+ * 
+ * \return Nothing because the data retrieved from the database is printing on the console screen.
+ *
+ */
 
-// For viewing the grievances: view_raise_grievances();
 void view_raised_grievances()
 {
 	MYSQL_RES *read=NULL;
@@ -445,10 +499,23 @@ void view_raised_grievances()
 	    }
 	}
 }
-// Ending of the view raised grievances
 
+/** 
+ * \brief Manager can rate the employees using this function 
+ *
+ * Employees will get the rating by their Manager for the increment/promotions
+ * The rating is from 1 to 5 and cannot accept others value than 1,2,3,4 and 5
+ * Employee ID is also validated that it is active or inactive.
+ * Description can be entered upto 200 character, which signifies qualities of the employee
+ * Year of the rating is also given and validated 
+ * The values are inserted in emp_perfor function
+ * 
+ * \return User Type: 0 as string: For error
+ *		   Not connected : Fail to establish the connection with database
+ *		   Failed to execute the query: Connection problem for execution of the query
+ *
+ */
 
-// Rate or Feedback the employee
 char* employee_rating()
 {
 	MYSQL_RES *read=NULL;
@@ -612,8 +679,17 @@ char* employee_rating()
 		}
 	}
 }
-// End of the rating of the employee.
 
+/** 
+ * \brief Create connection and basically calls the function from here 
+ *
+ * It will initialize the connection and calls the other function from this function.
+ *
+ * @param[in] int emp_id: Employee ID for the user.
+ * 
+ * \return Nothing because every functions is handled internally.
+ *
+ */
 
 int emp_detail_mgmt(int emp_id)
 {
@@ -629,6 +705,14 @@ int emp_detail_mgmt(int emp_id)
     scanf("%d",&i);
     switch (i)
     {
+    	 
+		 /** 
+		 * Case 1: Query is passed from here to display the employee details
+		 * Case2: Update function is called with emp_id as @param [in]
+		 * Case3: Query is passed from here to view the feedback of the employee
+		 * Case4: Change Password function is called with emp_id as @param [in] 
+		 */
+		 
         case 1:
         {
             char stmt[1500];
@@ -638,8 +722,8 @@ int emp_detail_mgmt(int emp_id)
             break;
         }
         case 2:
-        printf("%s",update_employee(emp_id));
-        break;
+        	printf("%s",update_employee(emp_id));
+        	break;
         case 3:
         {
             char stmt[1500];
@@ -654,13 +738,13 @@ int emp_detail_mgmt(int emp_id)
             break;
         }
         case 5:
-            {
-                return 1;
-            }
+        {
+            return 1;
+        }
         default:
-            {
-                printf("\nInvalid Input\n");
-            }
+        {
+            printf("\nInvalid Input\n");
+        }
         break;
     }
     return 0;
