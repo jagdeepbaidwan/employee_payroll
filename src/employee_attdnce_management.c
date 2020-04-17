@@ -7,36 +7,32 @@ MYSQL *conn3;
 
 // Attendance request change...
 int port5=3305;
-char* attendance_change(int emp_id)
+char* attendance_change(int emp_id, int dd,int mm,int yy, char description[150])
 {
-	char stmt[1500];
-	//struct request
-	//{
-		int id;
-       	char date[15];
-       	char description[150];
-	//};
-	//struct request req;
-	printf("Enter the date on which you have problem (mm/dd/yyyy)\n");
-    scanf("%s",date);
-    int x;
-    do{
-    printf("Explain your problem in 150 characters\n");
-    gets(description);
-    x=notempty(description);
-    }while(x==0);
-
-    char qry[]={"insert into request_form (emp_id,date,descript,req_status) VALUES('%d','%s','%s','0')"};
-	sprintf(stmt,qry,emp_id,date,description);
-    if (mysql_query(conn3,stmt))
-    {
-   		printf(" Error: %s\n", mysql_error(conn3));
-   		return "Failed to execute query.";
-   	}
-    else
- 	{
- 	   return "\n\n\n Record entered in database\n\n\n\n";
- 	}
+	int r;
+	char date[15];
+	r=validate_current_month(dd,mm,yy);
+	if(r!=1)
+	{
+		printf("\nInvalid Date\n");
+		return "Invalid Date";
+	}
+	else
+	{
+		sprintf(date,"%d/%d/%d", dd,mm,yy);
+		char stmt[1500];
+    	char qry[]={"insert into request_form (emp_id,date,descript,req_status) VALUES('%d','%s','%s','0')"};
+		sprintf(stmt,qry,emp_id,date,description);
+    	if (mysql_query(conn3,stmt))
+    	{
+	   		printf(" Error: %s\n", mysql_error(conn3));
+	   		return "Database Error";
+	   	}
+	    else
+	 	{
+	 	   return "Request submitted";
+	 	}
+	}
 }
 //Function attendance request change
 
@@ -125,7 +121,30 @@ int emp_attendance_mgmt(int emp_id)
 		}
 		else if(ch==3)
 		{
-            printf("%s",attendance_change(emp_id));
+            char decs11[50];
+			int r,dd,mm,yy;
+			char description[150];
+    		int x;
+			do
+			{
+
+				printf("Enter the date on which you have problem (mm/dd/yyyy)\n");
+				scanf("%d/%d/%d",&dd,&mm,&yy);
+				do{
+    				printf("Explain your problem in 150 characters\n");
+    				gets(description);
+    				x=notempty(description);
+    			}while(x==0);
+				strcpy(decs11,attendance_change(emp_id,dd,mm,yy,description));
+			}while(strcmp(decs11,"Invalid Date")==0);
+			if(strcmp(decs11,"Database Error")==0)
+			{
+				printf("Database Error");
+			}
+			else if(strcmp(decs11,"Request submitted")==0)
+			{
+				printf("Request Submitted");
+			}
 		}
 		else if(ch==4)
         {
