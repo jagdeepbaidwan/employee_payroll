@@ -11,7 +11,7 @@ MYSQL *conn3;
 MYSQL *conn8;
 MYSQL *conn9;
 
-int port7=3305;
+int port7=3306;
 
 // In this function, it will display the detail of the employee and doesnot return nothing but instead printing the messages on the console screen.
 void emp_display(char stmt[]){

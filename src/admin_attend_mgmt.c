@@ -9,7 +9,7 @@ MYSQL *conn4;
 char query[1500];
 
 // Check record availability in attendance
-int port1=3305;
+int port1=3306;
 int attendance_month_availability(int mm, int yy)
 {
 	MYSQL_RES *read=NULL;

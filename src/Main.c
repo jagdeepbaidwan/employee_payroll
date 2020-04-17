@@ -16,7 +16,7 @@ MYSQL *oo,*conn,*conn4;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
-int port8=3305;
+int port8=3306;
 /*
 int getch(void)
 {
