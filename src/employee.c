@@ -14,7 +14,7 @@
 #include "..\include\admin_attendance.h"
 #include "..\include\employee_management.h"
 #include "..\include\validation.h"
-int port4=3306;
+int port4=3305;
 
 int getch(void)
 {

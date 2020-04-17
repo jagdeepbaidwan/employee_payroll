@@ -1,9 +1,9 @@
-/** 
+/**
  * @file Main.c
  *
  * Contains the main function from which different functions
  * located in other files are called to perform different
- * tasks assigned for admin,employee and manager based on 
+ * tasks assigned for admin,employee and manager based on
  * user inputs.
  *
  */
@@ -25,26 +25,26 @@
 #include "..\include\employee.h"
 #include "..\include\validation.h"
 
-/* Declaration of connection to MYSQL Database pointers */ 
+/* Declaration of connection to MYSQL Database pointers */
 MYSQL *oo,*conn,*conn4;
 
-/* Initializing the pointers to access data from MYSQL database*/ 
+/* Initializing the pointers to access data from MYSQL database*/
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
 
 /* Database connection port number*/
-int port8=3306;
+int port8=3305;
 
 
-/** 
+/**
  * \brief Checks the login credentials from database to assign the user type: Admin,Employee,Manager.
  *
  * Accesses the login_details table from database and matches
- * login credentials provided by the user corresponding to the 
+ * login credentials provided by the user corresponding to the
  * data entry in the database
- * 
- * @param[in] id Unique login id for the user 
+ *
+ * @param[in] id Unique login id for the user
  * @param[in] pwd Password for the user
  *
  * \return User_Type: admin,employee or manager for successful login
@@ -60,7 +60,7 @@ char* login(int id, char pwd[25])
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
 	mysql_real_connect(oo, "localhost", "root", "1234","payroll", port8, NULL, 0);
-	
+
 	/* checks for the database connectivity */
 	if(oo)
     {
@@ -99,11 +99,11 @@ char* login(int id, char pwd[25])
 
 
 
-/** 
+/**
  * \brief The main function which distributes various tasks to other functions.
  *
  * Expects a user type from the login function
- * Based on the functionalities provided for the user type 
+ * Based on the functionalities provided for the user type
  * and corresponding user inputs calls the other functions.
  *
  */
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
                 p++;
             }while(pwd[p-1]!='\r'||pwd[p-1]!=13);
             pwd[p-1]='\0';
-            
+
             /* Calls the login function and stores the user type in user_type*/
             strcpy(user_type,login(id,pwd));
             printf("%s\n",user_type);
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 
 
 	/* Display the functionalities available corresponding to the user_type */
-	
+
     if(strcmp("admin",user_type)==0)
     {
         int st=1;

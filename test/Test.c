@@ -3,16 +3,17 @@
  *
  * @brief Implementation of unit test cases.
  *
- * @author Arshdeep Singh - 
- * @author Jagdeep Singh - 
+ * @author Arshpreet Singh -
+ * @author Jagdeep Singh -
  * @author Puneet Singh -
- * @author Varinder Singh Dhanda - 
+ * @author Varinder Singh Dhanda -
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include<windows.h>
 #include<mysql.h>
 #include<string.h>
+#include "..\include\employee_management.h"
 MYSQL *oo,*conn;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
@@ -29,12 +30,13 @@ MYSQL_ROW row=NULL;
         }                                     \
     }
 
-char* login(int id, char pwd[25])
+
+/*char* login(int id, char pwd[25])
 {
 	char stmt[1500];
 	char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
 	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3306, NULL, 0);
+	mysql_real_connect(oo, "localhost", "root", "1234","payroll", 3305, NULL, 0);
 	if(oo)
     {
 
@@ -69,7 +71,7 @@ char* login(int id, char pwd[25])
     }
 }
 
-    
+
 char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_pass[45])
 {
     char stmt[1500];
@@ -89,7 +91,7 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
             if(row==NULL)
             {
                  return "\nWrong username or password\n\n\n\n\n";
-        	
+
             }
             else
 	    {
@@ -118,10 +120,10 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
 	       else
 	       {
 	          return "\nOld password wrong\n\n\n";
-			   
+
                }
 	   }
- 	
+
        }
     }
     else
@@ -129,35 +131,53 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
     	printf("not connected");
         printf("%s\n", mysql_error(oo));
         return "Error\n";
-    	
-    }
-	
-}
 
+    }
+
+}
+*/
 int main(int argc, char *argv[])
 {
-  	
-  printf("*********************************TEST 1 for Login**********************************************\n");
-  printf("***********************************TEST 1A*****************************************************\n");
-  printf("We are first going to login using correct credentials for Admin i.e. Userid=1 and password=1234\n");
-  printf("Expected result is it should return string admin\n ");
-  ASSERT_TEST(strcmp(login(1,"1234"),"admin")==0);	
-  printf("***********************************TEST 1B****************************************************\n");
-  printf("We are going to login using incorrect credentials Userid=1 and password=1233\n");
-  printf("Expected result is it should return string Wrong username or password\n ");
-  ASSERT_TEST(strcmp(login(1,"1233"),"\nWrong username or password\n\n\n\n\n")==0);
-  printf("*******************************TEST 2 for change_password*****************************************\n");
-  printf("***********************************TEST 2A*****************************************************\n");
-  printf("Change_password accepts 4 parameters i.e. userid,old password , new password , confirm new password\n");  
-  printf("In first case we are going to input correct credentials, it should return string Password updated\n");
-  ASSERT_TEST(strcmp(change_pass(1,"1222","1222","1234"),"Password updated\n")==0);
-  printf("***********************************TEST 2B*****************************************************\n");
-  printf("In second case we are going to input incorrect old password, it should return string Old password wrong\n");
-  ASSERT_TEST(strcmp(change_pass(1,"1222","1222","12"),"\nOld password wrong\n\n\n")==0);	
- 
-  printf("***********************************TEST 2C*****************************************************\n");
-  printf("In second case we are going to input incorrect new password, it should return string re-enter new password\n");
-  ASSERT_TEST(strcmp(change_pass(1,"1232","1224","1222"),"re-enter new password \n")==0);	
-		
+    int ch;
+    printf("\n     Press 1 to test login\n");
+    printf("\n     Press 2 to raise attendance change request\n");
+    printf("Enter test case number");
+
+    scanf("%d",&ch);
+    switch(ch)
+    {
+    case 1:
+        {
+            printf("*********************************TEST 1 for Login**********************************************\n");
+            printf("***********************************TEST 1A*****************************************************\n");
+            printf("We are first going to login using correct credentials for Admin i.e. Userid=1 and password=1234\n");
+            printf("Expected result is it should return string admin\n ");
+            //ASSERT_TEST(strcmp(login(1,"1234"),"admin")==0);
+            printf("***********************************TEST 1B****************************************************\n");
+            printf("We are going to login using incorrect credentials Userid=1 and password=1233\n");
+            printf("Expected result is it should return string Wrong username or password\n ");
+            //ASSERT_TEST(strcmp(login(1,"1233"),"\nWrong username or password\n\n\n\n\n")==0);
+            printf("*******************************TEST 2 for change_password*****************************************\n");
+            printf("***********************************TEST 2A*****************************************************\n");
+            printf("Change_password accepts 4 parameters i.e. userid,old password , new password , confirm new password\n");
+            printf("In first case we are going to input correct credentials, it should return string Password updated\n");
+            //ASSERT_TEST(strcmp(change_pass(1,"1222","1222","1234"),"Password updated\n")==0);
+            printf("***********************************TEST 2B*****************************************************\n");
+            printf("In second case we are going to input incorrect old password, it should return string Old password wrong\n");
+            //ASSERT_TEST(strcmp(change_pass(1,"1222","1222","12"),"\nOld password wrong\n\n\n")==0);
+            printf("***********************************TEST 2C*****************************************************\n");
+            printf("In second case we are going to input incorrect new password, it should return string re-enter new password\n");
+            //ASSERT_TEST(strcmp(change_pass(1,"1232","1224","1222"),"re-enter new password \n")==0);
+        }
+    case 2:
+        {
+            printf("\n\n\n\n*********************************TEST 1 for attendance change request**********************************************\n");
+            printf("***********************************TEST 1A*****************************************************\n");
+            printf("We are first going to raise a request with wrong date 123/123/1243 and a random description\n");
+            printf("Expected result is it should return Invalid date format\n ");
+            ASSERT_TEST(strcmp("Invalid Date",attendance_change(2,123,123,1243,"abcd"))==0);
+        }
+    }
+
 }
 
