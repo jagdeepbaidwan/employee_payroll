@@ -8,18 +8,20 @@
  *
  */
 
+/* Including basic libraries */
 #include<stdio.h>
 #include<windows.h>
 #include<mysql.h>
+
+/* including preprocessors */
 #include "..\include\Validation.h"
 #include "..\include\employee_personal_dtl_management.h"
 #include "..\include\employee.h"
 #define YEAR 2020
 #define MIN_YEAR 2018
 
-MYSQL *conn3;
-MYSQL *conn8;
-MYSQL *conn9;
+/* Declaration of connection to MYSQL Database pointers and database port number */
+MYSQL *conn3, *conn8, *conn9;
 int port7=3305;
 
 /** 

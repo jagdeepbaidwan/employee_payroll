@@ -5,14 +5,17 @@
  *
  */
 
-
+/* Including basic libraries */
 #include<windows.h>
 #include<mysql.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
+
+/* Include for calculating salary till date of the month */
 #include<time.h>
 
+/* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn7, *conn8, *conn9;
 int port11 =3305;
 
@@ -73,38 +76,28 @@ char* add_salary(int e_id)
     	printf("Salary type is %s",sal.sal_type);
     	if (strcasecmp(sal.sal_type,"hourly")==0 || strcasecmp(sal.sal_type,"Salaried")==0)
     	{
-
-
-
-						int n = sprintf(stmt,add_sal_qry,e_id,sal.sal_type,sal.salary,sal_year);
-
-						if (mysql_query(conn7,stmt))
-    					{
-   							printf(" Error: %s\n", mysql_error(conn7));
-   							return "Failed to execute query.";
-   						}
-
-						else
- 						{
-
-							return ("\n\n\t\t		Salary added successfully \n\n");
-						}
-
-
-        	}
+			int n = sprintf(stmt,add_sal_qry,e_id,sal.sal_type,sal.salary,sal_year);
+			if (mysql_query(conn7,stmt))
+			{
+				printf(" Error: %s\n", mysql_error(conn7));
+				return "Failed to execute query.";
+			}
 
 			else
 			{
-
-				printf("\t\t Wrong salary_type for emp_id: %d\n",e_id);
-				return ("try again\n");
+				return ("\n\n\t\t		Salary added successfully \n\n");
 			}
+       	}
 
+		else
+		{
+			printf("\t\t Wrong salary_type for emp_id: %d\n",e_id);
+			return ("try again\n");
+		}
     }
 
     else
     {
-
         printf ("%s\n", mysql_error(conn7));
         return("not connected");
 	}
@@ -127,7 +120,6 @@ char* add_salary(int e_id)
  *
  */
 
-
 char* count_attendances_and_compute_salary(char stmt[1500])
 {
 	MYSQL_RES *read = NULL;
@@ -135,6 +127,7 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 	MYSQL_ROW rows=NULL;
 	MYSQL_ROW res=NULL;
 	MYSQL_FIELD *fields;
+	
 	time_t s;
 	struct tm* current_time;
 	s = time(NULL);
