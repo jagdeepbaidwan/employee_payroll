@@ -433,7 +433,27 @@ int main(int argc, char *argv[])
                                     }
                                     case 2:
                                     {
-                                        printf("%s",employee_rating());
+                                    	char description[200];
+										int x=0,year=0,rate=0,e_id=0;
+										
+										printf("Enter the Employee ID for rating: ");
+  										scanf("%d",&e_id);
+  										
+  										printf("Enter the rating of the employee for %d : ",e_id);
+										scanf("%d",&rate);
+										
+										getchar();
+										do
+										{
+    										printf("Feedback of the employee under 200 characters\n");
+											gets(description);
+											x=notempty(description);
+    									}while(x==0);
+										
+										printf("Enter the year for rating\n");
+										scanf("%d",&year);
+										
+                                        printf("%s",employee_rating(e_id,rate,description,year));
                                         break;
                                     }
                                     case 3:

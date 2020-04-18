@@ -245,7 +245,8 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 					{
 						char qry[] ={"select * from daily_attendance where attend_month ='%d' and attend_year ='%d' and emp_id ='%d'"};
 				  		sprintf(stmt,qry,current_time->tm_mon+1,current_time->tm_year+1900,emp_id);
-
+						char sal_type[20];
+						
 						if (mysql_query(conn8,stmt))
     			    			{
 			        			printf("Error: %s\n", mysql_error(conn8));
