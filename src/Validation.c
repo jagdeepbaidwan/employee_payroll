@@ -1,3 +1,11 @@
+/**
+ * @file Validation.c
+ *
+ * Perform the validations for most of the functions
+ *
+ */
+
+/* Including basic libraries */
 #include<stdio.h>
 #include<string.h>
 #include<windows.h>
@@ -5,11 +13,27 @@
 #include <stdlib.h>
 #include<time.h>
 #include<ctype.h>
+
+/* Include preprocessor for declaration of the functions. */
 #include "..\include\Validation.h"
+
+/* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn9;
+int port9=3306;
+
 char query[1500];
 
-int port9=3305;
+/**
+ * \brief Removes the extra spacing
+ *
+ * It will delete or trim the extra space in the array of characters by calling this function
+ *
+ * @param[in] char *s Array of Character Pointer, pointing to the character of size char
+ *
+ * \return User_Type: Pointer to the array of character
+ *
+ */
+ 
 char *rtrim(char *s)
 {
     char* back = s + strlen(s);
@@ -18,24 +42,45 @@ char *rtrim(char *s)
     return s;
 }
 
+/**
+ * \brief Validating the attendance
+ *
+ * Accessing the database,and compare the string (L), (PHL), (ML), (PL), (LWP), (WOFF), (A), (P)
+ * with the fields accessed from the excel file
+ *  
+ * @param[in] char attnd[] Array of Character Pointer with the capacity to store 4 elements.
+ * @param[in] int yy Integer value for specifying the leave year
+ * @param[in] int emp_id Employee ID of the user
+ *
+ * \return User_Type: 0: For false Case or Error
+ * 					  1 or 2: Positive Response 
+ *
+ */
+ 
 int validate_attendance(char attnd[4],int yy, int emp_id)
 {
+	/* Initializing pointers, to access data from MYSQL database */
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res2=NULL;
 	MYSQL_ROW row=NULL;
 	conn9=mysql_init(NULL);
-	//int id;
+	
+	/*setting up the connection for *conn9 */
 	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
 	if(!conn9)
 	{
 		printf("Connection error");
 		return 0;
 	}
+	/* Called rtrim function to remove the extra spaces */
 	attnd=rtrim(attnd);
+	
+	/* Comparing attnd array with the different types of leaves */
 	if(strcmp(attnd,"L")==0 || strcmp(attnd,"PHL")==0 || strcmp(attnd,"ML")==0 || strcmp(attnd,"PL")==0 || strcmp(attnd,"LWP")==0 || strcmp(attnd,"WOFF")==0 || strcmp(attnd,"A")==0 || strcmp(attnd,"P")==0)
 	{
 		if(strcmp(attnd,"ML")==0 )
 		{
+			/* Accessing the leave_details table to select leave year with the emp_id */
 			char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
 			sprintf(query,qry_id,yy,emp_id);
 			if (mysql_query(conn9,query))
@@ -70,6 +115,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 		}
 		if(strcmp(attnd,"PL")==0)
 		{
+			/* Accessing the leave_details table to select leave year with the emp_id */
 			char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
 			sprintf(query,qry_id,yy,emp_id);
 			if (mysql_query(conn9,query))
@@ -90,6 +136,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 				else
 				{
 					l_balance=l_balance-1;
+					/* Update the database by selecting leave year and emp_id */
 					char qry_id[]={"update leave_details set balance_PL='%d' where leave_year='%d' and emp_id=%d"};
 					sprintf(query,qry_id,l_balance,yy,emp_id);
 					if (mysql_query(conn9,query))
@@ -113,6 +160,22 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 		return 0;
 	}
 }
+
+/**
+ * \brief Validating the current month
+ *
+ * Compairing the given date,month,year by the Admin against the actual number of days in that month
+ * Month is of 29 or 30 or 31 days in the given year
+ *  
+ * @param[in] int dd Integer input from the user
+ * @param[in] int mm Integer input from the user
+ * @param[in] int yy Integer input from the user
+ *
+ * \return User_Type: 0: For Error of the invalid month
+ * 					  1: Positive case that month is valid
+ *
+ */
+ 
 int validate_current_month(int dd, int mm, int yy)
 {
 	int month, year;
@@ -153,6 +216,21 @@ int validate_current_month(int dd, int mm, int yy)
 		return 0;
 	}
 }
+
+/**
+ * \brief Validating the current date
+ *
+ * Compairing the given date,month,year by the Admin against the actual number of days in that month
+ * Month is of 29 or 30 or 31 days in the given year
+ *  
+ * @param[in] int dd Integer input from the user
+ * @param[in] int mm Integer input from the user
+ * @param[in] int yy Integer input from the user
+ *
+ * \return User_Type: 0: For Error of the invalid date
+ * 					  1: Positive case that date is valid
+ *
+ */
 
 int validate_date(int dd,int mm,int yy)
 {
@@ -197,6 +275,17 @@ int validate_date(int dd,int mm,int yy)
     }
 }
 
+/**
+ * \brief Validating the Phone number
+ *
+ * Validating the given array of character that it is of length 10
+ * If not of length 10, gives an invalid message
+ *  
+ * @param[in] char phone[] Array of character pointers
+ *
+ * \return User_Type: 0: For Error of the invalid phone number
+ * 					  1: Positive case the valid phone number
+ */
 
 int valid_phone(char phone[])
 {
@@ -220,6 +309,18 @@ int valid_phone(char phone[])
 	}
 }
 
+/**
+ * \brief Validating that string is empty or not
+ *
+ * Given string by the user is validated that it is empty or not
+ *  
+ * @param[in] char num[] Array of characters given by the user
+ *
+ * \return User_Type: 0: For Error of the invalid character
+ * 					  1: Positive case for valid character
+ *
+ */
+
 int notempty(char num[] )
 {
 
@@ -232,6 +333,19 @@ int notempty(char num[] )
 	return 1;
 
 }
+
+/**
+ * \brief Validating the given string
+ *
+ * Given string by the user is validated that email is having with '@' and '.'
+ *  
+ * @param[in] char test[] Array of characters given by the user
+ *
+ * \return User_Type: 0: For Error of the invalid email
+ * 					  1: Positive case for valid email
+ *
+ */
+
 int valid_email(char test[])
 {
     int     i;
@@ -270,6 +384,18 @@ int valid_email(char test[])
     return 1;
 }
 
+/**
+ * \brief Validating the year as leap or not
+ *
+ * Test the year for leap year or not
+ * 
+ * @param[in] int y Integer value by the user
+ *
+ * \return User_Type: 0: For Error of the invalid date
+ * 					  1: Positive case that date is valid
+ *
+ */
+
 int isleap(int y) {
    if((y % 4 == 0) && (y % 100 != 0) && (y % 400 == 0))
    {
@@ -282,6 +408,20 @@ int isleap(int y) {
    }
 
 }
+
+/**
+ * \brief Validating the date,month and year
+ *
+ * It will validate the dat,month and year given by the user
+ *  
+ * @param[in] int d Integer input from the user
+ * @param[in] int m Integer input from the user
+ * @param[in] int y Integer input from the user
+ *
+ * \return User_Type: 0: For Error of invalid input
+ * 					  1: Positive case for the value is valid
+ *
+ */
 
 int datevalid(int d, int m, int y) {
    if(y < 1800 || y > 9999)

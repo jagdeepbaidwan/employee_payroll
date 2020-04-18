@@ -22,7 +22,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn3, *conn8, *conn9;
-int port7=3305;
+int port7=3306;
 
 /** 
  * \brief Access the database and display the details of the employee. 

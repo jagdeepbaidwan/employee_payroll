@@ -1,10 +1,33 @@
+/**
+ * @file attendance_display.c
+ *
+ * Perform the Admin duties for viewing the attendance from this file
+ *
+ */
+
+/* Including basic libraries */
 #include<stdio.h>
 #include<windows.h>
 #include<mysql.h>
+
+/* Include preprocessor for declaration of the functions. */
 #include "..\include\Validation.h"
 
+/* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn10;
 int port3=3305;
+
+/**
+ * \brief View the attendance table  from admin login credentials
+ *
+ * Accessing the database to view the attendance from daily_attendance table
+ *
+ * @param[in] int emp_id Integer value of the user Employee ID
+ *
+ * \return Nothing as the function is printing messages on the console screen
+ *
+ */
+ 
 void view_attendance(int emp_id)
 {
 	int dd,mm,yy,r,num;
