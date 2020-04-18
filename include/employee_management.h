@@ -180,7 +180,7 @@ char* deactivate (int , int);
  *
  */
 
-char* decision_leave_request(int );
+char* decision_leave_request(int,int);
 
 
 #endif
