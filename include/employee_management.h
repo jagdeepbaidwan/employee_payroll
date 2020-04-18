@@ -80,7 +80,7 @@ char* view_pending_requests(char []);
 
 
 char* add_employee_department(int );
-<<<<<<< HEAD
+
 
 
 
@@ -106,9 +106,8 @@ int display_leaves(int,int);
  */
 
 
-=======
-int display_leaves(int,int);
->>>>>>> 1f11dd488b1e33df5e6d2e307badc13c20f771c0
+
+
 void view_raised_grievances();
 
 
@@ -153,6 +152,26 @@ char* view_pending_leave_requests(char []);
 
 
 
+/**  @brief Function prototypes to change attendance
+ *
+ *  
+ * This function is used to change attendance
+ * 
+ *
+ */
+char* attendance_change(int, int,int,int, char []);
+
+/**  @brief Function prototypes to deactivate employee
+ *
+ *  
+ * This function is used to deactivate employee
+ *
+ * 
+ *
+ */
+char* deactivate (int , int);
+
+
 /**  @brief Function prototypes to give decision on the leave request raised by employee
  *
  *  
@@ -162,10 +181,8 @@ char* view_pending_leave_requests(char []);
  */
 
 char* decision_leave_request(int );
-<<<<<<< HEAD
+
 
 #endif
-=======
-char* attendance_change(int, int,int,int, char []);
-char* deactivate (int , int);
->>>>>>> 1f11dd488b1e33df5e6d2e307badc13c20f771c0
+
+
