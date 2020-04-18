@@ -15,6 +15,8 @@
 #include<string.h>
 #include "..\include\employee_management.h"
 #include "..\include\employee.h"
+#include "..\include\manager_dept_management.h"
+
 MYSQL *conn;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
@@ -207,8 +209,94 @@ int main(int argc, char *argv[])
             ASSERT_TEST(display_leaves(9999,2020)==3);
             break;
 			}
-
+		case 7:
+			{
+				
+			printf("\n\n\n*****  TEST 7 Function: char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[]) ****\n");
+            printf("*********************  TEST 7A  **************************************************\n");
+            printf("A leave request will be raised with all valid input parameters except the date which is invalid: 123/123/124\n");
+            printf("Expected result is that it should return an Invalid date message \n ");
+            ASSERT_TEST(strcmp("Invalid Date",leave_request(12,123,123,124,4,"SL"))==0);
+            
+            printf("\n\n*****************  TEST 7B  **************************************************\n");
+            printf("A leave request will be raised with all valid input parameters except the leave type which is invalid: ABCD \n");
+            printf("Expected result is it should return Invalid Leave Type \n ");
+            ASSERT_TEST(strcmp("Invalid Leave Type",leave_request(12,11,12,2006,4,"ABCD"))==0);
+            
+            printf("\n\n*****************  TEST 7C  ***************************************************\n");
+            printf("A leave request will be raised with employee id that does not exist in the database\n");
+            printf("Expected result is it should return User does not exist \n ");
+            ASSERT_TEST(strcmp("User does not exist",leave_request(26,11,12,2006,4,"SL"))==0);
+            
+            printf("\n\n*****************  TEST 7D  **************************************************\n");
+            printf("A leave request will be raised with leave_type length greater than 10\n");
+            printf("Expected result is that it should return Invalid string length for leave_type message\n ");
+            ASSERT_TEST(strcmp("Invalid string length for leave_type",leave_request(12,11,12,2006,4,"ABCDEFGHIJKL"))==0);
+            
+            printf("\n\n*****************  TEST 7E  **************************************************\n");
+            printf("\n A leave request will be raised with all the right parameters and therefore will be raised successfully\n");
+            printf("Expected result is it should return a string message Request raised successfully \n ");
+            ASSERT_TEST(strcmp("Request raised successfully",leave_request(12,11,12,2009,4,"SL"))==0);
+			break;	
+			}
+		case 8:
+		{
+			printf("\n\n\n*****  TEST 8 Function: char* employee_request(int emp_id,char dept[]) ****\n");
+            printf("*********************  TEST 8A  **************************************************\n");
+            printf("The employee request function is called to raise employee request but emp_id of the manager who raises request doesn't exist in the database\n");
+            printf("Expected result is that it should return User does not exist message \n ");
+            ASSERT_TEST(strcmp("User does not exist",employee_request(24,"Elec","Technician"))==0);
+            
+            printf("\n\n*****************  TEST 8B  **************************************************\n");
+            printf("The employee request function is called to raise emp request but the department input to function is not the one assigned to the manager \n");
+            printf("Expected result is it should return Data Mismatch message as the department does not match the department assigned to the manager\n ");
+            ASSERT_TEST(strcmp("Data Mismatch",employee_request(5,"Physics","Technician"))==0);
+            
+            printf("\n\n*****************  TEST 8C  ***************************************************\n");
+            printf("The employee request function is called to raise emp request but the department length is greater than 10\n");
+            printf("Expected result is it should return Department string length invalid \n ");
+            ASSERT_TEST(strcmp("Department string length invalid",employee_request(5,"Mechanical Engineer","Technician"))==0);
+            
+            printf("\n\n*****************  TEST 8D  ***************************************************\n");
+            printf("The employee request function is called to raise emp request but the designation length is greater than 15\n");
+            printf("Expected result is it should return Designation string length invalid \n ");
+            ASSERT_TEST(strcmp("Designation string length invalid",employee_request(5,"Elec","abcdefghijklmnopqrst"))==0);
+            
+			printf("\n\n*****************  TEST 8E  **************************************************\n");
+            printf("The employee request function is called to raise emp request with right parameters\n");
+            printf("Expected result is that it should return Request raised successfully\n ");
+            ASSERT_TEST(strcmp("Request raised successfully",employee_request(5,"Elec","Technician"))==0);
+			break;
+		}
+		case 9:
+		{
+			printf("\n\n\n*****  TEST 9 Function: char* decision_leave_request(int req_id,int k) ****\n");
+            printf("*********************  TEST 9A  **************************************************\n");
+            printf("The decision leave request function is called but no leave request exists with the input request id\n");
+            printf("Expected result is that it should return No such pending leave request exists message \n ");
+            ASSERT_TEST(strcmp("No such pending leave request exists",decision_leave_request(75,1))==0);
+            
+            printf("*********************  TEST 9B  **************************************************\n");
+            printf("The decision leave request function is called but decision input: k is invalid as k can be only 1 or 2\n");
+            printf("Expected result is that it should return Invalid input for k message \n ");
+            ASSERT_TEST(strcmp("Invalid input for k",decision_leave_request(4,4))==0);
+            
+            printf("*********************  TEST 9C  **************************************************\n");
+            printf("The decision leave request function is called with right parameters to approve a leave request id\n");
+            printf("Expected result is that it should return Leave request and Leave balance status updated successfully message \n ");
+            ASSERT_TEST(strcmp("Leave request and Leave balance status updated successfully",decision_leave_request(4,1))==0);
+            
+            printf("*********************  TEST 9D  **************************************************\n");
+            printf("The decision leave request function is called to approve req id which is already approved\n");
+            printf("Expected result is that it should return Request is already approved message \n ");
+            ASSERT_TEST(strcmp("Request is already approved",decision_leave_request(4,1))==0);
+            
+            printf("*********************  TEST 9E  **************************************************\n");
+            printf("The decision leave request function is called with right parameters to reject a leave request id\n");
+            printf("Expected result is that it should return Request Status Updated successfully message \n ");
+            ASSERT_TEST(strcmp("Request Status Updated successfully",decision_leave_request(4,2))==0);
+            
+		break;
+	}		
     }
-
 }
-

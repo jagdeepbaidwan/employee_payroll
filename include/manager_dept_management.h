@@ -9,6 +9,6 @@
 #ifndef employee_dept_management_H
 #define employee_dept_management_H
 
-char* employee_request(int ,char[]);
+char* employee_request(int ,char[],char[]);
 
 #endif

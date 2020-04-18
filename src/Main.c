@@ -409,6 +409,7 @@ int main(int argc, char *argv[])
                                     {
                                         char stmt[1500];
                                         char dept[10];
+                                        char designation[15];
                                         conn4=mysql_init(NULL);
                                         mysql_real_connect(conn4, "localhost", "root", "1234","payroll", port8, NULL, 0);
                                         char qry_dep[]={"select department from emp_details where emp_id='%d'"};
@@ -419,7 +420,9 @@ int main(int argc, char *argv[])
                                             read1=mysql_store_result(conn4);
                                             row=mysql_fetch_row(read1);
                                             strcpy(dept,row[0]);
-                                            printf("%s",employee_request(id,dept));
+                                            printf("At which position/designation is the employee required: \n");
+											scanf("%s",designation);
+                                            employee_request(id,dept,designation);
                                         }
                                         else
                                         {

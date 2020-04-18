@@ -1595,10 +1595,13 @@ int emp_management(int i,int emp_id)
                     }
                     else if(ch==5)
                     {
-                        int req_id;
+                        int req_id,k;
                         printf("Please provide the request id to be addressed: ");
                         scanf("%d",&req_id);
-                        decision_leave_request(req_id);
+                        printf("-------------------------Press 1: To Approve----------------------\n");
+						printf("-------------------------Press 2: To Reject----------------------\n");
+						scanf("%d",&k);
+                        decision_leave_request(req_id,k);
                     }
                     else if(ch==6)
                     {

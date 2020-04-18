@@ -14,7 +14,7 @@
 #include "..\include\admin_attendance.h"
 #include "..\include\employee_management.h"
 #include "..\include\validation.h"
-int port4=3305;
+int port4=3306;
 
 int getch(void)
 {
@@ -357,26 +357,31 @@ int employee(int emp_id)
                         int dd,mm,yy,r;
                         int no_of_days;
                         char leave_type[20];
-                        do{
-                            printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
-                            scanf("%d/%d/%d",&dd,&mm,&yy);
-                            r=validate_date(dd,mm,yy);
-                        }while(r!=1);
-                        printf("Provide the number of days for the leave,(including start date): ");
-                        scanf("%d",&no_of_days);
-                        do{
-                            printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
-                            scanf("%s",leave_type);
-                            if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0)
-                            {
-                                x=1;
-                                break;
-                            }
-                        } while(x==0);
-                        x=0;
-                        printf("%s",leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
-                        break;
-                    }
+                        char validation_res[45];
+                    do{
+	                    printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
+	                    scanf("%d/%d/%d",&dd,&mm,&yy);
+	                                  
+	                    printf("Provide the number of days for the leave,(including start date): ");
+	                    scanf("%d",&no_of_days);
+	                    
+	                    printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
+	                    scanf("%s",leave_type);
+	                    strcpy(validation_res,leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
+                    }while(strcmp(validation_res,"Invalid Date")==0 || strcmp(validation_res,"Invalid leave type")==0);
+                    
+                    if(strcmp(validation_res,"Request raised successfully")==0)
+                    {
+                    	dcsn=1;
+					}
+					else if(strcmp(validation_res,"Database connection error")==0)
+                    {
+                    	dcsn=1;
+					}
+                    
+					break;
+                	}
+                	
                     case 2:{
                         int year1,dcsn1=1;
                         do
