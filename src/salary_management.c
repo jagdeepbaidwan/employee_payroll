@@ -17,7 +17,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn7, *conn8, *conn9;
-int port11 =3305;
+int port11 =3306;
 
 /**
  * \brief Add the salary in database with table name 'salary' by taking the inputs given
@@ -169,7 +169,6 @@ char* count_attendances_and_compute_salary(char stmt[1500])
   					float wage = atof(rows[2]);
   					float hours=0;
 					float net_pay=0,deductions=0,total=0;
-				  	printf("\t\tEmployee ID:%d with wage:%.2lf\n",emp_id,wage);
 
 				  	if (0 == strcasecmp(rows[1],"H"))
 				  	{
@@ -245,7 +244,6 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 					{
 						char qry[] ={"select * from daily_attendance where attend_month ='%d' and attend_year ='%d' and emp_id ='%d'"};
 				  		sprintf(stmt,qry,current_time->tm_mon+1,current_time->tm_year+1900,emp_id);
-				  		printf("%s",stmt);
 
 						if (mysql_query(conn8,stmt))
     			    			{
@@ -256,17 +254,19 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 						else
         					{
         						read1 = mysql_store_result(conn8);
-							int num_fields1 = mysql_num_rows(read1);
-							printf("%d",num_fields1);
-							if (num_fields <=0)
-            						{
-            							return ("\t\t No Record found.\n");
-							}
-							else
-							{
+								int num_fields1 = mysql_num_rows(read1);
+								char sal_type[20];
+								
+								if (num_fields <=0)
+            					{
+            						return ("\t\t No Record found.\n");
+								}
+								else
+								{
 								float hours=0;
 								while (res = mysql_fetch_row(read1))
   								{
+  									strcpy(sal_type,res[3]);
 									int i=0;
       									for(i = 6; i < num_fields-1; i++)
       									{
@@ -313,7 +313,7 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 						mysql_real_connect(conn9, "localhost", "root", "1234","payroll",port11, NULL, 0);
 
 						char qry1[] ={"insert into salary_cal (emp_id,salary_type,month,year,calculated_salary,deductions,net_pay) VALUES ('%d','%s','%d','%d','%.2f','%.2f','%.2f')"};
-				  		sprintf(stmt,qry1,emp_id,"admin",current_time->tm_mon+1,current_time->tm_year+1900,total,deductions,net_pay);
+				  		sprintf(stmt,qry1,emp_id,sal_type,current_time->tm_mon+1,current_time->tm_year+1900,total,deductions,net_pay);
 
 						if (mysql_query(conn9,stmt))
 		    			    	{
@@ -344,8 +344,8 @@ char* count_attendances_and_compute_salary(char stmt[1500])
  *
  * It will initialize the connection and calls the other function from this function.
  *
- * \return 0: Unsuccessful connection
- * 1: Successful connection
+ * \return  0: Unsuccessful connection
+ * 			1: Successful connection
  *
  */
 
@@ -377,9 +377,9 @@ int emp_sal_mgmt()
 		if (compute_opt == 1)
 		{
 			char qry[] = {"select * from salary where salary_type='hourly'"};
-          		int n = sprintf(stmt,qry);
-
-		            printf("%s",count_attendances_and_compute_salary(stmt));
+      		int n = sprintf(stmt,qry);
+            printf("%s",count_attendances_and_compute_salary(stmt));
+            
 		}
 
 		else if(compute_opt == 2)

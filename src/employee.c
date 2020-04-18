@@ -1,3 +1,11 @@
+/** 
+ * @file employee.c 
+ *
+ * Perform the functions who is login with employee crendentials
+ *
+ */
+
+/* Including basic libraries */
 #include <stdio.h>
 #include <stdlib.h>
 #include<windows.h>
@@ -5,16 +13,32 @@
 #include<string.h>
 #include <termios.h>
 #include <unistd.h>
+
+/* Including all dependencies */
 #define MAX_YEAR 2020
 #define MIN_YEAR 2010
 #define MAX_MONTH 12
 #define MIN_MONTH 1
 #include "..\include\employee_personal_dtl_management.h"
-//#include "..\include\employee.h"
+#include "..\include\employee.h"
 #include "..\include\admin_attendance.h"
 #include "..\include\employee_management.h"
 #include "..\include\validation.h"
+
+/* Declaration of connection to MYSQL Database pointers and database port number */
+MYSQL *conn2, *oo,*conn,*conn4;
 int port4=3306;
+
+/** 
+ * \brief Get or scan the value from the console screen
+ *
+ * Function can be called for any type of user-> Admin, Manager, Employee who want to scan the values from console screeen
+ * 
+ * @param [void] No Arguments will be passed
+ *
+ * \return User_Type: Integer value 'ch' for all case
+ *
+ */
 
 int getch(void)
 {
@@ -29,13 +53,20 @@ int getch(void)
     return ch;
 }
 
+/** 
+ * \brief Display salary with the Employee ID
+ *
+ * It will display the salary for the employee ID
+ * 
+ * @param[in] int emp_id Integer value is passed of the user.
+ *
+ * \return User_Type: 0: Negative or Wrong value
+ *                    1: Positiveor Successful Value
+ *
+ */
 
-
-//start of display_salary
 int display_salary(int emp_id)
 {
-MYSQL *conn2;
-
 	conn2=mysql_init(NULL);
     int id;
     mysql_real_connect(conn2, "localhost", "root", "1234","payroll", port4, NULL, 0);
@@ -53,10 +84,12 @@ MYSQL *conn2;
 	char qry[300];
 	if(option==1)
 	{
+		/* Accessing the salary_cal table to select emp_id */
 	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc");
 	}
 	else if(option==2)
 	{
+		/* Accessing the salary_cal table to select emp_id, year and month */
 	    strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'");
 	}
 	else if(option==3)
@@ -156,12 +189,26 @@ MYSQL *conn2;
     return 0;
 }
 
-//end of display_salary
-
+/**
+ * \brief Change password of the user
+ *
+ * Change the password when user called this function
+ *
+ * @param[in] int emp_id Integer value for Employee ID 
+ * 			  char new_pass[45] Array of characters of length 45
+ * 			  char confirm_pass[45] Array of characters of length 45 
+ * 			  char old_passs[45] Array of characters of length 45 
+ *
+ * \return User_Type: Password updated: For positive case
+ *					  Re-enter new password: Old password is same as current password
+ *		   			  Wrong username or password: For wrong username or password
+ *         		      Not connected : Fail to establish the connection with database
+ *		              Failed to execute the query: Connection problem for execution of the query
+ *
+ */
 
 char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_pass[45])
 {
-    MYSQL *oo,*conn,*conn4;
 MYSQL_RES *read1=NULL;
 MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
@@ -229,6 +276,17 @@ MYSQL_ROW row=NULL;
     }
 
 }
+
+/** 
+ * \brief Change the password of the user 
+ *
+ * Change the password of the user
+ *
+ * @param[in] int id Integer value given by the user 
+ * 
+ * \return Nothing because the data retrieved from the database is printing on the console screen.
+ *
+ */
 
 void change_password(int id)
 {
@@ -305,6 +363,17 @@ void change_password(int id)
     confirm_pass[p-1]='\0';
     printf("%s\n",change_pass(id,new_pass,confirm_pass,old_pass));
 }
+
+/** 
+ * \brief Basically call the function from this main function 
+ *
+ * It is the main function where other functions are called to perform the actions accordingly
+ *
+ * @param[in] int emp_id: Employee ID for the user
+ * 
+ * \return Nothing because every functions is handled internally
+ *
+ */
 
 int employee(int emp_id)
 {

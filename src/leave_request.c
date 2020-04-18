@@ -3,10 +3,10 @@
 #include<windows.h>
 #include<mysql.h>
 #include<stdlib.h>
-int port10=3306;
 
 /* Declaration of connection to MYSQL Database pointers */ 
 MYSQL *connect7,*connect8,*connect9,*connect10,*connect2,*connect1,*connect11;
+int port10=3306;
 
 /* Start of Function: char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[])*/
 

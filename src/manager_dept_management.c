@@ -14,6 +14,7 @@
 
 /* Declaration of connection to MYSQL Database pointers */
 MYSQL *connect4,*connect5;
+int port=3306;
 
 /** 
  * \brief Employee request for the department from other department using
@@ -51,7 +52,7 @@ char* employee_request(int emp_id,char dept[],char designation[]){
 	char status[15];
 	char dep[20];
 	connect5=mysql_init(NULL);
-	mysql_real_connect(connect5, "localhost", "root", "1234","payroll",3306, NULL, 0);	
+	mysql_real_connect(connect5, "localhost", "root", "1234","payroll",port, NULL, 0);	
 	char qry_manager_id[]={"select * from emp_details where emp_id='%d'"};
 	
 	if(connect5){
