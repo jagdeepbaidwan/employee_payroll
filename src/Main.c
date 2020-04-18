@@ -34,7 +34,7 @@ MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
 
 /* Database connection port number*/
-int port8=3305;
+int port8=3306;
 
 
 /**
