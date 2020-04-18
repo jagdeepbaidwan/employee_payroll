@@ -77,7 +77,7 @@ char* view_pending_requests(char status[]){
     }
     else{
     	printf("not connected");
-        return ("%s\n", mysql_error(conn5));
+        return ("%s", mysql_error(conn5));
 	}
 	return "\n\n\nRequests displayed successfully";
 }

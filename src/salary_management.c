@@ -127,6 +127,7 @@ char* count_attendances_and_compute_salary(char stmt[1500])
 	MYSQL_ROW rows=NULL;
 	MYSQL_ROW res=NULL;
 	MYSQL_FIELD *fields;
+	char sal_type[15];
 	
 	time_t s;
 	struct tm* current_time;
