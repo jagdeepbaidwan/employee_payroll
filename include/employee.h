@@ -58,7 +58,7 @@ int getch(void);
  */
 
 
-int display_salary(int);
+int display_salary(int,int);
 
  /**  @brief Function prototypes to view raised grievances
  *

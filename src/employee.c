@@ -1,9 +1,9 @@
-/** 
- * @file employee.c 
- *
- * Perform the functions who is login with employee crendentials
- *
- */
+/**
+* @file employee.c
+*
+* Perform the functions who is login with employee crendentials
+*
+*/
 
 /* Including basic libraries */
 #include <stdio.h>
@@ -29,16 +29,16 @@
 MYSQL *conn2, *oo,*conn,*conn4;
 int port4=3306;
 
-/** 
- * \brief Get or scan the value from the console screen
- *
- * Function can be called for any type of user-> Admin, Manager, Employee who want to scan the values from console screeen
- * 
- * @param [void] No Arguments will be passed
- *
- * \return User_Type: Integer value 'ch' for all case
- *
- */
+/**
+* \brief Get or scan the value from the console screen
+*
+* Function can be called for any type of user-> Admin, Manager, Employee who want to scan the values from console screeen
+*
+* @param [void] No Arguments will be passed
+*
+* \return User_Type: Integer value 'ch' for all case
+*
+*/
 
 int getch(void)
 {
@@ -53,109 +53,105 @@ int getch(void)
     return ch;
 }
 
-/** 
- * \brief Display salary with the Employee ID
- *
- * It will display the salary for the employee ID
- * 
- * @param[in] int emp_id Integer value is passed of the user.
- *
- * \return User_Type: 0: Negative or Wrong value
- *                    1: Positiveor Successful Value
- *
- */
+/**
+* \brief Display salary with the Employee ID
+*
+* It will display the salary for the employee ID
+*
+* @param[in] int emp_id Integer value is passed of the user.
+*
+* \return User_Type: 0: Negative or Wrong value
+*                    1: Positiveor Successful Value
+*
+*/
 
-int display_salary(int emp_id)
+int display_salary(int emp_id,int option)
 {
-	conn2=mysql_init(NULL);
+    conn2=mysql_init(NULL);
     int id;
     mysql_real_connect(conn2, "localhost", "root", "1234","payroll", port4, NULL, 0);
-	MYSQL_RES *read=NULL;
+    MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
     int num;
     char stmt[1500];
-    int option;
-    printf("\n                Press 1 if you want to see all pay slips\n");
-	printf("                Press 2 if you want to see pay slips for particular pay period\n");
-	printf("                Press 3 Go back...\n");
-	scanf("%d",&option);
-	char qry[300];
-	if(option==1)
-	{
-		/* Accessing the salary_cal table to select emp_id */
-	    strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc");
-	}
-	else if(option==2)
-	{
-		/* Accessing the salary_cal table to select emp_id, year and month */
-	    strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'");
-	}
-	else if(option==3)
+    char qry[300];
+    if(option==1)
+    {
+        /* Accessing the salary_cal table to select emp_id */
+        strcpy(qry,"select * from salary_cal where emp_id='%d'  order by year desc,month desc");
+    }
+    else if(option==2)
+    {
+        /* Accessing the salary_cal table to select emp_id, year and month */
+        strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'");
+    }
+    else if(option==3)
     {
         return 1;
     }
     else
     {
         printf("Wrong Input");
-        return 0;
+        return 3;
     }
-
+    
     if(conn2)
     {
-    	int n;
-    	if(option==1)
-    	{
-    	    n = sprintf(stmt,qry,emp_id);
-		}
-		else if(option==2)
-		{
-			int year,month;
-			int x=0;
-			do{
-			printf("Enter the  year you wish to see: \n");
-            scanf("%d",&year);
-            if(year<=MAX_YEAR && year>=MIN_YEAR)
-            {
-            	x=1;
-			}
-			else{
-				printf("INVALID year, enter again\n");
-			}
+        int n;
+        if(option==1)
+        {
+            n = sprintf(stmt,qry,emp_id);
+        }
+        else if(option==2)
+        {
+            int year,month;
+            int x=0;
+            do{
+                printf("Enter the  year you wish to see: \n");
+                scanf("%d",&year);
+                if(year<=MAX_YEAR && year>=MIN_YEAR)
+                {
+                    x=1;
+                }
+                else{
+                    printf("INVALID year, enter again\n");
+                }
             }while(x==0);
             x=0;
             do{
-	        printf("Enter the month you wish to see: \n");
-            scanf("%d",&month);
-            if(month<=MAX_MONTH && month>=MIN_MONTH)
-            {
-            	x=1;
-	    }
-	    else{
-				printf("INVALID month, enter again\n");
-			}
+                printf("Enter the month you wish to see: \n");
+                scanf("%d",&month);
+                if(month<=MAX_MONTH && month>=MIN_MONTH)
+                {
+                    x=1;
+                }
+                else{
+                    printf("INVALID month, enter again\n");
+                }
             }while(x==0);
             x=0;
-
+            
             n = sprintf(stmt,qry,emp_id,year,month);
-		}
-
+        }
+        
         mysql_query(conn2,stmt);
         read = mysql_store_result(conn2);
         if (mysql_query(conn2,stmt))
         {
             printf(" Error: %s\n", mysql_error(conn2));
             printf("Failed to execute query.");
-            return 0;
+            return 7;
         }
-
+        
         else
         {
             row = mysql_fetch_row(read);
-	    if(row==NULL)
+            if(row==NULL)
             {
-              printf("No details found");
+                printf("No details found");
+                return 6;
             }
             while (row)
             {
@@ -171,122 +167,122 @@ int display_salary(int emp_id)
                         {
                             printf("%s |", field->name);
                         }
-
+                        
                         printf("\n");
                     }
-
+                    
                     printf("  %s  ", row[i] ? row[i] : "NULL");
                 }
                 row = mysql_fetch_row(read);
-
+                
             }
-
-
-
-		}
+            
+       
+            
+        }
     }
-
+    
     return 0;
 }
 
 /**
- * \brief Change password of the user
- *
- * Change the password when user called this function
- *
- * @param[in] int emp_id Integer value for Employee ID 
- * 			  char new_pass[45] Array of characters of length 45
- * 			  char confirm_pass[45] Array of characters of length 45 
- * 			  char old_passs[45] Array of characters of length 45 
- *
- * \return User_Type: Password updated: For positive case
- *					  Re-enter new password: Old password is same as current password
- *		   			  Wrong username or password: For wrong username or password
- *         		      Not connected : Fail to establish the connection with database
- *		              Failed to execute the query: Connection problem for execution of the query
- *
- */
+* \brief Change password of the user
+*
+* Change the password when user called this function
+*
+* @param[in] int emp_id Integer value for Employee ID
+* 			  char new_pass[45] Array of characters of length 45
+* 			  char confirm_pass[45] Array of characters of length 45
+* 			  char old_passs[45] Array of characters of length 45
+*
+* \return User_Type: Password updated: For positive case
+*					  Re-enter new password: Old password is same as current password
+*		   			  Wrong username or password: For wrong username or password
+*         		      Not connected : Fail to establish the connection with database
+*		              Failed to execute the query: Connection problem for execution of the query
+*
+*/
 
 char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_pass[45])
 {
-MYSQL_RES *read1=NULL;
-MYSQL_RES *res=NULL;
-MYSQL_ROW row=NULL;
-
-	oo=mysql_init(NULL);
-	mysql_real_connect(oo, "localhost", "root", "1234","payroll", port4, NULL, 0);
+    MYSQL_RES *read1=NULL;
+    MYSQL_RES *res=NULL;
+    MYSQL_ROW row=NULL;
+    
+    oo=mysql_init(NULL);
+    mysql_real_connect(oo, "localhost", "root", "1234","payroll", port4, NULL, 0);
     char stmt[1500];
     char qry[]={"select password from login_details where emp_id='%d'"};
     if(oo)
     {
         sprintf(stmt,qry,emp_id);
         if (mysql_query(oo,stmt))
-      	{
+        {
             printf(" Error: %s\n", mysql_error(oo));
             return "Failed to execute query.";
         }
-       	else
- 	{
- 	    read1=mysql_store_result(oo);
+        else
+        {
+            read1=mysql_store_result(oo);
             row = mysql_fetch_row(read1);
             if(row==NULL)
             {
-                 return "\nWrong username or password\n\n\n\n\n";
-
+                return "\nWrong username or password\n\n\n\n\n";
+                
             }
             else
-	    {
+            {
                 if(strcmp(old_pass,row[0])==0)
-		{
-	            char qry[]={"update login_details set password='%s' where emp_id='%d'"};
-	            printf( "\nOld Password confirmed\n\n\n");
-	            if(strcmp(new_pass,confirm_pass)==0)
-	            {
-	                sprintf(stmt,qry,new_pass,emp_id);
-		        if (mysql_query(oo,stmt))
-      	                {
-   			     printf(" Error: %s\n", mysql_error(oo));
-   		             return "Failed to execute query.\n";
-   	                }
-         	        else
- 	                {
- 	                    return "Password updated\n";
-			}
-		    }
-                   else
-		   {
-		       return "re-enter new password \n";
-		   }
-               }
-	       else
-	       {
-	          return "\nOld password wrong\n\n\n";
-
-               }
-	   }
-
-       }
+                {
+                    char qry[]={"update login_details set password='%s' where emp_id='%d'"};
+                    printf( "\nOld Password confirmed\n\n\n");
+                    if(strcmp(new_pass,confirm_pass)==0)
+                    {
+                        sprintf(stmt,qry,new_pass,emp_id);
+                        if (mysql_query(oo,stmt))
+                        {
+                            printf(" Error: %s\n", mysql_error(oo));
+                            return "Failed to execute query.\n";
+                        }
+                        else
+                        {
+                            return "Password updated\n";
+                        }
+                    }
+                    else
+                    {
+                        return "re-enter new password \n";
+                    }
+                }
+                else
+                {
+                    return "\nOld password wrong\n\n\n";
+                    
+                }
+            }
+            
+        }
     }
     else
     {
-    	printf("not connected");
+        printf("not connected");
         printf("%s\n", mysql_error(oo));
         return "Error\n";
-
+        
     }
-
+    
 }
 
-/** 
- * \brief Change the password of the user 
- *
- * Change the password of the user
- *
- * @param[in] int id Integer value given by the user 
- * 
- * \return Nothing because the data retrieved from the database is printing on the console screen.
- *
- */
+/**
+* \brief Change the password of the user
+*
+* Change the password of the user
+*
+* @param[in] int id Integer value given by the user
+*
+* \return Nothing because the data retrieved from the database is printing on the console screen.
+*
+*/
 
 void change_password(int id)
 {
@@ -296,84 +292,84 @@ void change_password(int id)
     int p=0;
     do
     {
-       old_pass[p]=getch();
-       if((old_pass[p]=='\b' ||old_pass[p]==127)&& p>0)
-       {
-           p--;
-       	   printf("\b \b");
-       	   continue;
-       }
-       if(old_pass[p]!='\r')
-       {
-           printf("*");
-       }
-       if(old_pass[p]=='\n'||old_pass[p]==13)
-       {
-           p++;
-	   break;
-       }
-       p++;
-     }while(old_pass[p-1]!='\r'||old_pass[p-1]!=13);
-     old_pass[p-1]='\0';
-     printf("\nEnter new password\n");
-     p=0;
-     do
-     {
-         new_pass[p]=getch();
-       	 if((new_pass[p]=='\b'||new_pass[p]==127)&& p>0)
-       	 {
-       	     p--;
-       	     printf("\b \b");
-             continue;
-       	 }
-	 if(new_pass[p]!='\r')
-	 {
-              printf("*");
-         }
-	 if(new_pass[p]=='\n'||new_pass[p]==13)
-         {
-             p++;
-	     break;
-	 }
-         p++;
-        }while(new_pass[p-1]!='\r'||new_pass[p-1]!=13);
-        new_pass[p-1]='\0';
-        printf("\nConfirm new password\n");
-        p=0;
+        old_pass[p]=getch();
+        if((old_pass[p]=='\b' ||old_pass[p]==127)&& p>0)
+        {
+            p--;
+            printf("\b \b");
+            continue;
+        }
+        if(old_pass[p]!='\r')
+        {
+            printf("*");
+        }
+        if(old_pass[p]=='\n'||old_pass[p]==13)
+        {
+            p++;
+            break;
+        }
+        p++;
+    }while(old_pass[p-1]!='\r'||old_pass[p-1]!=13);
+    old_pass[p-1]='\0';
+    printf("\nEnter new password\n");
+    p=0;
+    do
+    {
+        new_pass[p]=getch();
+        if((new_pass[p]=='\b'||new_pass[p]==127)&& p>0)
+        {
+            p--;
+            printf("\b \b");
+            continue;
+        }
+        if(new_pass[p]!='\r')
+        {
+            printf("*");
+        }
+        if(new_pass[p]=='\n'||new_pass[p]==13)
+        {
+            p++;
+            break;
+        }
+        p++;
+    }while(new_pass[p-1]!='\r'||new_pass[p-1]!=13);
+    new_pass[p-1]='\0';
+    printf("\nConfirm new password\n");
+    p=0;
     do
     {
         confirm_pass[p]=getch();
         if((confirm_pass[p]=='\b'||confirm_pass[p]==127)&& p>0)
         {
-       	    p--;
-       	    printf("\b \b");
-       	    continue;
+            p--;
+            printf("\b \b");
+            continue;
         }
         if(confirm_pass[p]!='\r')
-	{
+        {
             printf("*");
         }
-	if(confirm_pass[p]=='\n'||confirm_pass[p]==13)
+        if(confirm_pass[p]=='\n'||confirm_pass[p]==13)
         {
-	    p++;
-	    break;
-	}
+            p++;
+            break;
+        }
         p++;
     }while(confirm_pass[p-1]!='\r'||confirm_pass[p-1]!=13);
     confirm_pass[p-1]='\0';
     printf("%s\n",change_pass(id,new_pass,confirm_pass,old_pass));
 }
 
-/** 
- * \brief Basically call the function from this main function 
- *
- * It is the main function where other functions are called to perform the actions accordingly
- *
- * @param[in] int emp_id: Employee ID for the user
- * 
- * \return Nothing because every functions is handled internally
- *
- */
+/**
+* \brief Basically call the function from this main function
+*
+* It is the main function where other functions are called to perform the actions accordingly
+*
+* @param[in] int emp_id: Employee ID for the user
+*
+* \return Nothing because every functions is handled internally
+*
+*/
 
 int employee(int emp_id)
 {
@@ -387,31 +383,31 @@ int employee(int emp_id)
     scanf("%d",&i);
     switch(i)
     {
-		case 1:
-		{
-		    int dcsn=0;
+        case 1:
+        {
+            int dcsn=0;
             do
             {
-              dcsn=emp_detail_mgmt(emp_id);
+                dcsn=emp_detail_mgmt(emp_id);
             }while(dcsn!=1);
-
+            
             break;
-		}
-
-		case 2:
-		{
-		    int dcsn=0;
+        }
+        
+        case 2:
+        {
+            int dcsn=0;
             do
             {
-              dcsn=emp_attendance_mgmt(emp_id);
+                dcsn=emp_attendance_mgmt(emp_id);
             }while(dcsn!=1);
-
-	    	break;
+            
+            break;
         }
-
-		case 3:
-		{
-		    int dcsn=0;
+        
+        case 3:
+        {
+            int dcsn=0;
             do
             {
                 int i;
@@ -427,30 +423,30 @@ int employee(int emp_id)
                         int no_of_days;
                         char leave_type[20];
                         char validation_res[45];
-                    do{
-	                    printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
-	                    scanf("%d/%d/%d",&dd,&mm,&yy);
-	                                  
-	                    printf("Provide the number of days for the leave,(including start date): ");
-	                    scanf("%d",&no_of_days);
-	                    
-	                    printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
-	                    scanf("%s",leave_type);
-	                    strcpy(validation_res,leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
-                    }while(strcmp(validation_res,"Invalid Date")==0 || strcmp(validation_res,"Invalid leave type")==0);
+                        do{
+                            printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
+                            scanf("%d/%d/%d",&dd,&mm,&yy);
+                            
+                            printf("Provide the number of days for the leave,(including start date): ");
+                            scanf("%d",&no_of_days);
+                            
+                            printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
+                            scanf("%s",leave_type);
+                            strcpy(validation_res,leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
+                        }while(strcmp(validation_res,"Invalid Date")==0 || strcmp(validation_res,"Invalid leave type")==0);
+                        
+                        if(strcmp(validation_res,"Request raised successfully")==0)
+                        {
+                            dcsn=1;
+                        }
+                        else if(strcmp(validation_res,"Database connection error")==0)
+                        {
+                            dcsn=1;
+                        }
+                        
+                        break;
+                    }
                     
-                    if(strcmp(validation_res,"Request raised successfully")==0)
-                    {
-                    	dcsn=1;
-					}
-					else if(strcmp(validation_res,"Database connection error")==0)
-                    {
-                    	dcsn=1;
-					}
-                    
-					break;
-                	}
-                	
                     case 2:{
                         int year1,dcsn1=1;
                         do
@@ -462,29 +458,34 @@ int employee(int emp_id)
                         break;
                     }
                     case 3:
-                        {
-                                dcsn=1;
-                                break;
-                        }
+                    {
+                        dcsn=1;
+                        break;
+                    }
                 }
             }while(dcsn!=1);
-
-
-		break;
-		}
-		case 4:
-		{
+            
+            
+            break;
+        }
+        case 4:
+        {
             int dcsn=0;
             do
             {
-              dcsn=display_salary(emp_id);
+                int option;
+                printf("\n                Press 1 if you want to see all pay slips\n");
+                printf("                Press 2 if you want to see pay slips for particular pay period\n");
+                printf("                Press 3 Go back...\n");
+                scanf("%d",&option);
+                dcsn=display_salary(emp_id,option);
             }while(dcsn!=1);
             break;
-		}
-
+        }
+        
         case 5:
-		{
-		    int dcsn=0;
+        {
+            int dcsn=0;
             do
             {
                 int choice;
@@ -496,7 +497,7 @@ int employee(int emp_id)
                 {
                     printf("%s",raise_grievances(emp_id));
                 }
-
+                
                 else if(choice==2)
                 {
                     view_raised_grievances();
@@ -510,8 +511,8 @@ int employee(int emp_id)
                     printf("\t\t Wrong Choice Entered.\n");
                 }
                 break;
-             }while(dcsn!=1);
-             break;
+            }while(dcsn!=1);
+            break;
         }
         case 6:
         {

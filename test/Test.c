@@ -190,23 +190,20 @@ int main(int argc, char *argv[])
         }
         case 6:
         	{
-        	printf("\n\n\n\n*********************************TEST 6 for admin display leaves**********************************************\n");
+        	printf("\n\n\n\n*********************************TEST 6 for  Display Salary**********************************************\n");
             printf("***********************************TEST 6A*****************************************************\n");
-            printf("We are first going to raise a display leave request with a wrong year\n");
-            printf("Expected result is it should return Wrong year chosen\n ");
-            ASSERT_TEST(display_leaves(2,2)==2);
+            printf("We are first going to raise a display salary request with wrong option\n");
+            printf("Expected result is it should return error\n ");
+            ASSERT_TEST(display_salary(2,8)==3);
             printf("***********************************TEST 6B*****************************************************\n");
-            printf("Now if the data is not available in the data base \n");
-            printf("Expected result is it should return: No data found \n ");
-            ASSERT_TEST(display_leaves(100,2025)==3);
+            printf("Now if the employee id is wrong\n");
+            printf("Expected result is it should return error \n ");
+            ASSERT_TEST(display_salary(100,1)==6);
             printf("***********************************TEST 6C*****************************************************\n");
             printf("Now we show the data available in the database...\n");
-            printf("Expected result is it should return: table show the data of leave\n ");
-            ASSERT_TEST(display_leaves(2,2020)==1);
-            printf("***********************************TEST 6D*****************************************************\n");
-            printf("Now if the the employee does not exist \n");
-            printf("Expected result is it should return: No data found \n ");
-            ASSERT_TEST(display_leaves(9999,2020)==3);
+            printf("Expected result is it should return: table show the data of salary\n ");
+            ASSERT_TEST(display_salary(2,1)==0);
+        
             break;
 			}
 		case 7:
