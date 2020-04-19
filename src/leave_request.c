@@ -4,8 +4,6 @@
 #include<mysql.h>
 #include<stdlib.h>
 
-#include "..\include\Validation.h"
-
 /* Declaration of connection to MYSQL Database pointers */ 
 MYSQL *connect7,*connect8,*connect9,*connect10,*connect2,*connect1,*connect11;
 int port10=3306;

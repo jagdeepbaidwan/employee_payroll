@@ -42,7 +42,8 @@ void emp_display(char stmt[]){
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
     int num;
-
+    conn3=mysql_init(NULL);
+    mysql_real_connect(conn3, "localhost", "root", "1234","payroll", port7, NULL, 0);
     if(conn3)
     {
         mysql_query(conn3,stmt);
@@ -518,7 +519,7 @@ void view_raised_grievances()
  *
  */
 
-char* employee_rating(int e_id,int rate,char description[200],int year)
+char* employee_rating()
 {
 	MYSQL_RES *read=NULL;
 	MYSQL_ROW row=NULL;
@@ -531,51 +532,92 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 	if(!conn8)
 	{
 		printf("Connection error");
-		return "Not Establish connection";
+		return "0";
 	}
 
 	else
 	{
 		char stmt[1500];
-		char qry1[]={"select * from emp_details where emp_id=%d"};
-		sprintf(stmt,qry1,e_id);
-		
-		if (mysql_query(conn8,stmt))
-		{
-    		printf("Error: %s\n", mysql_error(conn8));
-    		return ("Failed to execute query.");
-		}
+		char description[200];
+		int temp,x=0,year=0,rate=0,e_id=0;
+		char *choice;
 
-		else
+		do
 		{
-			read = mysql_store_result(conn8);
-			row = mysql_fetch_row(read);
-			int num_rows = mysql_num_rows(read);
-			if(num_rows<0)
+			temp = 0;
+			printf("Enter the Employee ID for rating: ");
+  			scanf("%d",&e_id);
+			char qry1[]={"select * from emp_details where emp_id=%d"};
+			sprintf(stmt,qry1,e_id);
+			if (mysql_query(conn8,stmt))
 			{
-				return ("Employee ID not found\n");
-			}
-			else
-			{
-				if(rate <= 0)
+        		printf("		Error: %s\n", mysql_error(conn8));
+        		return ("		Failed to execute query.");
+    		}
+
+    		else
+    		{
+    			read = mysql_store_result(conn8);
+				row = mysql_fetch_row(read);
+				int num_rows = mysql_num_rows(read);
+				if(num_rows<0)
 				{
-					return("Rating cannot be 0.\n");
+					printf("		Employee ID not found\n");
+					temp=0;
 				}
-		
-				else if (rate >1 && rate <=5)
-				{
-					rate = rate;
-				}
-		
 				else
 				{
-					return ("Rating does not exceed 5.\n");
+					temp=1;
 				}
-	
-				if(!(year<=YEAR && year>=MIN_YEAR))
-					return ("INVALID year\n");
+    		}
+		}while (temp!=1);
+
+		do
+		{
+			printf("Enter the rating of the employee: ");
+			scanf("%d",&rate);
+
+			if(rate <= 0)
+			{
+				printf("		Rating cannot be 0.\n");
+				temp = 0;
 			}
-		}	
+
+			else if (rate >1 && rate <=5)
+			{
+				rate = rate;
+				temp =1;
+			}
+
+			else
+			{
+				printf("		Rating does not exceed 5.\n");
+				temp = 0;
+			}
+		}while (temp!=1);
+
+		getchar();
+
+		do
+		{
+    		printf("Feedback of the employee under 200 characters\n");
+			gets(description);
+			x=notempty(description);
+    	}while(x==0);
+
+    	getchar();
+    	do
+		{
+    		printf("Enter the year for rating\n");
+			scanf("%d",&year);
+			if(year<=YEAR && year>=MIN_YEAR)
+            {
+            	x=1;
+			}
+			else{
+				printf("\t\t INVALID year\n");
+			}
+    	}while(x==0);
 
 		conn9 = mysql_init(NULL);
 		mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port7, NULL, 0);
@@ -583,7 +625,7 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 		if(!conn9)
 		{
 			printf("Connection error");
-			return "Not Establish connection";
+			return "0";
 		}
 
 		else
@@ -593,8 +635,8 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 
 			if (mysql_query(conn9,stmt))
 			{
-        		printf("Error: %s\n", mysql_error(conn9));
-        		return ("Failed to execute query.");
+        		printf("		Error: %s\n", mysql_error(conn9));
+        		return ("		Failed to execute query.");
     		}
 
     		else
@@ -609,13 +651,13 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 
 					if (mysql_query(conn9,stmt))
 					{
-						printf("Error: %s\n", mysql_error(conn9));
-						return ("Failed to execute query.");
+						printf("		Error: %s\n", mysql_error(conn9));
+						return ("		Failed to execute query.");
 					}
 
 					else
 					{
-   						printf ("Rating Added. \n");
+   						printf ("\n\n Rating Added. \n");
 					}
 				}
 
@@ -627,13 +669,13 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 
 					if (mysql_query(conn8,stmt))
 					{
-						printf("Error: %s\n", mysql_error(conn8));
-						return ("Failed to execute query.");
+						printf("		Error: %s\n", mysql_error(conn8));
+						return ("		Failed to execute query.");
 					}
 
 					else
 					{
-   						printf ("Rating Updated. \n");
+   						printf ("\n\n Rating Updated. \n");
 					}
 				}
 			}
