@@ -37,46 +37,50 @@ int port11 =3306;
  *
  */
 
-char* add_salary(int e_id)
+char* add_salary(int e_id,char sal_type[20],float salary,char desig[50])
 {
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res=NULL;
 	MYSQL_ROW row=NULL;
 	MYSQL_FIELD *field;
-	int num;
-	float salary;
-	char sal_type;
-	int x=0;
 	char stmt[1500];
 	int sal_year;
+	
     time_t now;
     time(&now);
     struct tm *local = localtime(&now);
     sal_year = local->tm_year + 1900;
-	char sal_qry[]={"select emp_id,designation from emp_details where emp_id = %d"};
-	char add_sal_qry[] ={"insert into salary values('%d','%s','%f','%d')"};
-	struct add_sal
-	{
-		float salary;
-		char sal_type[20];
-	};
-	struct add_sal sal;
+	char add_sal_qry[] ={"insert into salary values('%d','%s','%f','%d','%s')"};
 
 	conn7=mysql_init(NULL);
 	mysql_real_connect(conn7, "localhost", "root", "1234","payroll", port11, NULL, 0);
 
 	if(conn7)
     {
-        printf("Enter the Salary type  hourly or salaried:\n");
-		scanf("%s",sal.sal_type);
-    	printf("\nEnter the Salary: \n");
-    	scanf("%f",&sal.salary);
-		getchar();
+    	char qry1[]={"select * from emp_details where emp_id=%d"};
+		sprintf(stmt,qry1,e_id);
+		
+		if (mysql_query(conn7,stmt))
+		{
+    		printf("Error: %s\n", mysql_error(conn8));
+    		return ("Failed to execute query");
+		}
 
-    	printf("Salary type is %s",sal.sal_type);
-    	if (strcasecmp(sal.sal_type,"hourly")==0 || strcasecmp(sal.sal_type,"Salaried")==0)
+		else
+		{
+			read = mysql_store_result(conn7);
+			int num_rows = mysql_num_rows(read);
+			if(num_rows<=0)
+			{
+				printf("Employee ID not found\n");
+				return ("Employee ID not found");
+			}
+		}
+
+    	printf("Salary type is %s",sal_type);
+    	if (strcasecmp(sal_type,"H")==0 || strcasecmp(sal_type,"S")==0)
     	{
-			int n = sprintf(stmt,add_sal_qry,e_id,sal.sal_type,sal.salary,sal_year);
+			int n = sprintf(stmt,add_sal_qry,e_id,sal_type,salary,sal_year,desig);
 			if (mysql_query(conn7,stmt))
 			{
 				printf(" Error: %s\n", mysql_error(conn7));
@@ -85,14 +89,14 @@ char* add_salary(int e_id)
 
 			else
 			{
-				return ("\n\n\t\t		Salary added successfully \n\n");
+				return ("Salary added successfully");
 			}
        	}
 
 		else
 		{
-			printf("\t\t Wrong salary_type for emp_id: %d\n",e_id);
-			return ("try again\n");
+			printf("\tWrong salary_type for emp_id: %d\n",e_id);
+			return ("Wrong salary_type");
 		}
     }
 
@@ -120,7 +124,7 @@ char* add_salary(int e_id)
  *
  */
 
-char* count_attendances_and_compute_salary(char stmt[1500],char sal_type[20])
+char* compute_salary(char stmt[1500],char sal_type[5])
 {
 	MYSQL_RES *read = NULL;
 	MYSQL_RES *read1 = NULL;
@@ -189,12 +193,12 @@ char* count_attendances_and_compute_salary(char stmt[1500],char sal_type[20])
 							int num_fields1 = mysql_num_rows(read1);
 
 							if (num_fields <=0)
-            						{
-            							return ("\t\t No Record found.\n");
+            				{
+            					return ("\t\t No Record found.\n");
 							}
+						
 							else
 							{
-
 								while (res = mysql_fetch_row(read1))
   								{
 	  								hours+=atoi(res[7]);
@@ -225,7 +229,7 @@ char* count_attendances_and_compute_salary(char stmt[1500],char sal_type[20])
 						mysql_real_connect(conn9, "localhost", "root", "1234","payroll",port11, NULL, 0);
 
 						char qry1[] ={"insert into salary_cal (emp_id,salary_type,month,year,calculated_salary,deductions,net_pay) VALUES ('%d','%s','%d','%d','%.2f','%.2f','%.2f')"};
-				  		sprintf(stmt,qry1,emp_id,"employee",current_time->tm_mon+1,current_time->tm_year+1900,total,deductions,net_pay);
+				  		sprintf(stmt,qry1,emp_id,sal_type,current_time->tm_mon+1,current_time->tm_year+1900,total,deductions,net_pay);
 
 						if (mysql_query(conn9,stmt))
 		    			    	{
@@ -244,7 +248,7 @@ char* count_attendances_and_compute_salary(char stmt[1500],char sal_type[20])
 					{
 						char qry[] ={"select * from daily_attendance where attend_month ='%d' and attend_year ='%d' and emp_id ='%d'"};
 				  		sprintf(stmt,qry,current_time->tm_mon+1,current_time->tm_year+1900,emp_id);
-
+						
 						if (mysql_query(conn8,stmt))
     			    			{
 			        			printf("Error: %s\n", mysql_error(conn8));
@@ -255,7 +259,6 @@ char* count_attendances_and_compute_salary(char stmt[1500],char sal_type[20])
         					{
         						read1 = mysql_store_result(conn8);
 								int num_fields1 = mysql_num_rows(read1);
-								char sal_type[20];
 								
 								if (num_fields <=0)
             					{
@@ -266,7 +269,6 @@ char* count_attendances_and_compute_salary(char stmt[1500],char sal_type[20])
 								float hours=0;
 								while (res = mysql_fetch_row(read1))
   								{
-  									strcpy(sal_type,res[3]);
 									int i=0;
       									for(i = 6; i < num_fields-1; i++)
       									{
@@ -365,7 +367,8 @@ int emp_sal_mgmt()
 		int compute_opt;
 
 		char stmt [1500];
-        char sal_type[20];
+        char sal_type[5];
+        
 		time_t s;
 		struct tm* current_time;
 		s = time(NULL);
@@ -376,22 +379,22 @@ int emp_sal_mgmt()
 		scanf("%d",&compute_opt);
 		if (compute_opt == 1)
 		{
-			char qry[] = {"select * from salary where salary_type='hourly'"};
+			char qry[] = {"select * from salary where salary_type='H'"};
       		int n = sprintf(stmt,qry);
-      		strcpy(sal_type,"hourly");
-            printf("%s",count_attendances_and_compute_salary(stmt,sal_type));
+      		strcpy(sal_type,"H");
+            printf("%s", compute_salary(stmt,sal_type));
             
 		}
 
 		else if(compute_opt == 2)
 		{
-			char qry[] = {"select * from salary where salary_type='salaried'"};
-		        int n = sprintf(stmt,qry);
-			strcpy(sal_type,"salaried");
-			printf("%s",count_attendances_and_compute_salary(stmt,sal_type));
+			char qry[] = {"select * from salary where salary_type='S'"};
+		    int n = sprintf(stmt,qry);
+			strcpy(sal_type,"S");
+			printf("%s", compute_salary(stmt,sal_type));
 		}
 
-	    	else
+	    else
 		{
 			printf("Wrong Choice.");
 		}

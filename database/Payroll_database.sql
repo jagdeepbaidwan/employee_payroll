@@ -191,8 +191,8 @@ insert into `login_details` values (4,"1234","manager","A",NULL);
 
 INSERT INTO `leave_details` (`Leave_id`,`Emp_id`,`Medical_leave`,`Paid_leave`,`Leave_year`,`Balance_ML`,`Balance_PL`) VALUES(1,2,5,12,2020,4,7);
 
-use payroll1;
-INSERT INTO `payroll1`.`emp_details`
+use payroll;
+INSERT INTO `payroll`.`emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -225,8 +225,8 @@ VALUES
 'Admin',
 1);
 
-use payroll1;
-INSERT INTO `payroll1`.`emp_details`
+use payroll;
+INSERT INTO `payroll`.`emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -259,8 +259,8 @@ VALUES
 'Manager',
 4);
 
-use payroll1;
-INSERT INTO `payroll1`.`emp_details`
+use payroll;
+INSERT INTO `payroll`.`emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -293,8 +293,8 @@ VALUES
 'Employee',
 3);
 
-use payroll1;
-INSERT INTO `payroll1`.`emp_details`
+use payroll;
+INSERT INTO `payroll`.`emp_details`
 (`name1`,
 `name2`,
 `department`,

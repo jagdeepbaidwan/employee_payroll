@@ -108,7 +108,7 @@ int display_leaves(int,int);
 
 
 
-void view_raised_grievances();
+char* view_raised_grievances(int,int);
 
 
 
