@@ -16,6 +16,8 @@
 #include "..\include\employee_management.h"
 #include "..\include\employee.h"
 #include "..\include\manager_dept_management.h"
+#include "..\include\employee_personal_dtl_management.h"
+#include "..\include\salary_management.h"
 
 MYSQL *conn;
 MYSQL_RES *read1=NULL;
@@ -77,9 +79,19 @@ char* login(int id, char pwd[25])
 int main(int argc, char *argv[])
 {
     int ch;
-    printf("\n     Press 1 to test login\n");
-    printf("\n     Press 2 to raise attendance change request\n");
-    printf("Enter test case number");
+    printf("\n     Press 1 to test for login function ");
+    printf("\n     Press 2 to test for change password function ");
+    printf("\n     Press 3 to test for attendance change request function ");
+    printf("\n     Press 4 to test for employee deactivation function ");
+    printf("\n     Press 5 to test for employee display leaves function ");
+    printf("\n     Press 6 to test for display salary function ");
+    printf("\n     Press 7 to test for leave_request function ");
+    printf("\n     Press 8 to test for employee request function ");
+    printf("\n     Press 9 to test for decision leave request function ");
+    printf("\n     Press 10 to test for employee rating function ");
+    printf("\n     Press 11 to test for view raised grievances function ");
+    printf("\n     Press 12 to test for add salary function ");
+    printf("\n  Enter test case number: ");
 
     scanf("%d",&ch);
     switch(ch)
@@ -293,7 +305,91 @@ int main(int argc, char *argv[])
             printf("Expected result is that it should return Request Status Updated successfully message \n ");
             ASSERT_TEST(strcmp("Request Status Updated successfully",decision_leave_request(4,2))==0);
             
-		break;
-	}		
+			break;
+		}	
+		
+		case 10:
+		{
+			printf("\n\n\n*****  TEST 10 Function: char* employee_rating(int emp_id,int rate, char description[200],int year) ****\n");
+            printf("*********************  TEST 10A  **************************************************\n");
+            printf("The employee rating function is called with employee id '17' but it is not exist in the database \n");
+            printf("Expected result is that it should return Employee ID not found message \n ");
+            ASSERT_TEST(strcmp("Employee ID not found",employee_rating(17,1,"Good employee",2020))==0);
+            
+            printf("*********************  TEST 10B  **************************************************\n");
+            printf("The employee rating function is called with rating '10' but the range is from 1 to 5 \n");
+            printf("Expected result is that it should return 'Rating does not exceed 5' message \n");
+            ASSERT_TEST(strcmp("Rating does not exceed 5",employee_rating(1,10,"Good employee",2020))==0);
+            
+            printf("*********************  TEST 10C  **************************************************\n");
+            printf("The employee rating function is called with rating '0' but the range is from 1 to 5 \n");
+            printf("Expected result is that it should return 'Rating canot be 0' message \n");
+            ASSERT_TEST(strcmp("Rating cannot be 0",employee_rating(1,0,"Good employee",2020))==0);
+            
+            printf("*********************  TEST 10D  **************************************************\n");
+            printf("The employee rating function is called with year '200' but the range is from 2018 to 2020 \n");
+            printf("Expected result is that it should return 'INVALID YEAR' message \n ");
+            ASSERT_TEST(strcmp("INVALID year",employee_rating(1,3,"Good employee",200))==0);
+            
+            printf("*********************  TEST 10E  **************************************************\n");
+            printf("The employee rating function is called for the existing employee \n");
+            printf("Expected result is that it should return 'Rating Updated' message \n ");
+            ASSERT_TEST(strcmp("Rating Updated",employee_rating(13,1,"Good employee",2020))==0);
+            
+			break;
+		}
+		
+		case 11:
+		{
+			printf("\n\n\n*****  TEST 11 Function: char* view_raised_grievances(int choice,int gri_choice) ****\n");
+            printf("*********************  TEST 11A  **************************************************\n");
+            printf("The view raised grievances function is called when no grievance is added in the table 'grievances' \n");
+            printf("Expected result is that it should return 'No Record with the query' message \n ");
+            ASSERT_TEST(strcmp("No Record with the query",view_raised_grievances(1,12))==0);
+            
+            printf("*********************  TEST 11B  **************************************************\n");
+            printf("The view raised grievances function is called when grievance is in the table 'grievances' \n");
+            printf("Expected result is that it should return 'Grievance Found for the employee ID' message \n ");
+            ASSERT_TEST(strcmp("Grievance Found for the employee ID",view_raised_grievances(1,2))==0);
+            
+            printf("*********************  TEST 11C  **************************************************\n");
+            printf("The view raised grievances function is called with right parameters \n");
+            printf("Expected result is that it should return 'Grievance Found' message \n ");
+            ASSERT_TEST(strcmp("Grievance Found",view_raised_grievances(2,1))==0);
+            
+            printf("*********************  TEST 11D  **************************************************\n");
+            printf("The view raised grievances function is called when employee ID is invalid \n");
+            printf("Expected result is that it should return 'Employee ID not found' message \n ");
+            ASSERT_TEST(strcmp("Employee ID not found",view_raised_grievances(1,17))==0);
+            
+            printf("*********************  TEST 11E  **************************************************\n");
+            printf("The view raised grievances function is called with wrong choice number \n");
+            printf("Expected result is that it should return 'Wrong choice' message \n ");
+            ASSERT_TEST(strcmp("Wrong choice",view_raised_grievances(4,1))==0);
+            
+			break;
+		}
+		
+		case 12:
+		{
+			printf("\n\n\n*****  TEST 12 Function: char* add_salary(int e_id,char sal_type[20], float salary,char desig[50]) ****\n");
+            printf("*********************  TEST 12A  **************************************************\n");
+            printf("The add salary function is called but with wrong employee ID \n");
+            printf("Expected result is that it should return 'Employee ID not found' message \n ");
+            ASSERT_TEST(strcmp("Employee ID not found",add_salary(100,"S",110.01,"developer"))==0);
+            
+            printf("*********************  TEST 12B  **************************************************\n");
+            printf("The add salary function is called with right parameters \n");
+            printf("Expected result is that it should return 'Salary added successfully' message \n ");
+            ASSERT_TEST(strcmp("Salary added successfully",add_salary(1,"S",110.01,"developer"))==0);
+            
+            printf("*********************  TEST 12C  **************************************************\n");
+            printf("The add salary function is called but with wrong salary_type \n");
+            printf("Expected result is that it should return 'Wrong salary_type' message \n ");
+            ASSERT_TEST(strcmp("Wrong salary_type",add_salary(1,"A",110.01,"developer"))==0);
+			
+			break;
+		}
+		
     }
 }

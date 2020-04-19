@@ -772,7 +772,14 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
                 }
             }
             
-            printf("%s",add_salary(emp_id));
+			float salary;
+			char sal_type[20];
+			char desi[50] = des;
+            printf("Enter the Salary type  hourly or salaried:\n");
+			scanf("%s",sal_type);
+    		printf("\nEnter the Salary: \n");
+    		scanf("%.2f",&salary);
+            printf("%s",add_salary(emp_id,sal_type,salary,desi));
             return "User Inserted";
         }
     }
@@ -1776,7 +1783,18 @@ int emp_management(int i,int emp_id)
                             
                             else if(2 == choice)
                             {
-                                view_raised_grievances();
+	                                int g_choice;
+								printf("		Press 1 View Grievances by employee id\n");
+								printf("		Press 2 View all Grievances\n");
+								scanf("%d",&g_choice);
+								if (choice == 1)
+								{
+									int gri_choice;
+									printf("Enter the employee id to see their grievances: \n");
+									scanf("%d",&gri_choice);
+								}
+								
+	                            view_raised_grievances(g_choice,gri_choice);
                             }
                             else if(3 == choice)
                             {

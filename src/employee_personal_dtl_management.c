@@ -379,12 +379,18 @@ char* raise_grievances(int e_id)
  *
  * It will display the raised grievances by the users. Admin,Manager,Employee have the option
  * to view the grievances by employee id or see all raised grievances.
+ *
+ * @param [in] int choice Intger value input from the user
+ *			   int gri_chocie Integer value input as the ID of the user
  * 
- * \return Nothing because the data retrieved from the database is printing on the console screen.
+ * \return User Type: Not connected : Fail to establish the connection with database
+ *		 			  Failed to execute the query: Connection problem for execution of the query
+ *		              Employee ID not found or No Record with the query: For not finding the employee in the database
+ *				      Grievance Found for the employee ID or Grievance Found: For positive case
  *
  */
 
-void view_raised_grievances()
+char* view_raised_grievances(int choice, int gri_choice)
 {
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res=NULL;
@@ -402,16 +408,28 @@ void view_raised_grievances()
 
 	else
 	{	char stmt[1500];
-		int choice;
-		printf("		Press 1 View Grievances by employee id\n");
-		printf("		Press 2 View all Grievances\n");
-		scanf("%d",&choice);
-
-		if (1 == choice)
+		char qry1[]={"select * from emp_details where emp_id=%d"};
+		sprintf(stmt,qry1,gri_choice);
+		
+		if (mysql_query(conn8,stmt))
 		{
-			int gri_choice;
-			printf("Enter the employee id to see their grievances: \n");
-			scanf("%d",&gri_choice);
+    		printf("Error: %s\n", mysql_error(conn8));
+    		return ("Failed to execute query");
+		}
+
+		else
+		{
+			read = mysql_store_result(conn8);
+			int num_rows = mysql_num_rows(read);
+			if(num_rows<=0)
+			{
+				printf("Employee ID not found\n");
+				return ("Employee ID not found");
+			}
+		}
+		
+		if (choice==1)
+		{
 			char qry[]={"select response_number, description from grievances where emp_id = %d"};
 			sprintf(stmt,qry,gri_choice);
 			if (mysql_query(conn8,stmt))
@@ -445,15 +463,17 @@ void view_raised_grievances()
 							printf(" %s", row[i] ? row[i] : "NULL");
 	    	  			}
 	  				}
-					printf("\n");
+					printf("Grievance Found for the employee ID\n");
+					return "Grievance Found for the employee ID";
  				}
  				else{
- 					printf("\nNo Record with the query.");
+ 					printf("No Record with the query");
+ 					return "No Record with the query";
 				}
 			}
 		}
 
-		else if (2 == choice)
+		else if (choice==2)
 		{
 			char qry[]={"select response_number, description from grievances"};
 			sprintf(stmt,qry);
@@ -488,18 +508,21 @@ void view_raised_grievances()
 							printf(" %s", row[i] ? row[i] : "NULL");
 	    	  			}
 	  				}
-					printf("\n");
+					printf("Grievance Found");
+					return("Grievance Found");
  				}
  				else{
- 					printf("\nNo Record Found in the Grievance Table.");
+ 					printf("No Record with the query");
+ 					return "No Record with the query";
 				}
 			}
 		}
-
+	
 		else
 		{
-			printf("Wrong choice.");
-	    }
+			printf("Wrong choice");
+			return ("Wrong choice");
+		}
 	}
 }
 
@@ -512,14 +535,21 @@ void view_raised_grievances()
  * Description can be entered upto 200 character, which signifies qualities of the employee
  * Year of the rating is also given and validated 
  * The values are inserted in emp_perfor function
+ *
+ * @param [in] int e_id Integer input value from the user
+ *			   int rate Integer input value as rate for the employee
+ *  		   char description [200] Array of character of length 200
+ *			   int year Integer input value as year of the rating
  * 
- * \return User Type: 0 as string: For error
- *		   Not connected : Fail to establish the connection with database
- *		   Failed to execute the query: Connection problem for execution of the query
+ * \return User Type: Not Establish connection: For error
+ *		 			  Not connected : Fail to establish the connection with database
+ * 					  Failed to execute the query: Connection problem for execution of the query
+ * 			   		  Rating Added or Rating Updated: Positive case
+ * 					  INVALID year, Rating cannot exceed 5, Rating can not be 0: Negative Case 
  *
  */
 
-char* employee_rating()
+char* employee_rating(int e_id,int rate,char description[200],int year)
 {
 	MYSQL_RES *read=NULL;
 	MYSQL_ROW row=NULL;
@@ -531,101 +561,65 @@ char* employee_rating()
 
 	if(!conn8)
 	{
-		printf("Connection error");
-		return "0";
+		printf("Connection error\n");
+		return "Not Establish connection";
 	}
 
 	else
 	{
 		char stmt[1500];
-		char description[200];
-		int temp,x=0,year=0,rate=0,e_id=0;
-		char *choice;
-
-		do
+		char qry1[]={"select * from emp_details where emp_id=%d"};
+		sprintf(stmt,qry1,e_id);
+		
+		if (mysql_query(conn8,stmt))
 		{
-			temp = 0;
-			printf("Enter the Employee ID for rating: ");
-  			scanf("%d",&e_id);
-			char qry1[]={"select * from emp_details where emp_id=%d"};
-			sprintf(stmt,qry1,e_id);
-			if (mysql_query(conn8,stmt))
-			{
-        		printf("		Error: %s\n", mysql_error(conn8));
-        		return ("		Failed to execute query.");
-    		}
+    		printf("Error: %s\n", mysql_error(conn8));
+    		return ("Failed to execute query");
+		}
 
-    		else
-    		{
-    			read = mysql_store_result(conn8);
-				row = mysql_fetch_row(read);
-				int num_rows = mysql_num_rows(read);
-				if(num_rows<0)
-				{
-					printf("		Employee ID not found\n");
-					temp=0;
-				}
-				else
-				{
-					temp=1;
-				}
-    		}
-		}while (temp!=1);
-
-		do
+		else
 		{
-			printf("Enter the rating of the employee: ");
-			scanf("%d",&rate);
-
-			if(rate <= 0)
+			read = mysql_store_result(conn8);
+			int num_rows = mysql_num_rows(read);
+			if(num_rows<=0)
 			{
-				printf("		Rating cannot be 0.\n");
-				temp = 0;
+				printf("Employee ID not found\n");
+				return ("Employee ID not found");
 			}
-
-			else if (rate >1 && rate <=5)
-			{
-				rate = rate;
-				temp =1;
-			}
-
 			else
 			{
-				printf("		Rating does not exceed 5.\n");
-				temp = 0;
+				if(rate <= 0)
+				{
+					printf("Rating cannot be 0\n");
+					return("Rating cannot be 0");
+				}
+		
+				else if (rate >0 && rate <=5)
+				{
+					rate = rate;
+				}
+		
+				else
+				{
+					printf ("Rating does not exceed 5\n");
+					return ("Rating does not exceed 5");
+				}
+	
+				if(!(year>=MIN_YEAR && year<=YEAR))
+				{
+					printf ("INVALID year\n");
+					return ("INVALID year");
+				}
 			}
-		}while (temp!=1);
-
-		getchar();
-
-		do
-		{
-    		printf("Feedback of the employee under 200 characters\n");
-			gets(description);
-			x=notempty(description);
-    	}while(x==0);
-
-    	getchar();
-    	do
-		{
-    		printf("Enter the year for rating\n");
-			scanf("%d",&year);
-			if(year<=YEAR && year>=MIN_YEAR)
-            {
-            	x=1;
-			}
-			else{
-				printf("\t\t INVALID year\n");
-			}
-    	}while(x==0);
+		}	
 
 		conn9 = mysql_init(NULL);
 		mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port7, NULL, 0);
 
 		if(!conn9)
 		{
-			printf("Connection error");
-			return "0";
+			printf("Connection error\n");
+			return "Not Establish connection";
 		}
 
 		else
@@ -635,8 +629,8 @@ char* employee_rating()
 
 			if (mysql_query(conn9,stmt))
 			{
-        		printf("		Error: %s\n", mysql_error(conn9));
-        		return ("		Failed to execute query.");
+        		printf("Error: %s\n", mysql_error(conn9));
+        		return ("Failed to execute query");
     		}
 
     		else
@@ -644,20 +638,21 @@ char* employee_rating()
     			read1 = mysql_store_result(conn9);
 				rows = mysql_fetch_row(read);
 				int num_rows = mysql_num_rows(read);
-				if(num_rows<0 )
+				if(num_rows<0)
 				{
 					char qry2[]={"insert into emp_perfor (emp_id,rating,description,year) VALUES('%d','%d','%s','%d')"};
 					sprintf(stmt,qry2,rate,description,e_id,year);
 
 					if (mysql_query(conn9,stmt))
 					{
-						printf("		Error: %s\n", mysql_error(conn9));
-						return ("		Failed to execute query.");
+						printf("Error: %s\n", mysql_error(conn9));
+						return ("Failed to execute query");
 					}
 
 					else
 					{
-   						printf ("\n\n Rating Added. \n");
+   						printf ("\nRating Added");
+   						return ("Rating Added");
 					}
 				}
 
@@ -669,13 +664,14 @@ char* employee_rating()
 
 					if (mysql_query(conn8,stmt))
 					{
-						printf("		Error: %s\n", mysql_error(conn8));
-						return ("		Failed to execute query.");
+						printf("Error: %s\n", mysql_error(conn8));
+						return ("Failed to execute query");
 					}
 
 					else
 					{
-   						printf ("\n\n Rating Updated. \n");
+   						printf ("\nRating Updated");
+   						return ("Rating Updated");
 					}
 				}
 			}

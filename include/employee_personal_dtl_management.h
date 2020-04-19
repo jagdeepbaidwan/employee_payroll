@@ -1,4 +1,3 @@
-
 /** @file employee_personal_dtl_management.h
  */
 #ifndef employee_personal_dtl_management_H
@@ -11,7 +10,8 @@
  * 
  *
  */
-int emp_detail_mgmt(int );
+ 
+int emp_detail_mgmt (int);
 
 /**  @brief Function prototypes to raise grievances
  *
@@ -38,7 +38,7 @@ char* update_employee(int );
  * 
  *
  */
-void view_raised_grievances();
+char* view_raised_grievances(int,int);
 
 /**  @brief Function prototypes to give employee rating
  *
@@ -47,7 +47,7 @@ void view_raised_grievances();
  * 
  *
  */
-char* employee_rating();
+char* employee_rating(int,int,char [],int);
 
 /**  @brief Function prototypes to display employee information
  *

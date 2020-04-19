@@ -500,7 +500,18 @@ int employee(int emp_id)
                 
                 else if(choice==2)
                 {
-                    view_raised_grievances();
+                    int g_choice;
+					printf("		Press 1 View Grievances by employee id\n");
+					printf("		Press 2 View all Grievances\n");
+					scanf("%d",&g_choice);
+					if (choice == 1)
+					{
+						int gri_choice;
+						printf("Enter the employee id to see their grievances: \n");
+						scanf("%d",&gri_choice);
+					}
+					
+                    view_raised_grievances(g_choice,gri_choice);
                 }
                 else if(choice==3)
                 {

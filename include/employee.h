@@ -68,7 +68,7 @@ int display_salary(int,int);
  *
  */
 
-void view_raised_grievances();
+char* view_raised_grievances(int,int);
 
 
  /**  @brief Function prototypes to change password

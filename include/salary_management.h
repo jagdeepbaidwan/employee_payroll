@@ -21,7 +21,7 @@ int emp_sal_mgmt();
  *
  */
 
-char* add_salary(int);
+char* add_salary(int,char [20],float,char [50]);
 
 #endif
 
