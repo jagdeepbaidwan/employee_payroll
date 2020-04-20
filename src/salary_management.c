@@ -17,7 +17,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn7, *conn8, *conn9;
-int port11 =3306;
+int port11 =3305;
 
 /**
  * \brief Add the salary in database with table name 'salary' by taking the inputs given
@@ -45,7 +45,7 @@ char* add_salary(int e_id,char sal_type[20],float salary,char desig[50])
 	MYSQL_FIELD *field;
 	char stmt[1500];
 	int sal_year;
-	
+
     time_t now;
     time(&now);
     struct tm *local = localtime(&now);
@@ -59,7 +59,7 @@ char* add_salary(int e_id,char sal_type[20],float salary,char desig[50])
     {
     	char qry1[]={"select * from emp_details where emp_id=%d"};
 		sprintf(stmt,qry1,e_id);
-		
+
 		if (mysql_query(conn7,stmt))
 		{
     		printf("Error: %s\n", mysql_error(conn8));
@@ -131,7 +131,7 @@ char* compute_salary(char stmt[1500],char sal_type[5])
 	MYSQL_ROW rows=NULL;
 	MYSQL_ROW res=NULL;
 	MYSQL_FIELD *fields;
-	
+
 	time_t s;
 	struct tm* current_time;
 	s = time(NULL);
@@ -196,7 +196,7 @@ char* compute_salary(char stmt[1500],char sal_type[5])
             				{
             					return ("\t\t No Record found.\n");
 							}
-						
+
 							else
 							{
 								while (res = mysql_fetch_row(read1))
@@ -248,7 +248,7 @@ char* compute_salary(char stmt[1500],char sal_type[5])
 					{
 						char qry[] ={"select * from daily_attendance where attend_month ='%d' and attend_year ='%d' and emp_id ='%d'"};
 				  		sprintf(stmt,qry,current_time->tm_mon+1,current_time->tm_year+1900,emp_id);
-						
+
 						if (mysql_query(conn8,stmt))
     			    			{
 			        			printf("Error: %s\n", mysql_error(conn8));
@@ -259,7 +259,7 @@ char* compute_salary(char stmt[1500],char sal_type[5])
         					{
         						read1 = mysql_store_result(conn8);
 								int num_fields1 = mysql_num_rows(read1);
-								
+
 								if (num_fields <=0)
             					{
             						return ("\t\t No Record found.\n");
@@ -368,7 +368,7 @@ int emp_sal_mgmt()
 
 		char stmt [1500];
         char sal_type[5];
-        
+
 		time_t s;
 		struct tm* current_time;
 		s = time(NULL);
@@ -383,7 +383,7 @@ int emp_sal_mgmt()
       		int n = sprintf(stmt,qry);
       		strcpy(sal_type,"H");
             printf("%s", compute_salary(stmt,sal_type));
-            
+
 		}
 
 		else if(compute_opt == 2)
@@ -399,6 +399,7 @@ int emp_sal_mgmt()
 			printf("Wrong Choice.");
 		}
 	}
+	printf("Successfully Computed");
 	return 1;
 }
 

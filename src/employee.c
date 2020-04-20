@@ -27,7 +27,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn2, *oo,*conn,*conn4;
-int port4=3306;
+int port4=3305;
 
 /**
 * \brief Get or scan the value from the console screen
@@ -96,7 +96,7 @@ int display_salary(int emp_id,int option)
         printf("Wrong Input");
         return 3;
     }
-    
+
     if(conn2)
     {
         int n;
@@ -132,10 +132,10 @@ int display_salary(int emp_id,int option)
                 }
             }while(x==0);
             x=0;
-            
+
             n = sprintf(stmt,qry,emp_id,year,month);
         }
-        
+
         mysql_query(conn2,stmt);
         read = mysql_store_result(conn2);
         if (mysql_query(conn2,stmt))
@@ -144,7 +144,7 @@ int display_salary(int emp_id,int option)
             printf("Failed to execute query.");
             return 7;
         }
-        
+
         else
         {
             row = mysql_fetch_row(read);
@@ -167,21 +167,21 @@ int display_salary(int emp_id,int option)
                         {
                             printf("%s |", field->name);
                         }
-                        
+
                         printf("\n");
                     }
-                    
+
                     printf("  %s  ", row[i] ? row[i] : "NULL");
                 }
                 row = mysql_fetch_row(read);
-                
+
             }
-            
-       
-            
+
+
+
         }
     }
-    
+
     return 0;
 }
 
@@ -208,7 +208,7 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
     MYSQL_RES *read1=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
-    
+
     oo=mysql_init(NULL);
     mysql_real_connect(oo, "localhost", "root", "1234","payroll", port4, NULL, 0);
     char stmt[1500];
@@ -228,7 +228,7 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
             if(row==NULL)
             {
                 return "\nWrong username or password\n\n\n\n\n";
-                
+
             }
             else
             {
@@ -257,10 +257,10 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
                 else
                 {
                     return "\nOld password wrong\n\n\n";
-                    
+
                 }
             }
-            
+
         }
     }
     else
@@ -268,9 +268,9 @@ char* change_pass(int emp_id,char new_pass[45], char confirm_pass[45],char old_p
         printf("not connected");
         printf("%s\n", mysql_error(oo));
         return "Error\n";
-        
+
     }
-    
+
 }
 
 /**
@@ -390,10 +390,10 @@ int employee(int emp_id)
             {
                 dcsn=emp_detail_mgmt(emp_id);
             }while(dcsn!=1);
-            
+
             break;
         }
-        
+
         case 2:
         {
             int dcsn=0;
@@ -401,10 +401,10 @@ int employee(int emp_id)
             {
                 dcsn=emp_attendance_mgmt(emp_id);
             }while(dcsn!=1);
-            
+
             break;
         }
-        
+
         case 3:
         {
             int dcsn=0;
@@ -426,15 +426,15 @@ int employee(int emp_id)
                         do{
                             printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
                             scanf("%d/%d/%d",&dd,&mm,&yy);
-                            
+
                             printf("Provide the number of days for the leave,(including start date): ");
                             scanf("%d",&no_of_days);
-                            
+
                             printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
                             scanf("%s",leave_type);
                             strcpy(validation_res,leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
                         }while(strcmp(validation_res,"Invalid Date")==0 || strcmp(validation_res,"Invalid leave type")==0);
-                        
+
                         if(strcmp(validation_res,"Request raised successfully")==0)
                         {
                             dcsn=1;
@@ -443,10 +443,10 @@ int employee(int emp_id)
                         {
                             dcsn=1;
                         }
-                        
+
                         break;
                     }
-                    
+
                     case 2:{
                         int year1,dcsn1=1;
                         do
@@ -464,8 +464,8 @@ int employee(int emp_id)
                     }
                 }
             }while(dcsn!=1);
-            
-            
+
+
             break;
         }
         case 4:
@@ -482,7 +482,7 @@ int employee(int emp_id)
             }while(dcsn!=1);
             break;
         }
-        
+
         case 5:
         {
             int dcsn=0;
@@ -497,20 +497,21 @@ int employee(int emp_id)
                 {
                     printf("%s",raise_grievances(emp_id));
                 }
-                
+
                 else if(choice==2)
                 {
                     int g_choice;
 					printf("		Press 1 View Grievances by employee id\n");
 					printf("		Press 2 View all Grievances\n");
 					scanf("%d",&g_choice);
+					int gri_choice;
 					if (choice == 1)
 					{
-						int gri_choice;
+
 						printf("Enter the employee id to see their grievances: \n");
 						scanf("%d",&gri_choice);
 					}
-					
+
                     view_raised_grievances(g_choice,gri_choice);
                 }
                 else if(choice==3)

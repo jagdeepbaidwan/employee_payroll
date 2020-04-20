@@ -1,5 +1,5 @@
-/** 
- * @file manager_dept_management.c 
+/**
+ * @file manager_dept_management.c
  *
  * Perform the Employee request functionality for managing employees between department.
  *
@@ -14,16 +14,16 @@
 
 /* Declaration of connection to MYSQL Database pointers */
 MYSQL *connect4,*connect5;
-int port=3306;
+int port=3305;
 
-/** 
+/**
  * \brief Employee request for the department from other department using
  *  'employee_request' table by taking the inputs given by the Manager
  *
- * Manager will request for the employee from other department for their purpose 
- * The statys will be approved when admin gives the approval permission 
+ * Manager will request for the employee from other department for their purpose
+ * The statys will be approved when admin gives the approval permission
  * Employee can also be promote to higher designation for the projects
- * 
+ *
  * @param[in] int e_id Employee ID of the user
  * @param[in]	char dept[] Department of the user
  *
@@ -36,7 +36,7 @@ char* employee_request(int emp_id,char dept[],char designation[]){
 	MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
-    
+
     if(strlen(dept)>10)
     {
     	printf("\nDepartment string length invalid\n");
@@ -47,14 +47,14 @@ char* employee_request(int emp_id,char dept[],char designation[]){
 		printf("\nDesignation string length invalid\n");
     	return "Designation string length invalid";
 	}
-	
+
 	char stmt[1500];
 	char status[15];
 	char dep[20];
 	connect5=mysql_init(NULL);
-	mysql_real_connect(connect5, "localhost", "root", "1234","payroll",port, NULL, 0);	
+	mysql_real_connect(connect5, "localhost", "root", "1234","payroll",port, NULL, 0);
 	char qry_manager_id[]={"select * from emp_details where emp_id='%d'"};
-	
+
 	if(connect5){
         int n=sprintf(stmt,qry_manager_id,emp_id);
         mysql_query(connect5,stmt);
@@ -66,7 +66,7 @@ char* employee_request(int emp_id,char dept[],char designation[]){
         }
         else
         {
-        	strcpy(dep,row[3]); 
+        	strcpy(dep,row[3]);
         	if(strcmp(dep,dept)==0)
         	{
         		connect4=mysql_init(NULL);
@@ -84,7 +84,7 @@ char* employee_request(int emp_id,char dept[],char designation[]){
 			 	    	printf("\nRequest raised successfully\n");
 			 	    	return "Request raised successfully";
 					}
-			    }    
+			    }
 			}
 			else
 			{

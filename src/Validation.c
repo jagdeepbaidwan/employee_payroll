@@ -15,11 +15,11 @@
 #include<ctype.h>
 
 /* Include preprocessor for declaration of the functions. */
-#include "..\include\Validation.h"
+#include "..\include\validation.h"
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn9;
-int port9=3306;
+int port9=3305;
 
 char query[1500];
 
@@ -33,7 +33,7 @@ char query[1500];
  * \return User_Type: Pointer to the array of character
  *
  */
- 
+
 char *rtrim(char *s)
 {
     char* back = s + strlen(s);
@@ -47,16 +47,16 @@ char *rtrim(char *s)
  *
  * Accessing the database,and compare the string (L), (PHL), (ML), (PL), (LWP), (WOFF), (A), (P)
  * with the fields accessed from the excel file
- *  
+ *
  * @param[in] char attnd[] Array of Character Pointer with the capacity to store 4 elements.
  * @param[in] int yy Integer value for specifying the leave year
  * @param[in] int emp_id Employee ID of the user
  *
  * \return User_Type: 0: For false Case or Error
- * 					  1 or 2: Positive Response 
+ * 					  1 or 2: Positive Response
  *
  */
- 
+
 int validate_attendance(char attnd[4],int yy, int emp_id)
 {
 	/* Initializing pointers, to access data from MYSQL database */
@@ -64,7 +64,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 	MYSQL_RES *res2=NULL;
 	MYSQL_ROW row=NULL;
 	conn9=mysql_init(NULL);
-	
+
 	/*setting up the connection for *conn9 */
 	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
 	if(!conn9)
@@ -74,7 +74,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
 	}
 	/* Called rtrim function to remove the extra spaces */
 	attnd=rtrim(attnd);
-	
+
 	/* Comparing attnd array with the different types of leaves */
 	if(strcmp(attnd,"L")==0 || strcmp(attnd,"PHL")==0 || strcmp(attnd,"ML")==0 || strcmp(attnd,"PL")==0 || strcmp(attnd,"LWP")==0 || strcmp(attnd,"WOFF")==0 || strcmp(attnd,"A")==0 || strcmp(attnd,"P")==0)
 	{
@@ -166,7 +166,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
  *
  * Compairing the given date,month,year by the Admin against the actual number of days in that month
  * Month is of 29 or 30 or 31 days in the given year
- *  
+ *
  * @param[in] int dd Integer input from the user
  * @param[in] int mm Integer input from the user
  * @param[in] int yy Integer input from the user
@@ -175,7 +175,7 @@ int validate_attendance(char attnd[4],int yy, int emp_id)
  * 					  1: Positive case that month is valid
  *
  */
- 
+
 int validate_current_month(int dd, int mm, int yy)
 {
 	int month, year;
@@ -222,7 +222,7 @@ int validate_current_month(int dd, int mm, int yy)
  *
  * Compairing the given date,month,year by the Admin against the actual number of days in that month
  * Month is of 29 or 30 or 31 days in the given year
- *  
+ *
  * @param[in] int dd Integer input from the user
  * @param[in] int mm Integer input from the user
  * @param[in] int yy Integer input from the user
@@ -280,7 +280,7 @@ int validate_date(int dd,int mm,int yy)
  *
  * Validating the given array of character that it is of length 10
  * If not of length 10, gives an invalid message
- *  
+ *
  * @param[in] char phone[] Array of character pointers
  *
  * \return User_Type: 0: For Error of the invalid phone number
@@ -313,7 +313,7 @@ int valid_phone(char phone[])
  * \brief Validating that string is empty or not
  *
  * Given string by the user is validated that it is empty or not
- *  
+ *
  * @param[in] char num[] Array of characters given by the user
  *
  * \return User_Type: 0: For Error of the invalid character
@@ -338,7 +338,7 @@ int notempty(char num[] )
  * \brief Validating the given string
  *
  * Given string by the user is validated that email is having with '@' and '.'
- *  
+ *
  * @param[in] char test[] Array of characters given by the user
  *
  * \return User_Type: 0: For Error of the invalid email
@@ -388,7 +388,7 @@ int valid_email(char test[])
  * \brief Validating the year as leap or not
  *
  * Test the year for leap year or not
- * 
+ *
  * @param[in] int y Integer value by the user
  *
  * \return User_Type: 0: For Error of the invalid date
@@ -413,7 +413,7 @@ int isleap(int y) {
  * \brief Validating the date,month and year
  *
  * It will validate the dat,month and year given by the user
- *  
+ *
  * @param[in] int d Integer input from the user
  * @param[in] int m Integer input from the user
  * @param[in] int y Integer input from the user

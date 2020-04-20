@@ -1,9 +1,9 @@
-/** 
- * @file employee_personal_dtl_management.c 
+/**
+ * @file employee_personal_dtl_management.c
  *
  * It will display the details of the employee such as employee personal detail
  * Employee feedback given by manager which help in increments or promotions
- * Raised and View Grievances by the Admin,Manager and Employee and 
+ * Raised and View Grievances by the Admin,Manager and Employee and
  * User have the option to be anonymous or not.
  *
  */
@@ -14,7 +14,7 @@
 #include<mysql.h>
 
 /* including preprocessors */
-#include "..\include\Validation.h"
+#include "..\include\validation.h"
 #include "..\include\employee_personal_dtl_management.h"
 #include "..\include\employee.h"
 #define YEAR 2020
@@ -22,20 +22,20 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn3, *conn8, *conn9;
-int port7=3306;
+int port7=3305;
 
-/** 
- * \brief Access the database and display the details of the employee. 
+/**
+ * \brief Access the database and display the details of the employee.
  *
  * It will display the details of the employees.
  *
- * @param[in] char stmt: Query passed from emp_detail_mgmt to display the employee details 
+ * @param[in] char stmt: Query passed from emp_detail_mgmt to display the employee details
  * and their rating given by the manager.
- * 
+ *
  * \return Nothing because the data retrieved from the database is printing on the console screen.
  *
  */
- 
+
 void emp_display(char stmt[]){
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
@@ -88,20 +88,20 @@ void emp_display(char stmt[]){
 
 }
 
-/** 
- * \brief Access the database for their details to be modified by the employee  
+/**
+ * \brief Access the database for their details to be modified by the employee
  *
  * The details of the employees can be modified by calling this function
  * Use "emp_detail" table to fetch and modify the records
  *
  * @param[in] int emp_id: Employee ID of the user.
- * 
+ *
  * \return User Type: User modified successfully: For positive case
  *		   Not connected : Fail to establish the connection with database
  *		   Failed to execute the query: Connection problem for execution of the query
  *
  */
- 
+
 char* update_employee(int emp_id)
 {
     conn3=mysql_init(NULL);
@@ -284,7 +284,7 @@ char* update_employee(int emp_id)
     }
 }
 
-/** 
+/**
  * \brief Raise grievances or complaints aginst others by Admin,Manager and EMployee
  *
  * It will raise a grievance or complaints against each other by Admin, Manager and Employee.
@@ -292,13 +292,13 @@ char* update_employee(int emp_id)
  * Description can be provided upto 200 characters for the grievances redressal.
  *
  * @param[in] int emp_id: Employee ID of the user.
- * 
+ *
  * \return User Type: Grivance Raised: For positive case
  *		   No Record found: For not finding the employee in the database
  *		   Not connected or Failed to execute the query: For failure with the database
  *
  */
- 
+
 char* raise_grievances(int e_id)
 {
 	conn8 = mysql_init(NULL);
@@ -327,12 +327,12 @@ char* raise_grievances(int e_id)
 
     	printf("Do you want to anonymous? y/n: ");
     	scanf("%s",choice);
-   		
-		/** 
+
+		/**
 		* Query: Insert into "grievances" table according to auto-generated response number
 		* It will add emp_id in the database by asking the permission from the user
 		*/
-		
+
     	if ( 0 == strcasecmp(choice,"y"))
 		{
 			char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL,NULL,'%s')"};
@@ -374,15 +374,15 @@ char* raise_grievances(int e_id)
 	}
 }
 
-/** 
- * \brief Access the database to display the raised grievances by the users. 
+/**
+ * \brief Access the database to display the raised grievances by the users.
  *
  * It will display the raised grievances by the users. Admin,Manager,Employee have the option
  * to view the grievances by employee id or see all raised grievances.
  *
  * @param [in] int choice Intger value input from the user
  *			   int gri_chocie Integer value input as the ID of the user
- * 
+ *
  * \return User Type: Not connected : Fail to establish the connection with database
  *		 			  Failed to execute the query: Connection problem for execution of the query
  *		              Employee ID not found or No Record with the query: For not finding the employee in the database
@@ -410,7 +410,7 @@ char* view_raised_grievances(int choice, int gri_choice)
 	{	char stmt[1500];
 		char qry1[]={"select * from emp_details where emp_id=%d"};
 		sprintf(stmt,qry1,gri_choice);
-		
+
 		if (mysql_query(conn8,stmt))
 		{
     		printf("Error: %s\n", mysql_error(conn8));
@@ -427,7 +427,7 @@ char* view_raised_grievances(int choice, int gri_choice)
 				return ("Employee ID not found");
 			}
 		}
-		
+
 		if (choice==1)
 		{
 			char qry[]={"select response_number, description from grievances where emp_id = %d"};
@@ -517,7 +517,7 @@ char* view_raised_grievances(int choice, int gri_choice)
 				}
 			}
 		}
-	
+
 		else
 		{
 			printf("Wrong choice");
@@ -526,26 +526,26 @@ char* view_raised_grievances(int choice, int gri_choice)
 	}
 }
 
-/** 
- * \brief Manager can rate the employees using this function 
+/**
+ * \brief Manager can rate the employees using this function
  *
  * Employees will get the rating by their Manager for the increment/promotions
  * The rating is from 1 to 5 and cannot accept others value than 1,2,3,4 and 5
  * Employee ID is also validated that it is active or inactive.
  * Description can be entered upto 200 character, which signifies qualities of the employee
- * Year of the rating is also given and validated 
+ * Year of the rating is also given and validated
  * The values are inserted in emp_perfor function
  *
  * @param [in] int e_id Integer input value from the user
  *			   int rate Integer input value as rate for the employee
  *  		   char description [200] Array of character of length 200
  *			   int year Integer input value as year of the rating
- * 
+ *
  * \return User Type: Not Establish connection: For error
  *		 			  Not connected : Fail to establish the connection with database
  * 					  Failed to execute the query: Connection problem for execution of the query
  * 			   		  Rating Added or Rating Updated: Positive case
- * 					  INVALID year, Rating cannot exceed 5, Rating can not be 0: Negative Case 
+ * 					  INVALID year, Rating cannot exceed 5, Rating can not be 0: Negative Case
  *
  */
 
@@ -570,7 +570,7 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 		char stmt[1500];
 		char qry1[]={"select * from emp_details where emp_id=%d"};
 		sprintf(stmt,qry1,e_id);
-		
+
 		if (mysql_query(conn8,stmt))
 		{
     		printf("Error: %s\n", mysql_error(conn8));
@@ -593,25 +593,25 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 					printf("Rating cannot be 0\n");
 					return("Rating cannot be 0");
 				}
-		
+
 				else if (rate >0 && rate <=5)
 				{
 					rate = rate;
 				}
-		
+
 				else
 				{
 					printf ("Rating does not exceed 5\n");
 					return ("Rating does not exceed 5");
 				}
-	
+
 				if(!(year>=MIN_YEAR && year<=YEAR))
 				{
 					printf ("INVALID year\n");
 					return ("INVALID year");
 				}
 			}
-		}	
+		}
 
 		conn9 = mysql_init(NULL);
 		mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port7, NULL, 0);
@@ -679,13 +679,13 @@ char* employee_rating(int e_id,int rate,char description[200],int year)
 	}
 }
 
-/** 
- * \brief Create connection and basically calls the function from here 
+/**
+ * \brief Create connection and basically calls the function from here
  *
  * It will initialize the connection and calls the other function from this function.
  *
  * @param[in] int emp_id: Employee ID for the user.
- * 
+ *
  * \return Nothing because every functions is handled internally.
  *
  */
@@ -704,14 +704,14 @@ int emp_detail_mgmt(int emp_id)
     scanf("%d",&i);
     switch (i)
     {
-    	 
-		 /** 
+
+		 /**
 		 * Case 1: Query is passed from here to display the employee details
 		 * Case2: Update function is called with emp_id as @param [in]
 		 * Case3: Query is passed from here to view the feedback of the employee
-		 * Case4: Change Password function is called with emp_id as @param [in] 
+		 * Case4: Change Password function is called with emp_id as @param [in]
 		 */
-		 
+
         case 1:
         {
             char stmt[1500];

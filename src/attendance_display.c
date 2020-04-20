@@ -11,7 +11,7 @@
 #include<mysql.h>
 
 /* Include preprocessor for declaration of the functions. */
-#include "..\include\Validation.h"
+#include "..\include\validation.h"
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn10;
@@ -27,7 +27,7 @@ int port3=3305;
  * \return Nothing as the function is printing messages on the console screen
  *
  */
- 
+
 void view_attendance(int emp_id)
 {
 	int dd,mm,yy,r,num;

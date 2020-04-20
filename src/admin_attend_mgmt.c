@@ -13,12 +13,12 @@
 #include <stdlib.h>
 
 /* Include preprocessor for declaration of the functions. */
-#include "..\include\Validation.h"
+#include "..\include\validation.h"
 #include "..\include\attendance_display.h"
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn4;
-int port1=3306;
+int port1=3305;
 
 char query[1500];
 
@@ -31,7 +31,7 @@ char query[1500];
  *			  int yy Integer year value from the user
  *
  * \return User_Type: 0: For false Case or Error
- * 					  1: Positive Response 
+ * 					  1: Positive Response
  *
  */
 
@@ -40,7 +40,7 @@ int attendance_month_availability(int mm, int yy)
 	MYSQL_RES *read=NULL;
 	MYSQL_RES *res2=NULL;
 	MYSQL_ROW row=NULL;
-	
+
 	/* Accessing the daily_attendance table to select attend_month with the attend_year */
 	char qry_id[]={"select * from daily_attendance where attend_month='%d' and attend_year='%d'"};
 	sprintf(query,qry_id,mm,yy);
@@ -94,7 +94,7 @@ void update_attendance()
 		t=0;
 		printf("\nEnter the employee Id to update the attendance\n");
 		scanf("%d",&emp_id);
-		
+
 		/* Accessing the emp_details to select the employee with emp_id and generate error message if employee is not found */
 		char qry_id1[]={"select * from emp_details where emp_id=%d"};
 		sprintf(stmt,qry_id1,emp_id);
@@ -173,7 +173,7 @@ void add_attendance()
     char *record,*line;
     int i=0,j=0,x=0;
     int mat[100][100];
-    
+
     /* Opening of the file using fstream pointer of type FILE in reading mode */
     FILE *fstream = fopen("myFile.csv","r");
     if(fstream == NULL)   {
@@ -276,7 +276,7 @@ void hourly_attendance()
     char response[55];
 	MYSQL_RES *read=NULL, *res2;
 	MYSQL_RES *res=NULL;
-	MYSQL_ROW row=NULL, *row1=NULL, *row2=NULL;
+	MYSQL_ROW row=NULL, row1=NULL;
 	int num,u;
 	int emp[1000],lp=0,ff;
 	struct attendance
@@ -368,7 +368,7 @@ void hourly_attendance()
 /**
  * \brief Add the new_month for attendance of the user
  *
- * Admin will add the new_month for attendance in the database 
+ * Admin will add the new_month for attendance in the database
  *
  * \return Nothing as the function is printing the message on the console screen
  *
@@ -378,8 +378,8 @@ void new_month()
 {
 
 	MYSQL_RES *read=NULL, *res2;
-	MYSQL_RES *res=NULL;
-	MYSQL_ROW row=NULL, *row1=NULL, *row2=NULL;
+	MYSQL_RES *res;
+	MYSQL_ROW row=NULL, row1=NULL, *row2=NULL;
 	int num,u;
 	int att_mnth,att_year;
 	int r=0;
@@ -396,7 +396,7 @@ void new_month()
         scanf("%d",&att_mnth);
         r=validate_date(01,att_mnth,2020);
     }while(r!=1);
-    
+
 	/* Accessing the daily_attendance table by selecting attend_month, attend_year */
 	char qry_id[]={"select * from daily_attendance where attend_month='%d' and attend_year='%d'"};
 	sprintf(query,qry_id,att_mnth,att_year);
@@ -431,11 +431,11 @@ void new_month()
 
 				res=mysql_store_result(conn4);
 				int i=0;
-            	while((row1 = mysql_fetch_row(res)))
+				while(row1 = mysql_fetch_row(res))
             	{
             			num = mysql_num_fields(res);
-                    	char att_qry[]={"insert into daily_attendance (emp_id,department,designation,attend_month,attend_year) values('%d','%s','%s','%d','%d')"};
-                    	sprintf(query,att_qry,(int)row1[0],row1[3],row1[4],att_mnth,att_year);
+                    	char att_qry[]={"insert into daily_attendance (emp_id,department,designation,attend_month,attend_year) values('%s','%s','%s','%d','%d')"};
+                    	sprintf(query,att_qry,row1[0],row1[3],row1[4],att_mnth,att_year);
                         if(mysql_query(conn4,query))
                         {
                         	printf(" Error: %s\n", mysql_error(conn4));

@@ -35,7 +35,7 @@ MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
 
 /* Database connection port number*/
-int port8=3306;
+int port8=3305;
 
 
 /**
@@ -61,11 +61,11 @@ char* login(int id, char pwd[25])
     char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
     oo=mysql_init(NULL);
     mysql_real_connect(oo, "localhost", "root", "1234","payroll", port8, NULL, 0);
-    
+
     /* checks for the database connectivity */
     if(oo)
     {
-        
+
         int n=sprintf(stmt,qry,id,pwd);
         mysql_query(oo,stmt);
         read1=mysql_store_result(oo);
@@ -73,20 +73,20 @@ char* login(int id, char pwd[25])
         if(row==NULL)
         {
             return "\nWrong username or password\n\n\n\n\n";
-            
+
         }
         else
         {
             if(strcmp("I",row[3])==0)
             {
-                
+
                 return "\nUser is deactivated\n\n\n\n\n\n";
             }
             else
             {
                 printf("\nSuccessfully logged in \n\n\n\n\n\n\n\n\n");
                 return row[2];
-                
+
             }
         }
     }
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     printf("\n*********************************************************************\n");
     printf("                               Login                                   \n");
     printf("\n*********************************************************************\n");
-    
+
     printf("                Press 1 LOGIN\n");
     printf("                Press 2 EXIT\n");
     scanf("%d",&i);
@@ -153,28 +153,28 @@ int main(int argc, char *argv[])
                 p++;
             }while(pwd[p-1]!='\r'||pwd[p-1]!=13);
             pwd[p-1]='\0';
-            
+
             /* Calls the login function and stores the user type in user_type*/
             strcpy(user_type,login(id,pwd));
             printf("%s\n",user_type);
             break;
         }
-        
+
         case 2:{
             printf("EXIT\n");
             break;
         }
-        
+
         default:
         {
             printf("Wrong Input");
             break;
         }
     }
-    
-    
+
+
     /* Display the functionalities available corresponding to the user_type */
-    
+
     if(strcmp("admin",user_type)==0)
     {
         int st=1;
@@ -203,17 +203,17 @@ int main(int argc, char *argv[])
             }
         }while(st==1);
     }
-    
+
     else if(strcmp("employee",user_type)==0){
         int dcsn=0;
         do
         {
             dcsn=employee(id);
         }while(dcsn!=1);
-        
-        
+
+
     }
-    
+
     else if(strcmp("manager",user_type)==0){
         int dcsn=0;
         do
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
             					char qry[] = {"select * from emp_details where emp_id = %d"};
             					int n = sprintf(stmt,qry,id);
             					emp_display(stmt);
-           
+
                             break;
                             }
                             case 2:
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
                         if(choice==1)
                         {
                         	view_attendance(id);
-                            
+
                         }
                         else if(choice==2)
                         {
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
                             }
                             case 2:
                             {
-                                
+
                                 int dcsn1=1,year;
                                 do
                                 {
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
                                 break;
                             }
                         }
-                        
+
                     }while(dcsn1!=1);
                     break;
                 }
@@ -372,9 +372,9 @@ int main(int argc, char *argv[])
                         printf("                Press 3 Go back...\n");
                         scanf("%d",&option);
                         dcsn1=display_salary(id,option);
-                        
+
                     }while(dcsn1!=1);
-                    
+
                     break;
                 }
                 case 5:
@@ -391,23 +391,24 @@ int main(int argc, char *argv[])
                         {
                             printf("%s",raise_grievances(id));
                         }
-                        
+
                         else if(choice==2)
                         {
                         	int g_choice;
 							printf("		Press 1 View Grievances by employee id\n");
 							printf("		Press 2 View all Grievances\n");
 							scanf("%d",&g_choice);
+							int gri_choice;
 							if (choice == 1)
 							{
-								int gri_choice;
+
 								printf("Enter the employee id to see their grievances: \n");
 								scanf("%d",&gri_choice);
 							}
-							
+
                             view_raised_grievances(g_choice,gri_choice);
                         }
-                        
+
                         else if(choice==3)
                         {
                             dcsn1=1;
@@ -418,7 +419,7 @@ int main(int argc, char *argv[])
                         }
                     }while(dcsn1!=1);
                     break;
-                    
+
                 }
                 case 6:
                 {
@@ -463,13 +464,13 @@ int main(int argc, char *argv[])
                             {
                                 char description[200];
 								int x=0,year=0,rate=0,e_id=0;
-								
+
 								printf("Enter the Employee ID for rating: ");
 								scanf("%d",&e_id);
-								
+
 								printf("Enter the rating of the employee for %d : ",e_id);
 								scanf("%d",&rate);
-								
+
 								getchar();
 								do
 								{
@@ -477,10 +478,10 @@ int main(int argc, char *argv[])
 									gets(description);
 									x=notempty(description);
 								}while(x==0);
-								
+
 								printf("Enter the year for rating\n");
 								scanf("%d",&year);
-								
+
                                 printf("%s",employee_rating(e_id,rate,description,year));
                                 break;
                             }
@@ -514,11 +515,11 @@ int main(int argc, char *argv[])
             }
         }while(dcsn!=1);
     }
-    
+
     else{
         printf("Have a Good Day!");
     }
-    
+
     return 0;
 }
 
