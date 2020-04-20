@@ -1,12 +1,12 @@
 #include<stdio.h>
 #include<windows.h>
 #include<mysql.h>
-#include "..\include\Validation.h"
+#include "..\include\validation.h"
 #include "..\include\attendance_display.h"
 MYSQL *conn3;
 
 // Attendance request change...
-int port5=3306;
+int port5=3305;
 char* attendance_change(int emp_id, int dd,int mm,int yy, char description[200])
 {
 	int r;
