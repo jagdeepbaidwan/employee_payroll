@@ -11,16 +11,16 @@ The software automatically takes attendance data from a csv file and calculate s
 - Arshpreet Singh -ArshpreetSinghArshpr@cmail.carleton.ca
 - Jagdeep Singh -Jagdeepsingh7@cmail.carleton.ca
 - Puneet Singh -PuneetSingh3@cmail.carleton.ca
-- varinder Dhanda -Varinderdhanda@cmail.carleton.ca - Carleton University
+- varinder Dhanda -Varinderdhanda@cmail.carleton.ca 
 
 # installation
 
-Installation steps are mentioned in [Installation.md]
+Installation steps are mentioned in [user_manual.doc] (https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.doc)
 
 # Usage
 
 To run, you must first install it. Then you can follow instructions mentioned in
-[Payroll_GroupD.md]
+[user_manual.doc] (https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.doc)
 
 # File Strucutre
 1.	bin: This folder has executable and data file for the Payroll system one input file: 
@@ -40,7 +40,8 @@ i)	Manager_dept_management.o
 j)	Validation.o
 
 3.	Doc: It contains all the documents for the project.
-a)	Payroll.pdf
+a)	developer_guide.doc
+b)      user_manual.doc
 
 4.	Include: It contains all the header files included in the project.
 a)	admin_attendance.h
@@ -72,7 +73,7 @@ a) Test.c
 
 # For Developers
 
-The developer manual is available [here]
+The developer manual is available [here](https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/developer_guide.doc)
 
 # License
 
