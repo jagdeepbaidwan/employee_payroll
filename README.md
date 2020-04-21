@@ -13,7 +13,7 @@ The software automatically takes attendance data from a csv file and calculate s
 - Puneet Singh -PuneetSingh3@cmail.carleton.ca
 - varinder Dhanda -Varinderdhanda@cmail.carleton.ca 
 
-# installation
+# Installation
 
 Installation steps are mentioned in [user_manual.doc] (https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.doc)
 
