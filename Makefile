@@ -32,7 +32,7 @@ INC      := -I$(INCDIR)
 #starting of compilation of all source files...........
 PAYROLL:
 	
-	$(CC) -g -O -c $(SRCDIR)/Main.c -fPIC -DPIC -o $(OBJDIR)/Main.o
+	$(CC) -g -O -c $(SRCDIR)/main.c -fPIC -DPIC -o $(OBJDIR)/main.o
 
 	$(CC) -g -O -c $(SRCDIR)/validation.c -fPIC -DPIC -o $(OBJDIR)/validation.o
 	

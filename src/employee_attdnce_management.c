@@ -7,6 +7,21 @@ MYSQL *conn3;
 
 // Attendance request change...
 int port5=3306;
+/**
+* \brief attendance change function takes 5 arguments.
+*
+* User can raise attendance request if he finds any problem
+*
+*
+* @param[in] emp_id employee id who logged in
+* @param[in] dd day of date
+* @param[in] mm month of date
+* @param[in] yy year of date
+* @param[in] description to write tha problem
+*
+* \return invalid date, user not found, database error, request submitted
+*
+*/
 char* attendance_change(int emp_id, int dd,int mm,int yy, char description[200])
 {
 	int r;

@@ -804,8 +804,11 @@ char* add_employee(char dept[],char desig[],int check, int request_id)
 * @param[in] emp_id employee id of the employee who has to be deactivated
 * @param[in] login_id login id of the employee who has to be deactivated
 *
-* \return no return value
-*
+* \return if no employee found
+* \return  Already de-activated
+* \return  Database error
+* \return  Same logged in user
+
 */
 
 
