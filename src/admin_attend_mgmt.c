@@ -18,7 +18,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn4;
-int port1=3305;
+int port1=3306;
 
 char query[1500];
 

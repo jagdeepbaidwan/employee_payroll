@@ -4,16 +4,20 @@
 #include<mysql.h>
 #include<stdlib.h>
 #include "..\include\validation.h"
+
 /* Declaration of connection to MYSQL Database pointers */
 MYSQL *connect7,*connect8,*connect9,*connect10,*connect2,*connect1,*connect11;
-int port10=3305;
 
-/* Start of Function: char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[])*/
+/* Database connection port number*/
+int port10=3306;
+
 
 /**
- * \brief Allows the user to raise a leave request.
+ * \fn char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[])
+ * \brief Allow the users to raise a leave request.
  *
- * The user can raise a request for a planned leave for the admin to review.
+ * The user can raise a request for a planned leave for the admin to review by specifying
+ * the start date for the leave, no of days and leave request type 
  *
  * @param[in] int emp_id employee id of the user who wants to raise leave request
  * @param[in] int dd     start day for the leave request
@@ -21,27 +25,31 @@ int port10=3305;
  * @param[in] int yy     year of the start day for the leave request
  * @param[in] int no_of_days number of days for the leave required
  * @param[in] char leave_type[] the type of leave required(ML/PL/LWP)
-
- * \return "Request raised successfully" for successful execution of the function
- 		   "Failed to execute query" for failure in query execution
+ *
+ * \return string corresponding to leave request status
+ *
  */
 
 char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[]){
 	int x,r;
 	int j=0;
 	char no_days[10];
+	
+	/*Validating the date provided for leave request*/
 	r=validate_date(dd,mm,yy);
 	if(r!=1){
 		printf("\nInvalid Date\n");
 		return "Invalid Date";
 	}
-
+	
+    /* Validating the length of the leave type*/
 	if(strlen(leave_type)>10){
 		printf("\nInvalid string length for leave_type\n");
 		return "Invalid string length for leave_type";
 	}
-
-	if (strcasecmp(leave_type,"SL")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0){
+	
+	/* Validating the leave type which must be from (SL/PL/LWP)*/
+	if (strcasecmp(leave_type,"ML")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0){
         j=1;
     }
     else{
@@ -54,11 +62,12 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     char stmt[1500];
-
+    
+    /*Connection to database initialization*/
 	connect11=mysql_init(NULL);
 	mysql_real_connect(connect11,"localhost", "root", "1234","payroll", port10, NULL, 0);
+	
 	char qry_emp_id[]={"select * from emp_details where emp_id='%d'"};
-
 	if(connect11){
         int n=sprintf(stmt,qry_emp_id,emp_id);
         mysql_query(connect11,stmt);
@@ -69,9 +78,8 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
             return "User does not exist";
         }
 	}
+	
 	connect7=mysql_init(NULL);
-
-    /*setting up the connection for *connect7*/
 	mysql_real_connect(connect7,"localhost", "root", "1234","payroll", port10, NULL, 0);
 	char status[15];
 
@@ -80,7 +88,6 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
 
 	/* leave_request status will be pending when request is raised*/
 	strcpy(status,"Pending");
-
 	if(connect7){
 	    int n=sprintf(stmt,qry_leave_request,emp_id,dd,mm,yy,no_of_days,leave_type,status);
 		if (mysql_query(connect7,stmt)){
@@ -92,7 +99,7 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
  	    	printf ("\nRequest raised successfully\n");
  	    	return "Request raised successfully";
 		}
-}
+	}
 	else{
 		printf("\nDatabase connection error\n");
 		return "Database connection error";
@@ -100,16 +107,16 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
 }
 
 
-/* Start of Function: char* view_pending_leave_requests(char status[])*/
-
 /**
+ *
+ * \fn char* view_pending_leave_requests(char status[])
  * \brief Allows the admin to view all the leave requests that are still pending
  *
  * The admin can view the leave requests on which no action has been taken yet.
  *
  * @param[in] char status[] status of the requests which are pending as no action taken
  *
- * \return "Request raised successfully" for successful execution of the function
+ * \return string corresponding to display status
  *
  */
 
@@ -158,31 +165,29 @@ return "\n\n\nRequests displayed successfully";
 }
 
 
-/* Start of Function: char* decision_leave_request(int req_id)*/
-
 /**
+ *
+ * \fn char* decision_leave_request(int req_id)
  * \brief Allows the admin to take can action on pending leave requests.
  *
  * @param[in] int req_id refers to the unique request id of the leave request
+ * @param[in] int k refers to the choice of decision Approval/Rejection
  *
- * \return
+ * \return string confirmation for the decision taken
  *
  */
 
-char* decision_leave_request(int req_id,int k)
-{
-	if(k<1 || k>2)
-	{
+char* decision_leave_request(int req_id,int k){
+	/* Validating for incorrect input for decision to be taken*/
+	if(k<1 || k>2){
 		printf("\nInvalid input for k\n");
 		return "Invalid input for k";
 	}
 	printf("\n");
-	/* admin input to approve or reject the leave request */
-	switch(k)
-	{
-		case 1:
-		{
-
+	
+	/* Admin input to approve or reject the leave request */
+	switch(k){
+		case 1:{
 			MYSQL_RES *read=NULL;
 			MYSQL_RES *res=NULL;
 			MYSQL_ROW row=NULL;
@@ -190,6 +195,7 @@ char* decision_leave_request(int req_id,int k)
 			int balance_ML=0;
 			int balance_PL=0;
 			char stmt[1500];
+			
 			char qry_decision[]={"select * from leave_request where request_id='%d'"};
 			connect9=mysql_init(NULL);
 			mysql_real_connect(connect9, "localhost", "root", "1234","payroll", port10, NULL, 0);
@@ -204,8 +210,7 @@ char* decision_leave_request(int req_id,int k)
 		            printf("Failed to execute query.");
 		        }
 				else{
-					if(row==NULL)
-					{
+					if(row==NULL){
 						printf("\nNo such pending leave request exists\n");
 						return "No such pending leave request exists";
 					}
@@ -224,8 +229,8 @@ char* decision_leave_request(int req_id,int k)
 					 * and there is not enough leave balance
 					 * employee will get leave without pay
 					*/
-					if(strcmp(leave_status,"Approved")==0)
-					{
+					
+					if(strcasecmp(leave_status,"Approved")==0){
 						printf("\nRequest is already approved\n");
 						return "Request is already approved";
 					}
@@ -255,7 +260,7 @@ char* decision_leave_request(int req_id,int k)
 		        		printf("%s\n", mysql_error(connect8));
 		        	}
 
-		        	if(strcmp(leave_type,"ML")==0){
+		        	if(strcasecmp(leave_type,"ML")==0){
 		        		if(balance_ML>no_of_days){
 		        			balance_ML=balance_ML-no_of_days;
 						}
@@ -271,7 +276,7 @@ char* decision_leave_request(int req_id,int k)
 						}
 					}
 
-					else if(strcmp(leave_type,"PL")==0){
+					else if(strcasecmp(leave_type,"PL")==0){
 						if(balance_PL>no_of_days){
 							balance_PL=balance_PL-no_of_days;
 						}
@@ -281,6 +286,7 @@ char* decision_leave_request(int req_id,int k)
 					}
 
 					/* updating the leave balance for the employee after availing the leaves as per leave request*/
+					
 					char qry_update_balance[]={"update leave_details set Balance_ML='%d',Balance_PL='%d' where Emp_id='%d'"};
 					connect2=mysql_init(NULL);
 					mysql_real_connect(connect2, "localhost", "root", "1234","payroll", port10, NULL, 0);
@@ -290,7 +296,7 @@ char* decision_leave_request(int req_id,int k)
    		    				printf(" Error: %s\n", mysql_error(connect2));
    		   					printf("Failed to execute query.");
  	   					}
- 	   				else{
+ 	   				    else{
  	   					//"Leave balance updated successfully\n");
 						}
     				}
@@ -307,7 +313,7 @@ char* decision_leave_request(int req_id,int k)
    		   					printf( "Failed to execute query.");
    		   					break;
  	   					}
- 	   				else{
+						else{
  	   					printf("Leave request and Leave balance status updated successfully\n");
  	   					return "Leave request and Leave balance status updated successfully";
 						}
@@ -316,87 +322,80 @@ char* decision_leave_request(int req_id,int k)
 				break;
 				}
 			}
-		}
+		    }
 		    break;
-			}
+	    }
 
 		else{
 		    printf("not connected");
 		    printf("%s\n", mysql_error(connect8));
 		}
 		break;
-	}
-	case 2:{
-			MYSQL_RES *read=NULL;
-			MYSQL_RES *res=NULL;
-			MYSQL_ROW row=NULL;
-			char stmt[1500];
-			char leave_status[20];
-			char qry_decision[]={"select * from leave_request where request_id='%d'"};
-			connect9=mysql_init(NULL);
-			mysql_real_connect(connect9, "localhost", "root", "1234","payroll", port10, NULL, 0);
-
-			if(connect9){
-		        int n=sprintf(stmt,qry_decision,req_id);
-		        mysql_query(connect9,stmt);
-				read = mysql_store_result(connect9);
-		        row = mysql_fetch_row(read);
-
-				if (mysql_query(connect9,stmt)){
-		            printf(" Error: %s\n", mysql_error(connect9));
-		            printf("Failed to execute query.");
-		        }
-				else{
-					if(row==NULL)
-					{
-						printf("\nNo such pending leave request exists\n");
-						return "No such pending leave request exists";
-					}
-					else
-					{
-		            int emp_id=atoi(row[1]);
-					strcpy(leave_status,row[7]);
-
-					if(strcmp(leave_status,"Rejected")==0)
-					{
-						printf("\nRequest is already Rejected\n");
-						return "Request is already Rejected";
-					}
-
+	    }
+		case 2:{
+				MYSQL_RES *read=NULL;
+				MYSQL_RES *res=NULL;
+				MYSQL_ROW row=NULL;
+				char stmt[1500];
+				char leave_status[20];
+				char qry_decision[]={"select * from leave_request where request_id='%d'"};
+				connect9=mysql_init(NULL);
+				mysql_real_connect(connect9, "localhost", "root", "1234","payroll", port10, NULL, 0);
+	
+				if(connect9){
+			        int n=sprintf(stmt,qry_decision,req_id);
+			        mysql_query(connect9,stmt);
+					read = mysql_store_result(connect9);
+			        row = mysql_fetch_row(read);
+	
+					if (mysql_query(connect9,stmt)){
+			            printf(" Error: %s\n", mysql_error(connect9));
+			            printf("Failed to execute query.");
+			        }
 					else{
-
-		            char status[20]="Rejected";
-    				char qry_status_update[]={"update leave_request set status='%s' where request_id='%d'"};
-					connect1=mysql_init(NULL);
-					mysql_real_connect(connect1, "localhost", "root", "1234","payroll", port10, NULL, 0);
-					if(connect1){
-	    				int n=sprintf(stmt,qry_status_update,status,req_id);
-						if (mysql_query(connect1,stmt))
-						{
-   		    				printf(" Error: %s\n", mysql_error(connect1));
-   		   					printf("Failed to execute query.");
- 	   					}
-						else{
- 	   					printf("\nRequest Status Updated successfully\n");
- 	   					return "Request Status Updated successfully";
+						if(row==NULL){
+							printf("\nNo such pending leave request exists\n");
+							return "No such pending leave request exists";
 						}
-					}
-					else{
-		    			printf("not connected");
-		    			printf("%s\n", mysql_error(connect8));
-					}
+						else{
+			            int emp_id=atoi(row[1]);
+						strcpy(leave_status,row[7]);
+	
+						if(strcasecmp(leave_status,"Rejected")==0){
+							printf("\nRequest is already Rejected\n");
+							return "Request is already Rejected";
+						}
+	
+						else{
+			            char status[20]="Rejected";
+	    				char qry_status_update[]={"update leave_request set status='%s' where request_id='%d'"};
+						connect1=mysql_init(NULL);
+						mysql_real_connect(connect1, "localhost", "root", "1234","payroll", port10, NULL, 0);
+						if(connect1){
+		    				int n=sprintf(stmt,qry_status_update,status,req_id);
+							if (mysql_query(connect1,stmt)){
+	   		    				printf(" Error: %s\n", mysql_error(connect1));
+	   		   					printf("Failed to execute query.");
+	 	   					}
+							else{
+	 	   					printf("\nRequest Status Updated successfully\n");
+	 	   					return "Request Status Updated successfully";
+							}
+						}
+						else{
+			    			printf("not connected");
+			    			printf("%s\n", mysql_error(connect8));
+						}
+					    }
+				        break;
+						}
+		            }
+	            }
+				else{
+				    printf("not connected");
+				    printf("%s\n", mysql_error(connect9));
 				}
-
-			break;
+				break;
 		}
 	}
-}
-		else{
-		    printf("not connected");
-		    printf("%s\n", mysql_error(connect9));
-		}
-		break;
-
-}
-}
 }

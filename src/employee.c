@@ -27,7 +27,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn2, *oo,*conn,*conn4;
-int port4=3305;
+int port4=3306;
 
 /**
 * \brief Get or scan the value from the console screen
@@ -430,7 +430,7 @@ int employee(int emp_id)
                             printf("Provide the number of days for the leave,(including start date): ");
                             scanf("%d",&no_of_days);
 
-                            printf("Please provide the leave type to avail: ? (SL),(PL),(LWP)");
+                            printf("Please provide the leave type to avail: ? (ML),(PL),(LWP)");
                             scanf("%s",leave_type);
                             strcpy(validation_res,leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
                         }while(strcmp(validation_res,"Invalid Date")==0 || strcmp(validation_res,"Invalid leave type")==0);

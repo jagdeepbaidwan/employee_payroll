@@ -189,7 +189,7 @@ insert into `login_details` values (3,"1234","employee","I",NULL);
 insert into `login_details` values (4,"1234","manager","A",NULL);
 
 
-INSERT INTO `leave_details` (`Leave_id`,`Emp_id`,`Medical_leave`,`Paid_leave`,`Leave_year`,`Balance_ML`,`Balance_PL`) VALUES(1,2,5,12,2020,4,7);
+INSERT INTO `leave_details` (`Leave_id`,`Emp_id`,`Medical_leave`,`Paid_leave`,`Leave_year`,`Balance_ML`,`Balance_PL`) VALUES(2,10,10,2009,8,7);
 
 use payroll;
 INSERT INTO `payroll`.`emp_details`
@@ -277,7 +277,7 @@ INSERT INTO `payroll`.`emp_details`
 `emp_type`,
 `emp_id`)
 VALUES
-('Arshdeep',
+('Arshpreet',
 'Singh',
 'IT',
 'Developer',
@@ -286,7 +286,7 @@ VALUES
 'Ottawa Canada',
 '6477057462',
 'Male',
-'arshdeep94@gmail.com',
+'arshpreet94@gmail.com',
 12,
 11,
 2018,
@@ -392,4 +392,3 @@ VALUES
 1000,
 200,
 800);
-
