@@ -6,7 +6,7 @@
 MYSQL *conn3;
 
 // Attendance request change...
-int port5=3305;
+int port5=3306;
 char* attendance_change(int emp_id, int dd,int mm,int yy, char description[200])
 {
 	int r;

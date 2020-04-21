@@ -14,7 +14,7 @@
 
 /* Declaration of connection to MYSQL Database pointers */
 MYSQL *connect4,*connect5;
-int port=3305;
+int port=3306;
 
 /**
  * \brief Employee request for the department from other department using

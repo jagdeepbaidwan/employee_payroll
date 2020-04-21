@@ -17,7 +17,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn7, *conn8, *conn9;
-int port11 =3305;
+int port11 =3306;
 
 /**
  * \brief Add the salary in database with table name 'salary' by taking the inputs given
