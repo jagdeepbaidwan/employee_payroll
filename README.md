@@ -15,12 +15,12 @@ The software automatically takes attendance data from a csv file and calculate s
 
 # Installation
 
-Installation steps are mentioned in [user_manual.doc] (https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.doc)
+Installation steps are mentioned in [user_manual.doc](https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.docx)
 
 # Usage
 
 To run, you must first install it. Then you can follow instructions mentioned in
-[user_manual.doc] (https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.doc)
+[user_manual.doc](https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.doc)
 
 # File Strucutre
 1.	bin: This folder has executable and data file for the Payroll system one input file: 
