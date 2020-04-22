@@ -1,0 +1,12 @@
+<map id="attend_mgmt" name="attend_mgmt">
+<area shape="rect" id="node1" title="Attendance Management and calls the function from this function." alt="" coords="5,107,104,133"/>
+<area shape="rect" id="node2" href="$admin__attend__mgmt_8c.html#ac138eba1507443b2ad38f5046d24f7f3" title="Add the attendance of the user." alt="" coords="161,5,275,32"/>
+<area shape="rect" id="node7" href="$admin__attend__mgmt_8c.html#a3b91fdefb5f5cdf7e785feeb24c843a5" title="Add the attendance of the employees." alt="" coords="154,107,282,133"/>
+<area shape="rect" id="node8" href="$admin__attend__mgmt_8c.html#ac954558374aa1d041896a8d6ad7fb617" title="Add the new_month for attendance of the user." alt="" coords="174,157,262,184"/>
+<area shape="rect" id="node9" href="$admin__attend__mgmt_8c.html#a05be99a37dcbc824a657fe08afa55a10" title="Update the attendance of the user." alt="" coords="152,56,284,83"/>
+<area shape="rect" id="node10" href="$attendance__display_8c.html#a0fee0bbf0bd0dabdb34a069d8249583a" title="View the attendance table from admin login credentials." alt="" coords="159,208,277,235"/>
+<area shape="rect" id="node3" href="$admin__attend__mgmt_8c.html#a4757b9e47ec9662432e9b196d85026dc" title="Month availability before inserting attendance." alt="" coords="332,5,527,32"/>
+<area shape="rect" id="node4" href="$_validation_8c.html#a98f7cea390f8c27a349f27fa8374956e" title="Validating the attendance." alt="" coords="361,56,497,83"/>
+<area shape="rect" id="node6" href="$_validation_8c.html#aad0e0d513f76295005bffda6a837e8ca" title="Validating the current date." alt="" coords="381,107,478,133"/>
+<area shape="rect" id="node5" href="$_validation_8c.html#acdfc0f8ee81107535c88f945cbfeb305" title="Removes the extra spacing." alt="" coords="575,56,623,83"/>
+</map>
