@@ -15,7 +15,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn10;
-int port3=3305;
+int port3=3306;
 
 /**
 * \brief View the attendance table  from admin login credentials

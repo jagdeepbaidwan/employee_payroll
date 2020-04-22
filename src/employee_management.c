@@ -31,7 +31,7 @@ MYSQL *conn2, *oo1,*oo3,*conn8,*connect6,*conn7;
 char query[1500];
 
 /* Database connection port number*/
-int port6=3305;
+int port6=3306;
 
 /**
 *
@@ -670,11 +670,14 @@ char* deactivate (int emp_id, int login_id){
                 if(atoi(row[0])!=login_id){
                     int dd,mm,yy;
                     int r;
-                    do{
+                    /*do{
                         printf("\nEnter the date of leave of an employee:Format(dd/mm/yyyy)");
                         scanf("%d/%d/%d",&dd,&mm,&yy);
                         r=validate_date(dd,mm,yy);
-                    }while(r!=1);
+                    }while(r!=1);*/
+                    dd=01;
+                    mm=01;
+                    yy=2020;
                     char date[15];
                     sprintf(date,"%d/%d/%d", dd,mm,yy);
                     char qry[]="update  login_details set status='I', DOL='%s' where emp_id='%d'";

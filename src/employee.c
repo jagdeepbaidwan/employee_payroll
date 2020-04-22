@@ -27,7 +27,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn2, *oo,*conn,*conn4;
-int port4=3305;
+int port4=3306;
 
 /**
 * \brief Get or scan the value from the console screen

@@ -16,7 +16,7 @@
 MYSQL *connect4,*connect5;
 
 /* Database connection port number */
-int port=3305;
+int port=3306;
 
 /**
 * \fn char* employee_request(int emp_id,char dept[],char designation[])

@@ -17,7 +17,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn7, *conn8, *conn9;
-int port11 =3305;
+int port11 =3306;
 
 /**
 * \fn char* add_salary(int e_id,char sal_type[20],float salary,char desig[50])
