@@ -318,7 +318,8 @@ int main(int argc, char *argv[]){
                         int option;
                         printf("\n                Press 1 if you want to see all pay slips\n");
                         printf("                Press 2 if you want to see pay slips for particular pay period\n");
-                        printf("                Press 3 Go back...\n");
+                        printf("                Press 3 To display hourly/monthly salary\n");
+                        printf("                Press 4 Go back...\n");
                         scanf("%d",&option);
                         dcsn1=display_salary(id,option);
                         

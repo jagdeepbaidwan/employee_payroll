@@ -12,6 +12,7 @@ CREATE TABLE `salary` (
 
 drop table if exists  `emp_details` ;
 CREATE TABLE  `emp_details` (
+  `emp_id` int(11) NOT NULL AUTO_INCREMENT,
   `name1` varchar(45) NOT NULL,
   `name2` varchar(45) NOT NULL,
   `department` varchar(45) DEFAULT NULL,
@@ -26,7 +27,7 @@ CREATE TABLE  `emp_details` (
   `month` int(11) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
   `emp_type` varchar(45) DEFAULT NULL,
-  `emp_id` int(11) NOT NULL AUTO_INCREMENT,
+  
   PRIMARY KEY (`emp_id`)
 ) ;
 

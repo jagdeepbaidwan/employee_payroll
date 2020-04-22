@@ -407,17 +407,31 @@ void attend_mgmt(int ch){
                 break;
             }
             case 2:{
-                printf("		Enter 1 to enter hourly employee attendance\n");
-                printf("		Enter 2 to enter salaried employee attendance\n");
-                int choi;
-                scanf("%d",&choi);
-                if(choi==1){
-                    hourly_attendance();
-                }else if(choi==2){
-                    add_attendance();
-                }else{
-                    printf("Wrong choice");
-                }
+                int dcsn1=0;
+                do
+                {
+                    printf("		Enter 1 to enter hourly employee attendance\n");
+                    printf("		Enter 2 to enter salaried employee attendance\n");
+                    printf("		Enter 3 to Go back.....\n");
+                    int choi;
+                    scanf("%d",&choi);
+                    if(choi==1)
+                    {
+                        hourly_attendance();
+                    }
+                    else if(choi==2)
+                    {
+                        add_attendance();
+                    }
+                    else if(choi==3)
+                    {
+                        dcsn1=1;
+                    }
+                    else
+                    {
+                        printf("Wrong choice");
+                    }
+                }while(dcsn1!=1);
                 break;
             }
             case 3:{

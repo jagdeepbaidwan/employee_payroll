@@ -82,6 +82,8 @@ int display_salary(int emp_id,int option){
         /* Accessing the salary_cal table to select emp_id, year and month */
         strcpy(qry,"select * from salary_cal where emp_id='%d' and year='%d'and month='%d'");
     }else if(option==3){
+        strcpy(qry,"select * from salary where emp_id='%d' and sal_year='%d'");
+    }else if(option==4){
         return 1;
     }else{
         printf("Wrong Input");
@@ -116,6 +118,20 @@ int display_salary(int emp_id,int option){
             }while(x==0);
             x=0;
             n = sprintf(stmt,qry,emp_id,year,month);
+        }else if(option==3){
+            int year;
+            int x=0;
+            do{
+                printf("Enter the  year you wish to see: \n");
+                scanf("%d",&year);
+                if(year<=MAX_YEAR && year>=MIN_YEAR){
+                    x=1;
+                }else{
+                    printf("INVALID year, enter again\n");
+                }
+            }while(x==0);
+            
+            sprintf(stmt,qry,emp_id,year);
         }
         
         mysql_query(conn2,stmt);
@@ -376,7 +392,8 @@ int employee(int emp_id){
                 int option;
                 printf("\n                Press 1 if you want to see all pay slips\n");
                 printf("                Press 2 if you want to see pay slips for particular pay period\n");
-                printf("                Press 3 Go back...\n");
+                printf("                Press 3 To display hourly/monthly salary\n");
+                printf("                Press 4 Go back...\n");
                 scanf("%d",&option);
                 dcsn=display_salary(emp_id,option);
             }while(dcsn!=1);
