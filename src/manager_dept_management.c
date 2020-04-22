@@ -70,7 +70,7 @@ char* employee_request(int emp_id,char dept[],char designation[]){
             printf("\nUser does not exist\n");
             return "User does not exist";
         }else{
-            strcpy(dep,row[2]);
+            strcpy(dep,row[3]);
             if(strcmp(dep,dept)==0){
                 connect4=mysql_init(NULL);
                 mysql_real_connect(connect4, "localhost", "root", "1234","payroll",3306, NULL, 0);
