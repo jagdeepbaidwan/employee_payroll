@@ -2,9 +2,9 @@
 # Generic Makefile
 #
 # @author Arshpreet Singh -
-# @author Jagdeep Singh -
-# @author Puneet Singh -
-# @author Varinder Singh Dhanda -varinderdhanda@cmail.carleton.ca
+# @author Jagdeep Singh - 
+# @author Puneet Singh - puneetsingh3@cmail.caretlon.ca
+# @author Varinder Singh Dhanda - varinderdhanda@cmail.carleton.ca
 # 
 
 # Date  : 2020-04-18
@@ -16,7 +16,7 @@
 # ------------------------------------------------
 
 # project name (generate executable with this name)
-TARGET   = PAYROLL
+TARGET   = payroll
 
 # change these to proper directories where each file should be
 
@@ -30,7 +30,7 @@ INCDIR	  	 = include
 CC       = gcc
 INC      := -I$(INCDIR)
 #starting of compilation of all source files...........
-PAYROLL:
+payroll:
 	
 	$(CC) -g -O -c $(SRCDIR)/main.c -fPIC -DPIC -o $(OBJDIR)/main.o
 
@@ -67,7 +67,7 @@ PAYROLL:
 
 
 	@echo "Now you can run test and Payroll files from  bin directory by using following commands"
-	@echo "bin/./Payroll"
+	@echo "bin/./payroll"
 	@echo "bin/./test"
 .PHONY: clean
 clean:
