@@ -1,8 +1,8 @@
 # ------------------------------------------------
 # Generic Makefile
 #
-# @author Arshpreet Singh -
-# @author Jagdeep Singh - 
+# @author Arshpreet Singh - arshpreetsingharshpr@cmail.carleton.ca
+# @author Jagdeep Singh - jagdeepsingh7@cmail.carleton.ca
 # @author Puneet Singh - puneetsingh3@cmail.caretlon.ca
 # @author Varinder Singh Dhanda - varinderdhanda@cmail.carleton.ca
 # 
