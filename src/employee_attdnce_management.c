@@ -12,7 +12,7 @@
 #include "..\include\attendance_display.h"
 MYSQL *conn3;
 
-int port5=3305;
+int port5=3306;
 /**
 * \brief attendance change function takes 5 arguments.
 *

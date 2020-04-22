@@ -31,7 +31,7 @@ MYSQL *conn2, *oo1,*oo3,*conn8,*connect6,*conn7;
 char query[1500];
 
 /* Database connection port number*/
-int port6=3305;
+int port6=3306;
 
 /**
 *

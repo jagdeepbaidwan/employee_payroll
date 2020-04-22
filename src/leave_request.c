@@ -22,7 +22,7 @@
 MYSQL *connect7,*connect8,*connect9,*connect10,*connect2,*connect1,*connect11;
 
 /* Database connection port number*/
-int port10=3305;
+int port10=3306;
 
 /**
 *

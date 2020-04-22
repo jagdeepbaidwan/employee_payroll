@@ -188,7 +188,7 @@ insert into `login_details` values (1,"1234","admin","A",NULL);
 insert into `login_details` values (2,"1234","employee","A",NULL);
 insert into `login_details` values (3,"1234","employee","I",NULL);
 insert into `login_details` values (4,"1234","manager","A",NULL);
-
+insert into `login_details` values (5,"1234","employee","A",NULL);
 
 INSERT INTO `leave_details` (`Emp_id`,`Medical_leave`,`Paid_leave`,`Leave_year`,`Balance_ML`,`Balance_PL`) VALUES(2,10,10,2009,8,7);
 
@@ -327,6 +327,39 @@ VALUES
 2018,
 'Employee',
 2);
+
+INSERT INTO `emp_details`
+(`name1`,
+`name2`,
+`department`,
+`designation`,
+`age`,
+`address_l1`,
+`address_l2`,
+`phonen`,
+`gender`,
+`email`,
+`day`,
+`month`,
+`year`,
+`emp_type`,
+`emp_id`)
+VALUES
+('Amitav',
+'Shaw',
+'IT',
+'Developer',
+'28',
+'1315,3 Meadowlands',
+'Ottawa Canada',
+'6132641524',
+'Male',
+'amitavshaw4@gmail.com',
+12,
+11,
+2018,
+'Employee',
+5);
 
 INSERT INTO `salary`
 (`emp_id`,

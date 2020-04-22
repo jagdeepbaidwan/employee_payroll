@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
             printf("***********************************TEST 4C*****************************************************\n");
             printf("Now we raise a request to deactivate the already deactivated account\n");
             printf("Expected result is it should return: User already deactivated\n ");
-            ASSERT_TEST(strcmp("Already de-activated",deactivate(8,1))==0);
+            ASSERT_TEST(strcmp("Already de-activated",deactivate(3,1))==0);
             printf("***********************************TEST 4D*****************************************************\n");
             printf("Now we raise a request to deactivate right employee\n");
             printf("Expected result is it should return: Employee deactivated\n ");
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
             printf("***********************************TEST 5C*****************************************************\n");
             printf("Now we show the data available in the database...\n");
             printf("Expected result is it should return: table show the data of leave\n ");
-            ASSERT_TEST(display_leaves(2,2020)==1);
+            ASSERT_TEST(display_leaves(2,2009)==1);
             printf("***********************************TEST 5D*****************************************************\n");
             printf("Now if the the employee does not exist \n");
             printf("Expected result is it should return: No data found \n ");

@@ -19,7 +19,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn5, *conn2;
-int port2=3305;
+int port2=3306;
 
 /**
 * \fn char* view_pending_requests(char status[])
