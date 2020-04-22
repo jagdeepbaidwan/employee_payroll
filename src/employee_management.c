@@ -31,7 +31,7 @@ MYSQL *conn2, *oo1,*oo3,*conn8,*connect6,*conn7;
 char query[1500];
 
 /* Database connection port number*/
-int port6=3306;
+int port6=3305;
 
 /**
 *
@@ -52,13 +52,13 @@ void sal_inc(){
     int year;
     time_t now;
     time(&now);
-    
+
     /* Accessing the system time */
     struct tm *local = localtime(&now);
     year = local->tm_year + 1900;
     int next_year;
     next_year=year+1;
-    
+
     char qry_id2[]={"select * from salary where sal_year='%d'"};
     sprintf(stmt,qry_id2,next_year);
     if (mysql_query(conn2,stmt)){
@@ -84,7 +84,7 @@ void sal_inc(){
                     float salary=atof(row[6]);
                     int rating=atoi(row[1]);
                     strcpy(sal_type,row[5]);
-                    
+
                     /* For different rating values different increments assigned*/
                     if(rating==1){
                         salary=salary+(salary*((float)2/100));
@@ -99,9 +99,9 @@ void sal_inc(){
                     }else{
                         printf("Rating is appropriate");
                     }
-                    
+
                     /* Inserting the updated salary values to the database */
-                    
+
                     char qry_id[]={"insert into salary values('%d','%s','%f','%d')"};
                     sprintf(stmt,qry_id,emp_id,sal_type,salary,next_year);
                     if (mysql_query(conn2,stmt)){
@@ -167,7 +167,7 @@ char* update_salary(int emp_id){
                 scanf("%f",&salary);
                 char qry2[]={"update salary set salary='%f' where emp_id='%d' and sal_year='%d'"};
                 sprintf(stmt,qry2,salary,emp_id,sal_year);
-                
+
                 if (mysql_query(conn2,stmt)){
                     printf("		Error: %s\n", mysql_error(conn8));
                     return ("		Failed to execute query.");
@@ -321,7 +321,7 @@ void new_leave_detail(){
 */
 
 void employee_reuests(){
-    
+
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
@@ -458,7 +458,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
         x=notempty(emp.l_name);
     }while(x==0);
     x=0;
-    
+
     if(check==1){
         strcpy(emp.dep,dept);
         strcpy(emp.des,desig);
@@ -469,7 +469,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
             x=notempty(emp.dep);
         }while(x==0);
         x=0;
-        
+
         do{
             printf("Enter the designation of employee\n");
             gets(emp.des);
@@ -486,7 +486,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
         x=notempty(emp.address1);
     }while(x==0);
     x=0;
-    
+
     do{
         printf("\nEnter city and country\n");
         gets(emp.address2);
@@ -524,7 +524,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
         x=valid_phone(emp.phonenumber);
     } while(x==0);
     x=0;
-    
+
     getchar();
     do{
         printf("Enter the date of joining\n");
@@ -536,7 +536,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
         scanf("%d",&emp.year);
         x=datevalid(emp.day,emp.month,emp.year);
     } while(x==0);
-    
+
     /* inserting in emp_details table */
     char stmt[1500];
     conn8=mysql_init(NULL);
@@ -709,7 +709,7 @@ void emp_display_details(char stmt[]){
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
     int num;
-    
+
     if(conn2){
         mysql_query(conn2,stmt);
         read = mysql_store_result(conn2);
@@ -771,7 +771,7 @@ char* modify_employee(int emp_id){
         int month;
         int year;
     };
-    
+
     struct employee emp;
     int i=0;
     int x=0;
@@ -793,7 +793,7 @@ char* modify_employee(int emp_id){
     scanf("%d",&i);
     switch(i){
         case 1:{
-            
+
             getchar();
             do{
                 printf("Please provide the first name: \n");
@@ -802,10 +802,10 @@ char* modify_employee(int emp_id){
             }while(x==0);
             x=0;
             char qry[]={"update emp_details set name1='%s' where emp_id='%d'"};
-            
+
             if(conn2){
                 sprintf(stmt,qry,emp.f_name,emp_id);
-                
+
                 if(mysql_query(conn2,stmt)){
                     printf(" Error: %s\n", mysql_error(conn2));
                     return "Failed to execute query.";
@@ -868,7 +868,7 @@ char* modify_employee(int emp_id){
                 gets(emp.address1);
                 x=notempty(emp.address1);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set address_l1='%s' where emp_id='%d'"};
             if(conn2){
                 sprintf(stmt,qry,emp.address1,emp_id);
@@ -892,7 +892,7 @@ char* modify_employee(int emp_id){
                 gets(emp.address2);
                 x=notempty(emp.address2);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set address_l2='%s' where emp_id='%d'"};
             if(conn2){
                 sprintf(stmt,qry,emp.address2,emp_id);
@@ -916,9 +916,9 @@ char* modify_employee(int emp_id){
                 getchar();
                 x=valid_phone(emp.phonenumber);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set phonen='%s' where emp_id='%d'"};
-            
+
             if(conn2){
                 sprintf(stmt,qry,emp.phonenumber,emp_id);
                 if(mysql_query(conn2,stmt)){
@@ -1153,7 +1153,7 @@ int emp_management(int i,int emp_id){
     conn2=mysql_init(NULL);
     int id;
     mysql_real_connect(conn2, "localhost", "root", "1234","payroll", port6, NULL, 0);
-    
+
     /* checking database connectivity */
     if(!conn2){
         printf("Connection error");
@@ -1305,7 +1305,7 @@ int emp_management(int i,int emp_id){
                 }while(dcsn!=1);
                 return 1;
             }
-            
+
             /* accessing the functionality related to salary management by the admin */
             case 4:{
                 int dcsn=0;
@@ -1348,7 +1348,7 @@ int emp_management(int i,int emp_id){
                 }while(dcsn!=1);
                 return 1;
             }
-            
+
             /* accessing the functionality related to department management by the admin */
             case 5:{
                 int dcsn=0;
@@ -1400,7 +1400,7 @@ int emp_management(int i,int emp_id){
                 }while(dcsn!=1);
                 return 1;
             }
-            
+
             /* accessing the functionality related to Grievance & Redresaal management by the admin */
             case 7:{
                 int dcsn=0;
@@ -1444,7 +1444,7 @@ int emp_management(int i,int emp_id){
                 }while(dcsn!=1);
                 return 1;
             }
-            
+
             case 8:{
                 change_password(emp_id);
                 return 1;

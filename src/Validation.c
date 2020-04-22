@@ -19,7 +19,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn9;
-int port9=3306;
+int port9=3305;
 
 char query[1500];
 
@@ -57,83 +57,37 @@ char *rtrim(char *s){
 */
 
 int validate_attendance(char attnd[4],int yy, int emp_id){
-    /* Initializing pointers, to access data from MYSQL database */
-    MYSQL_RES *read=NULL;
-    MYSQL_RES *res2=NULL;
-    MYSQL_ROW row=NULL;
-    conn9=mysql_init(NULL);
-    
-    /*setting up the connection for *conn9 */
-    mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
-    if(!conn9){
-        printf("Connection error");
-        return 0;
-    }
-    /* Called rtrim function to remove the extra spaces */
-    attnd=rtrim(attnd);
-    
-    /* Comparing attnd array with the different types of leaves */
-    if(strcmp(attnd,"L")==0 || strcmp(attnd,"PHL")==0 || strcmp(attnd,"ML")==0 || strcmp(attnd,"PL")==0 || strcmp(attnd,"LWP")==0 || strcmp(attnd,"WOFF")==0 || strcmp(attnd,"A")==0 || strcmp(attnd,"P")==0){
-        if(strcmp(attnd,"ML")==0 ){
-            /* Accessing the leave_details table to select leave year with the emp_id */
-            char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
-            sprintf(query,qry_id,yy,emp_id);
-            if (mysql_query(conn9,query)){
-                printf(" Error: %s\n", mysql_error(conn9));
-                printf("Failed to execute query.");
-            }else{
-                res2=mysql_store_result(conn9);
-                row = mysql_fetch_row(res2);
-                int l_balance=atoi(row[5]);
-                if(l_balance==0){
-                    printf("Employee=%d has no medical leave. Please add some leaves\n",emp_id);
-                    return 2;
-                }else{
-                    l_balance=l_balance-1;
-                    char qry_id[]={"update leave_details set balance_ML='%d' where leave_year='%d' and emp_id=%d"};
-                    sprintf(query,qry_id,l_balance,yy,emp_id);
-                    if (mysql_query(conn9,query)){
-                        printf(" Error: %s\n", mysql_error(conn9));
-                        printf("Failed to execute query.");
-                    }
-                }
-            }
-            //printf("%s",attnd);
-            return 1;
-        }
-        if(strcmp(attnd,"PL")==0){
-            /* Accessing the leave_details table to select leave year with the emp_id */
-            char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
-            sprintf(query,qry_id,yy,emp_id);
-            if (mysql_query(conn9,query)){
-                printf(" Error: %s\n", mysql_error(conn9));
-                printf("Failed to execute query.");
-            }else{
-                res2=mysql_store_result(conn9);
-                row = mysql_fetch_row(res2);
-                int l_balance=atoi(row[6]);
-                if(l_balance==0){
-                    printf("Employee=%d has no paid leave. Please add some leaves\n",emp_id);
-                    return 2;
-                }else{
-                    l_balance=l_balance-1;
-                    /* Update the database by selecting leave year and emp_id */
-                    char qry_id[]={"update leave_details set balance_PL='%d' where leave_year='%d' and emp_id=%d"};
-                    sprintf(query,qry_id,l_balance,yy,emp_id);
-                    if (mysql_query(conn9,query)){
-                        printf(" Error: %s\n", mysql_error(conn9));
-                        printf("Failed to execute query.");
-                    }
-                }
-            }
-            //printf("%s",attnd);
-            return 1;
-        }else{
-            return 1;
-        }
-    }else{
-        return 0;
-    }
+	/* Initializing pointers, to access data from MYSQL database */
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res2=NULL;
+	MYSQL_ROW row=NULL;
+	conn9=mysql_init(NULL);
+
+	/*setting up the connection for *conn9 */
+	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
+	if(!conn9){
+		printf("Connection error");
+		return 0;
+	}
+	/* Called rtrim function to remove the extra spaces */
+	attnd=rtrim(attnd);
+
+	/* Comparing attnd array with the different types of leaves */
+	if(strcmp(attnd,"L")==0 || strcmp(attnd,"PHL")==0 || strcmp(attnd,"ML")==0 || strcmp(attnd,"PL")==0 || strcmp(attnd,"LWP")==0 || strcmp(attnd,"WOFF")==0 || strcmp(attnd,"A")==0 || strcmp(attnd,"P")==0){
+		if(strcmp(attnd,"ML")==0 ){
+			return leave_check(yy,emp_id,"ML");
+			/* Accessing the leave_details table to select leave year with the emp_id */
+
+		}else if(strcmp(attnd,"PL")==0){
+			/* Accessing the leave_details table to select leave year with the emp_id */
+			return leave_check(yy,emp_id,"PL");
+		}else{
+			return 1;
+		}
+	}else
+	{
+		return 7;
+	}
 }
 /**
 * \brief Validating the current month
@@ -346,12 +300,12 @@ int datevalid(int d, int m, int y) {
         printf("Invalid month\n");
         return 0;
     }
-    
+
     if(d < 1 || d > 31){
         printf("Invalid day\n");
         return 0;
     }
-    
+
     if( m == 2 ){
         if(isleap(y)){
             if(d <= 29)
@@ -372,3 +326,132 @@ int datevalid(int d, int m, int y) {
         return 1;
     }
 }
+
+
+
+/**
+* \brief Validating empType Salaried or Hourly
+*
+*
+*
+* @param[in] char temp_id employee id
+*
+* \return User_Type: 9: database error
+* 					  1: Positive case for valid email
+*
+*/
+
+int chk_emp_type(int emp_id){
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	char stmt[2500];
+	char qry_id[2000];
+	conn9=mysql_init(NULL);
+	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
+	strcpy(qry_id,"select *from salary where emp_id='%d' and sal_year=%d");
+	sprintf(stmt,qry_id,emp_id,2020);
+	if (mysql_query(conn9,stmt)){
+        printf(" Error: %s\n", mysql_error(conn9));
+        printf("Failed to execute query.");
+        return 9;
+    }else{
+    	int i=0;
+    	read = mysql_store_result(conn9);
+        int count=mysql_num_rows(read);
+        if(count>=1){
+
+        	row = mysql_fetch_row(read);
+        	if(strcmp(row[1],"Salaried")==0){
+        		return 1;
+			}else if(strcmp(row[1],"Hourly")==0){
+				return 2;
+			}
+        }else{
+        	printf("No Record");
+        	return 0;
+		}
+    }
+
+}
+
+/**
+* \brief check the availability of leaves
+*
+*
+*
+*
+*
+*
+*
+*
+*/
+
+int leave_check(int yy,int emp_id, char le_type[]){
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res2=NULL;
+	MYSQL_ROW row=NULL;
+	conn9=mysql_init(NULL);
+
+	/*setting up the connection for *conn9 */
+	mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port9, NULL, 0);
+	if(!conn9){
+		printf("Connection error");
+		return 9;
+	}
+	char qry_id[]={"select * from leave_details where leave_year='%d' and emp_id=%d"};
+	sprintf(query,qry_id,yy,emp_id);
+	if (mysql_query(conn9,query)){
+        printf(" Error: %s\n", mysql_error(conn9));
+        printf("Failed to execute query.");
+        return 9;
+	}else{
+		res2=mysql_store_result(conn9);
+		int count=mysql_num_rows(res2);
+		if(count>=1){
+			if(strcmp(le_type,"ML")==0){
+				row = mysql_fetch_row(res2);
+				int l_balance=atoi(row[5]);
+				if(l_balance==0){
+					printf("Employee=%d has no medical leave. Please add some leaves\n",emp_id);
+					return 2;
+				}else{
+					l_balance=l_balance-1;
+					char qry_id[]={"update leave_details set balance_ML='%d' where leave_year='%d' and emp_id=%d"};
+					sprintf(query,qry_id,l_balance,yy,emp_id);
+					if (mysql_query(conn9,query)){
+		        		printf(" Error: %s\n", mysql_error(conn9));
+		        		printf("Failed to execute query.");
+		        		return 9;
+					}else{
+                        return 1;
+                    }
+				}
+			}else if(strcmp(le_type,"PL")==0){
+				row = mysql_fetch_row(res2);
+				int l_balance=atoi(row[6]);
+				if(l_balance==0){
+					printf("Employee=%d has no paid leave. Please add some leaves\n",emp_id);
+					return 2;
+				}else{
+					l_balance=l_balance-1;
+					char qry_id[]={"update leave_details set balance_PL='%d' where leave_year='%d' and emp_id=%d"};
+					sprintf(query,qry_id,l_balance,yy,emp_id);
+					if (mysql_query(conn9,query)){
+		        		printf(" Error: %s\n", mysql_error(conn9));
+		        		printf("Failed to execute query.");
+		        		return 9;
+					}else{
+                        return 1;
+                    }
+				}
+			}
+
+		}else{
+			printf("\nNo record in the database of employee=%d",emp_id);
+			return 2;
+		}
+	}
+			//printf("%s",attnd);
+}
+

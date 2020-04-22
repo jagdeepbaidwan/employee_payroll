@@ -35,7 +35,7 @@ MYSQL_RES *res=NULL;
 MYSQL_ROW row=NULL;
 
 /* Database connection port number*/
-int port8=3306;
+int port8=3305;
 
 
 /**
@@ -58,13 +58,13 @@ int port8=3306;
 
 char* login(int id, char pwd[25]){
     char stmt[1500];
-    
+
     /* SQL query to access login_details table from database */
     char qry[]={"select * from login_details where emp_id='%d'and password='%s'"};
-    
+
     oo=mysql_init(NULL);
     mysql_real_connect(oo, "localhost", "root", "1234","payroll", port8, NULL, 0);
-    
+
     /* checks for the database connectivity */
     if(oo){
         int n=sprintf(stmt,qry,id,pwd);
@@ -108,14 +108,14 @@ int main(int argc, char *argv[]){
     printf("\n*********************************************************************\n");
     printf("                               Login                                   \n");
     printf("\n*********************************************************************\n");
-    
+
     printf("                Press 1 LOGIN\n");
     printf("                Press 2 EXIT\n");
     scanf("%d",&i);
     switch(i){
-        
+
         /* Expecting user id and password from the user for login*/
-        
+
         case 1:{
             printf("\nEnter your employee id:");
             scanf("%d",&id);
@@ -139,31 +139,31 @@ int main(int argc, char *argv[]){
                 p++;
             }while(pwd[p-1]!='\r'||pwd[p-1]!=13);
             pwd[p-1]='\0';
-            
+
             /* Calls the login function and stores the user type in user_type*/
-            
+
             strcpy(user_type,login(id,pwd));
             char user_t[25];
             strcpy(user_t,user_type);
             printf("%s\n",strupr(user_t));
             break;
         }
-        
+
         case 2:{
             printf("EXIT\n");
             break;
         }
-        
+
         default:{
             printf("Wrong Input");
             break;
         }
     }
-    
-    
+
+
     /* Display the functionalities available corresponding to the user_type */
-    
-    
+
+
     /* If the user type is admin, the following functionality is available to the user */
     if(strcmp("admin",user_type)==0){
         int st=1;
@@ -308,7 +308,7 @@ int main(int argc, char *argv[]){
                                 break;
                             }
                         }
-                        
+
                     }while(dcsn1!=1);
                     break;
                 }
@@ -322,7 +322,7 @@ int main(int argc, char *argv[]){
                         printf("                Press 4 Go back...\n");
                         scanf("%d",&option);
                         dcsn1=display_salary(id,option);
-                        
+
                     }while(dcsn1!=1);
                     break;
                 }
@@ -392,20 +392,20 @@ int main(int argc, char *argv[]){
                                 int x=0,year=0,rate=0,e_id=0;
                                 printf("Enter the Employee ID for rating: ");
                                 scanf("%d",&e_id);
-                                
+
                                 printf("Enter the rating of the employee for %d : ",e_id);
                                 scanf("%d",&rate);
-                                
+
                                 getchar();
                                 do{
                                     printf("Feedback of the employee under 200 characters\n");
                                     gets(description);
                                     x=notempty(description);
                                 }while(x==0);
-                                
+
                                 printf("Enter the year for rating\n");
                                 scanf("%d",&year);
-                                
+
                                 printf("%s",employee_rating(e_id,rate,description,year));
                                 break;
                             }

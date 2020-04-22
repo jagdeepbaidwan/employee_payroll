@@ -22,7 +22,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn3, *conn8, *conn9;
-int port7=3306;
+int port7=3305;
 
 /**
 * \brief Access the database and display the details of the employee.
@@ -98,7 +98,7 @@ char* update_employee(int emp_id){
         char gender[10];
         char email[100];
     };
-    
+
     struct employee emp;
     int i=0;
     char stmt[1500];
@@ -139,7 +139,7 @@ char* update_employee(int emp_id){
                 gets(emp.address2);
                 x=notempty(emp.address2);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set address_l2='%s' where emp_id='%d'"};
             if(conn3){
                 sprintf(stmt,qry,emp.address2,emp_id);
@@ -163,7 +163,7 @@ char* update_employee(int emp_id){
                 x=valid_phone(emp.phonenumber);
             }while(x==0);
             char qry[]={"update emp_details set phonen='%s' where emp_id='%d'"};
-            
+
             if(conn3){
                 sprintf(stmt,qry,emp.phonenumber,emp_id);
                 if(mysql_query(conn3,stmt)){
@@ -203,7 +203,7 @@ char* update_employee(int emp_id){
                 scanf("%s",emp.email);
                 x=valid_email(emp.email);
             }while(x==0);
-            
+
             char qry[]={"update emp_details set email='%s' where emp_id='%d'"};
             if(conn3){
                 sprintf(stmt,qry,emp.email,emp_id);
@@ -240,7 +240,7 @@ char* update_employee(int emp_id){
 char* raise_grievances(int e_id){
     conn8 = mysql_init(NULL);
     mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port7, NULL, 0);
-    
+
     if(!conn8){
         printf("Connection error");
         return "0";
@@ -250,21 +250,21 @@ char* raise_grievances(int e_id){
         char choice[10];
         int x=0;
         getchar();
-        
+
         do{
             printf("Redress the problem in 200 characters\n");
             gets(description);
             x=notempty(description);
         }while(x==0);
-        
+
         printf("Do you want to anonymous? y/n: ");
         scanf("%s",choice);
-        
+
         /**
         * Query: Insert into "grievances" table according to auto-generated response number
         * It will add emp_id in the database by asking the permission from the user
         */
-        
+
         if ( 0 == strcasecmp(choice,"y")){
             char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL,NULL,'%s')"};
             sprintf(stmt,qry,description);
@@ -277,7 +277,7 @@ char* raise_grievances(int e_id){
         }else if (0 == strcasecmp(choice,"n")){
             char qry[]={"insert into grievances (response_number,emp_id,description) VALUES(NULL, %d,'%s')"};
             sprintf(stmt,qry,e_id,description);
-            
+
             if (mysql_query(conn8,stmt)){
                 printf(" Error: %s\n", mysql_error(conn8));
                 return "Failed to execute query.";
@@ -312,10 +312,10 @@ char* view_raised_grievances(int choice, int gri_choice){
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     MYSQL_FIELD *field;
-    
+
     conn8 = mysql_init(NULL);
     mysql_real_connect(conn8, "localhost", "root", "1234","payroll", 3306, NULL, 0);
-    
+
     if(!conn8){
         printf("Connection error");
         printf("%s\n", mysql_error(conn8));
@@ -323,7 +323,7 @@ char* view_raised_grievances(int choice, int gri_choice){
         char stmt[1500];
         char qry1[]={"select * from emp_details where emp_id=%d"};
         sprintf(stmt,qry1,gri_choice);
-        
+
         if (mysql_query(conn8,stmt)){
             printf("Error: %s\n", mysql_error(conn8));
             return ("Failed to execute query");
@@ -434,10 +434,10 @@ char* employee_rating(int e_id,int rate,char description[200],int year){
     MYSQL_ROW row=NULL;
     MYSQL_RES *read1=NULL;
     MYSQL_ROW rows=NULL;
-    
+
     conn8 = mysql_init(NULL);
     mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port7, NULL, 0);
-    
+
     if(!conn8){
         printf("Connection error\n");
         return "Not Establish connection";
@@ -445,7 +445,7 @@ char* employee_rating(int e_id,int rate,char description[200],int year){
         char stmt[1500];
         char qry1[]={"select * from emp_details where emp_id=%d"};
         sprintf(stmt,qry1,e_id);
-        
+
         if (mysql_query(conn8,stmt)){
             printf("Error: %s\n", mysql_error(conn8));
             return ("Failed to execute query");
@@ -465,7 +465,7 @@ char* employee_rating(int e_id,int rate,char description[200],int year){
                     printf ("Rating does not exceed 5\n");
                     return ("Rating does not exceed 5");
                 }
-                
+
                 if(!(year>=MIN_YEAR && year<=YEAR)){
                     printf ("INVALID year\n");
                     return ("INVALID year");
@@ -474,14 +474,14 @@ char* employee_rating(int e_id,int rate,char description[200],int year){
         }
         conn9 = mysql_init(NULL);
         mysql_real_connect(conn9, "localhost", "root", "1234","payroll", port7, NULL, 0);
-        
+
         if(!conn9){
             printf("Connection error\n");
             return "Not Establish connection";
         }else{
             char qry4[]={"select ep.emp_id,ep.rating,ep.description,ep.year,ed.emp_id from emp_perfor ep inner join emp_details ed on (ep.emp_id=ed.emp_id)"};
             sprintf(stmt,qry4);
-            
+
             if (mysql_query(conn9,stmt)){
                 printf("Error: %s\n", mysql_error(conn9));
                 return ("Failed to execute query");
@@ -492,7 +492,7 @@ char* employee_rating(int e_id,int rate,char description[200],int year){
                 if(num_rows<0){
                     char qry2[]={"insert into emp_perfor (emp_id,rating,description,year) VALUES('%d','%d','%s','%d')"};
                     sprintf(stmt,qry2,rate,description,e_id,year);
-                    
+
                     if (mysql_query(conn9,stmt)){
                         printf("Error: %s\n", mysql_error(conn9));
                         return ("Failed to execute query");
@@ -504,7 +504,7 @@ char* employee_rating(int e_id,int rate,char description[200],int year){
                     printf("\t Already in database so going to update it.\n");
                     char qry2[]={"update emp_perfor set rating = '%d',description ='%s',year='%d' where emp_id= '%d'"};
                     sprintf(stmt,qry2,rate,description,year,e_id);
-                    
+
                     if (mysql_query(conn8,stmt)){
                         printf("Error: %s\n", mysql_error(conn8));
                         return ("Failed to execute query");
@@ -541,14 +541,14 @@ int emp_detail_mgmt(int emp_id){
     printf("                Press 5 Log out\n");
     scanf("%d",&i);
     switch (i){
-        
+
         /**
         * Case 1: Query is passed from here to display the employee details
         * Case2: Update function is called with emp_id as @param [in]
         * Case3: Query is passed from here to view the feedback of the employee
         * Case4: Change Password function is called with emp_id as @param [in]
         */
-        
+
         case 1:{
             char stmt[1500];
             char qry[] = {"select * from emp_details where emp_id = %d"};

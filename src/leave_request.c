@@ -22,7 +22,7 @@
 MYSQL *connect7,*connect8,*connect9,*connect10,*connect2,*connect1,*connect11;
 
 /* Database connection port number*/
-int port10=3306;
+int port10=3305;
 
 /**
 *
@@ -47,20 +47,20 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
     int x,r;
     int j=0;
     char no_days[10];
-    
+
     /*Validating the date provided for leave request*/
     r=validate_date(dd,mm,yy);
     if(r!=1){
         printf("\nInvalid Date\n");
         return "Invalid Date";
     }
-    
+
     /* Validating the length of the leave type*/
     if(strlen(leave_type)>10){
         printf("\nInvalid string length for leave_type\n");
         return "Invalid string length for leave_type";
     }
-    
+
     /* Validating the leave type which must be from (ML/PL/LWP)*/
     if (strcasecmp(leave_type,"ML")==0 || strcasecmp(leave_type,"PL")==0 || strcasecmp(leave_type,"LWP")==0){
         j=1;
@@ -68,17 +68,17 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
         printf("\nInvalid Leave Type\n");
         return "Invalid Leave Type";
     }
-    
+
     /* Initializing the pointers to access data from MYSQL database*/
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
     char stmt[1500];
-    
+
     /*Connection to database initialization*/
     connect11=mysql_init(NULL);
     mysql_real_connect(connect11,"localhost", "root", "1234","payroll", port10, NULL, 0);
-    
+
     /* Checking for employee existence in the database */
     char qry_emp_id[]={"select * from emp_details where emp_id='%d'"};
     if(connect11){
@@ -91,14 +91,14 @@ char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_ty
             return "User does not exist";
         }
     }
-    
+
     connect7=mysql_init(NULL);
     mysql_real_connect(connect7,"localhost", "root", "1234","payroll", port10, NULL, 0);
     char status[15];
-    
+
     /* Inserting the leave request in the leave_request table for the employee*/
     char qry_leave_request[]={"insert into leave_request (emp_id,start_day,leave_month,leave_year,no_of_days,leave_type,status) values ('%d','%d','%d','%d','%d','%s','%s')"};
-    
+
     /* leave_request status will be pending when request is raised*/
     strcpy(status,"Pending");
     if(connect7){
@@ -134,14 +134,14 @@ char* view_pending_leave_requests(char status[]){
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
-    
+
     char stmt[1500];
-    
+
     /* Retrieving the requests from database*/
     char qry_view_leave_req[]={"select * from leave_request where status='%s'"};
     connect8=mysql_init(NULL);
     mysql_real_connect(connect8, "localhost", "root", "1234","payroll", port10, NULL, 0);
-    
+
     if(connect8){
         int n=sprintf(stmt,qry_view_leave_req,status);
         mysql_query(connect8,stmt);
@@ -156,7 +156,7 @@ char* view_pending_leave_requests(char status[]){
             printf("REQ_ID  |	EMP_ID	|   START_DAY   |   LEAVE_MONTH |  LEAVE_YEAR   |   NO_OF_DAYS  |  Leave_Type  |	STATUS");
             printf("\n");
             printf("\n");
-            
+
             /* Displaying all the pending requests*/
             while((row = mysql_fetch_row(read))){
                 num = mysql_num_fields(read);
@@ -195,7 +195,7 @@ char* decision_leave_request(int req_id,int k){
         return "Invalid input for k";
     }
     printf("\n");
-    
+
     /* Admin input to approve or reject the leave request */
     switch(k){
         case 1:{
@@ -206,12 +206,12 @@ char* decision_leave_request(int req_id,int k){
             int balance_ML=0;
             int balance_PL=0;
             char stmt[1500];
-            
+
             /* Retrieving the data for leave request from database */
             char qry_decision[]={"select * from leave_request where request_id='%d'"};
             connect9=mysql_init(NULL);
             mysql_real_connect(connect9, "localhost", "root", "1234","payroll", port10, NULL, 0);
-            
+
             if(connect9){
                 int n=sprintf(stmt,qry_decision,req_id);
                 mysql_query(connect9,stmt);
@@ -234,22 +234,22 @@ char* decision_leave_request(int req_id,int k){
                         strcpy(leave_type,row[6]);
                         strcpy(leave_status,row[7]);
                         printf("\n");
-                        
+
                         /* retrieving the leaves balance for the employee
                         * if admin decided to approve the request
                         * and there is not enough leave balance
                         * employee will get leave without pay
                         */
-                        
+
                         if(strcasecmp(leave_status,"Approved")==0){
                             printf("\nRequest is already approved\n");
                             return "Request is already approved";
                         }else{
-                            
+
                             char qry_retrieve_leaves[]={"select * from leave_details where Emp_id='%d' and Leave_year='%d'"};
                             connect10=mysql_init(NULL);
                             mysql_real_connect(connect10, "localhost", "root", "1234","payroll", port10, NULL, 0);
-                            
+
                             if(connect10){
                                 int n=sprintf(stmt,qry_retrieve_leaves,emp_id,year);
                                 mysql_query(connect10,stmt);
@@ -267,7 +267,7 @@ char* decision_leave_request(int req_id,int k){
                                 printf("not connected");
                                 printf("%s\n", mysql_error(connect8));
                             }
-                            
+
                             if(strcasecmp(leave_type,"ML")==0){
                                 if(balance_ML>no_of_days){
                                     balance_ML=balance_ML-no_of_days;
@@ -287,7 +287,7 @@ char* decision_leave_request(int req_id,int k){
                                     balance_PL=0;
                                 }
                             }
-                            
+
                             /* updating the leave balance for the employee after availing the leaves as per leave request*/
                             char qry_update_balance[]={"update leave_details set Balance_ML='%d',Balance_PL='%d' where Emp_id='%d'"};
                             connect2=mysql_init(NULL);
@@ -301,7 +301,7 @@ char* decision_leave_request(int req_id,int k){
                                     //"Leave balance updated successfully\n");
                                 }
                             }
-                            
+
                             /* changes the status of the leave request to Approved*/
                             char status[20]="Approved";
                             char qry_status_update[]={"update leave_request set status='%s' where request_id='%d'"};
@@ -330,19 +330,19 @@ char* decision_leave_request(int req_id,int k){
             }
             break;
         }
-        
+
         case 2:{
             MYSQL_RES *read=NULL;
             MYSQL_RES *res=NULL;
             MYSQL_ROW row=NULL;
             char stmt[1500];
             char leave_status[20];
-            
+
             /* Retrieving the data for leave request from database */
             char qry_decision[]={"select * from leave_request where request_id='%d'"};
             connect9=mysql_init(NULL);
             mysql_real_connect(connect9, "localhost", "root", "1234","payroll", port10, NULL, 0);
-            
+
             if(connect9){
                 int n=sprintf(stmt,qry_decision,req_id);
                 mysql_query(connect9,stmt);
@@ -359,7 +359,7 @@ char* decision_leave_request(int req_id,int k){
                     }else{
                         int emp_id=atoi(row[1]);
                         strcpy(leave_status,row[7]);
-                        
+
                         if(strcasecmp(leave_status,"Rejected")==0){
                             printf("\nRequest is already Rejected\n");
                             return "Request is already Rejected";
