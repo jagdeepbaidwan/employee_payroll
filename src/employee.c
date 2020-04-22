@@ -27,7 +27,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn2, *oo,*conn,*conn4;
-int port4=3306;
+int port4=3305;
 
 /**
 * \brief Get or scan the value from the console screen
@@ -89,7 +89,7 @@ int display_salary(int emp_id,int option){
         printf("Wrong Input");
         return 3;
     }
-    
+
     if(conn2){
         int n;
         if(option==1){
@@ -130,10 +130,10 @@ int display_salary(int emp_id,int option){
                     printf("INVALID year, enter again\n");
                 }
             }while(x==0);
-            
+
             sprintf(stmt,qry,emp_id,year);
         }
-        
+
         mysql_query(conn2,stmt);
         read = mysql_store_result(conn2);
         if (mysql_query(conn2,stmt)){
@@ -353,15 +353,15 @@ int employee(int emp_id){
                         do{
                             printf("\nEnter the start date for the leave:Format(dd/mm/yyyy)");
                             scanf("%d/%d/%d",&dd,&mm,&yy);
-                            
+
                             printf("Provide the number of days for the leave,(including start date): ");
                             scanf("%d",&no_of_days);
-                            
+
                             printf("Please provide the leave type to avail: ? (ML),(PL),(LWP)");
                             scanf("%s",leave_type);
                             strcpy(validation_res,leave_request(emp_id,dd,mm,yy,no_of_days,leave_type));
                         }while(strcmp(validation_res,"Invalid Date")==0 || strcmp(validation_res,"Invalid leave type")==0);
-                        
+
                         if(strcmp(validation_res,"Request raised successfully")==0){
                             dcsn=1;
                         }else if(strcmp(validation_res,"Database connection error")==0){
@@ -416,7 +416,7 @@ int employee(int emp_id){
                     scanf("%d",&g_choice);
                     int gri_choice;
                     if (choice == 1){
-                        
+
                         printf("Enter the employee id to see their grievances: \n");
                         scanf("%d",&gri_choice);
                     }

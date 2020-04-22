@@ -15,7 +15,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn10;
-int port3=3306;
+int port3=3305;
 
 /**
 * \brief View the attendance table  from admin login credentials
@@ -28,6 +28,61 @@ int port3=3306;
 *
 */
 
+ void hourly_view_attendance(int emp_id)
+ {
+    int dd,mm,yy,r,num;
+	MYSQL_RES *read=NULL;
+	MYSQL_RES *res=NULL;
+	MYSQL_ROW row=NULL;
+	char stmt[2500];
+	char qry_id[2000];
+	conn10=mysql_init(NULL);
+	mysql_real_connect(conn10, "localhost", "root", "1234","payroll", port3, NULL, 0);
+	int days;
+    do
+	{
+		printf("\nEnter the attendance month and year:Format(mm/yyyy)\n");
+		scanf("%d/%d",&mm,&yy);
+		r=validate_date(01,mm,yy);
+	}while(r!=1);
+
+    strcpy(qry_id,"select emp_details.name1,emp_details.name2, hourly_attendance.att_day,hourly_attendance.In_time,hourly_attendance.Out_time,hourly_attendance.days from hourly_attendance join emp_details on emp_details.emp_id=hourly_attendance.emp_id where emp_details.emp_id='%d' and hourly_attendance.att_month='%d'and att_year='%d'");
+
+	//char qry_id[]={"select emp_details.name1,emp_details.name2, daily_attendance.designation,daily_attendance.A%d from daily_attendance join emp_details on emp_details.emp_id=daily_attendance.emp_id where emp_details.emp_id='%d' and daily_attendance.attend_month='%d'and attend_year='%d'"};
+    sprintf(stmt,qry_id,emp_id,mm,yy);
+
+	if (mysql_query(conn10,stmt))
+    {
+        printf(" Error: %s\n", mysql_error(conn10));
+        printf("Failed to execute query.");
+    }
+    else
+    {
+    	int i=0;
+    	read = mysql_store_result(conn10);
+        int count=mysql_num_rows(read);
+        if(count>=1)
+        {
+            //printf("\nName |LName|Designation\n");
+            while(row = mysql_fetch_row(read))
+            {
+                printf("|");
+                printf("Name=%",row[0]);
+                printf("    Last Name=%s",row[1]);
+                printf("    Day=%s",row[2]);
+                printf("    In_time=%s",row[3]);
+                printf("    Out_time=%s",row[4]);
+                printf("    Total Hours=%s",row[4]);
+                printf("\n");
+            }
+        }
+        else
+        {
+            printf("No record in the database");
+        }
+
+	}
+ }
 void view_attendance(int emp_id){
     int dd,mm,yy,r,num;
     MYSQL_RES *read=NULL;
@@ -57,17 +112,17 @@ void view_attendance(int emp_id){
             days=28;
         }
     }
-    
+
     //char qry_id[]={"select emp_details.name1,emp_details.name2, daily_attendance.designation,daily_attendance.A%d from daily_attendance join emp_details on emp_details.emp_id=daily_attendance.emp_id where emp_details.emp_id='%d' and daily_attendance.attend_month='%d'and attend_year='%d'"};
     sprintf(stmt,qry_id,emp_id,mm,yy);
-    
+
     if (mysql_query(conn10,stmt)){
         printf(" Error: %s\n", mysql_error(conn10));
         printf("Failed to execute query.");
     }else{
         int i=0;
         read = mysql_store_result(conn10);
-        
+
         //printf("\nName |LName|Designation\n");
         row = mysql_fetch_row(read);
         num = mysql_num_fields(read);

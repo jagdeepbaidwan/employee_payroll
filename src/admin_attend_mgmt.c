@@ -18,7 +18,7 @@
 
 /* Declaration of connection to MYSQL Database pointers and database port number */
 MYSQL *conn4;
-int port1=3306;
+int port1=3305;
 
 char query[1500];
 
@@ -39,24 +39,24 @@ int attendance_month_availability(int mm, int yy){
     MYSQL_RES *read=NULL;
     MYSQL_RES *res2=NULL;
     MYSQL_ROW row=NULL;
-    
+
     /* Accessing the daily_attendance table to select attend_month with the attend_year */
     char qry_id[]={"select * from daily_attendance where attend_month='%d' and attend_year='%d'"};
     sprintf(query,qry_id,mm,yy);
     if (mysql_query(conn4,query)){
-        
+
         printf(" Error: %s\n", mysql_error(conn4));
         printf("Failed to execute query.");
     }else{
         res2=mysql_store_result(conn4);
         row = mysql_fetch_row(res2);
         int count_row = mysql_num_rows(res2);
-        
+
         if(count_row>1){
             return 1;
         }else{
             printf("Month is not present in the database");
-            
+
             return 0;
         }
     }
@@ -85,7 +85,7 @@ void update_attendance(){
         t=0;
         printf("\nEnter the employee Id to update the attendance\n");
         scanf("%d",&emp_id);
-        
+
         /* Accessing the emp_details to select the employee with emp_id and generate error message if employee is not found */
         char qry_id1[]={"select * from emp_details where emp_id=%d"};
         sprintf(stmt,qry_id1,emp_id);
@@ -102,8 +102,8 @@ void update_attendance(){
                 t=1;
             }
         }
-        
-        
+
+
     }while(t!=1);
     do{
         printf("\nEnter the attendance date:Format(dd/mm/yyyy)");
@@ -117,7 +117,7 @@ void update_attendance(){
         scanf("%s",new_att);
         r=validate_attendance(new_att,yy,emp_id);
     }while(r!=1);
-    
+
     char qry_id[]={"update daily_attendance set A%d='%s' where attend_month='%d' and attend_year='%d' and emp_id=%d"};
     sprintf(query,qry_id,dd,new_att,mm,yy,emp_id);
     //printf("\n%s",query);
@@ -151,7 +151,7 @@ void add_attendance(){
     char *record,*line;
     int i=0,j=0,x=0;
     int mat[100][100];
-    
+
     /* Opening of the file using fstream pointer of type FILE in reading mode */
     FILE *fstream = fopen("myFile.csv","r");
     if(fstream == NULL){
@@ -178,14 +178,14 @@ void add_attendance(){
     int dd,mm,yy;
     int r;
     do{
-        printf("\nEnter the attendance date of file:");
+        printf("\nEnter the attendance date of file format(dd/mm/yyyy) :");
         scanf("%d/%d/%d",&dd,&mm,&yy);
         r=validate_date(dd,mm,yy);
         int rr;
         rr=attendance_month_availability(mm,yy);
-        
+
         if(rr==0){
-            
+
             r=0;
         }
     }while(r!=1);
@@ -195,22 +195,21 @@ void add_attendance(){
         char qry_id[]={"update daily_attendance set A%d='%s' where attend_month='%d' and attend_year='%d' and emp_id=%d"};
         int v=validate_attendance(attnd[tmp].att,yy,attnd[tmp].emp_att_id);
         if(v==1){
-            err=0;
-            sprintf(query,qry_id,dd,attnd[tmp].att,mm,yy,attnd[tmp].emp_att_id);
-            if (mysql_query(conn4,query)){
-                printf(" Error: %s\n", mysql_error(conn4));
-                printf("Failed to execute query.");
-            }else{
-                printf("\nUpdated attendance of employee:%d",attnd[tmp].emp_att_id);
-            }
-        }else if(v==2){
-            
-            emp[lp] = attnd[tmp].emp_att_id;
-            lp=lp+1;
-        }else{
-            err=1;
-            break;
-        }
+			err=0;
+			sprintf(query,qry_id,dd,attnd[tmp].att,mm,yy,attnd[tmp].emp_att_id);
+			if (mysql_query(conn4,query)){
+	        	printf(" Error: %s\n", mysql_error(conn4));
+	        	printf("Failed to execute query.");
+	    	}else{
+	    		printf("\nUpdated attendance of employee:%d",attnd[tmp].emp_att_id);
+			}
+		}else if(v==2){
+			emp[lp] = attnd[tmp].emp_att_id;
+			lp=lp+1;
+		}else if(v==7){
+			err=1;
+			break;
+		}
         tmp++;
     }
     if(err==1){
@@ -254,12 +253,12 @@ void hourly_attendance(){
     FILE *fstream = fopen("Attend.csv","r");
     if(fstream == NULL)   {
         printf("\n file opening failed ");
-        
+
     }
     while((line=fgets(buffer,sizeof(buffer),fstream))!=NULL){
         record = strtok(line,";");
         while(record != NULL){
-            
+
             char *ptr=strtok(record,",");
             attnd[x].emp_att_id=atoi(ptr);
             ptr = strtok(NULL, ",");
@@ -285,7 +284,7 @@ void hourly_attendance(){
     while(tmp<x){
         char qry_id1[]={"select *from hourly_attendance where emp_id='%d' and att_day='%d' and att_month='%d' and att_year='%d'"};
         sprintf(query,qry_id1,attnd[tmp].emp_att_id,dd,mm,yy);
-        
+
         if (mysql_query(conn4,query)){
             printf(" Error: %s\n", mysql_error(conn4));
             printf("Failed to execute query.");
@@ -323,7 +322,7 @@ void hourly_attendance(){
 */
 
 void new_month(){
-    
+
     MYSQL_RES *read=NULL, *res2;
     MYSQL_RES *res;
     MYSQL_ROW row=NULL, row1=NULL, *row2=NULL;
@@ -341,20 +340,20 @@ void new_month(){
         scanf("%d",&att_mnth);
         r=validate_date(01,att_mnth,2020);
     }while(r!=1);
-    
+
     /* Accessing the daily_attendance table by selecting attend_month, attend_year */
     char qry_id[]={"select * from daily_attendance where attend_month='%d' and attend_year='%d'"};
     sprintf(query,qry_id,att_mnth,att_year);
-    
+
     if (mysql_query(conn4,query)){
-        
+
         printf(" Error: %s\n", mysql_error(conn4));
         printf("Failed to execute query.");
     }else{
         res2=mysql_store_result(conn4);
         row = mysql_fetch_row(res2);
         int count_row = mysql_num_rows(res2);
-        
+
         if(count_row>=1){
             printf("This Month is already in the database");
         }else{
@@ -364,7 +363,7 @@ void new_month(){
                 printf(" Error: %s\n", mysql_error(conn4));
                 printf("Failed to execute query.");
             }else{
-                
+
                 res=mysql_store_result(conn4);
                 int i=0;
                 while(row1 = mysql_fetch_row(res))
@@ -437,7 +436,14 @@ void attend_mgmt(int ch){
             case 3:{
                 printf("Please specify the employee_id for the attendance display: ");
                 scanf("%d",&id);
-                view_attendance(id);
+                int i=chk_emp_type(id);
+                if(i==1){
+                    view_attendance(id);
+                }else if(i==2){
+                    hourly_view_attendance(id);
+                }
+
+
                 break;
             }
             case 4:{
@@ -449,6 +455,6 @@ void attend_mgmt(int ch){
                 break;
             }
         }
-        
+
     }
 }

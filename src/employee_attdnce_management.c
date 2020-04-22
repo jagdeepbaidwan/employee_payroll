@@ -3,7 +3,7 @@
 *
 * Various attendance management functions for the user present in this file
 *
-*/ 
+*/
 
 #include<stdio.h>
 #include<windows.h>
@@ -12,7 +12,7 @@
 #include "..\include\attendance_display.h"
 MYSQL *conn3;
 
-int port5=3306;
+int port5=3305;
 /**
 * \brief attendance change function takes 5 arguments.
 *
@@ -69,7 +69,7 @@ char* attendance_change(int emp_id, int dd,int mm,int yy, char description[200])
 *
 */
 void reuest_status(int emp_id){
-    
+
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
@@ -83,11 +83,11 @@ void reuest_status(int emp_id){
     }else{
         int i=0;
         read = mysql_store_result(conn3);
-        
+
         printf("\n--------------------------------------------------------------------------------\n");
         while(row = mysql_fetch_row(read)){
             num = mysql_num_fields(read);
-            
+
             printf("|");
             for(i = 0; i < num; i++){
                 if(i==4){
@@ -98,7 +98,7 @@ void reuest_status(int emp_id){
                     }else if(atoi(row[i])==2){
                         printf("-Accepted-");
                     }
-                    
+
                 }else{
                     printf("%s|", row[i]);
                 }
@@ -127,7 +127,7 @@ int emp_attendance_mgmt(int emp_id){
     mysql_real_connect(conn3, "localhost", "root", "1234","payroll", port5, NULL, 0);
     if(!conn3){
         printf("Connection error");
-        
+
     }else{
         printf("                Press 1 Display attendance \n");
         printf("                Press 2 Display attendance change request\n");
@@ -136,7 +136,12 @@ int emp_attendance_mgmt(int emp_id){
         int ch;
         scanf("%d",&ch);
         if(ch==1){
-            view_attendance(emp_id);
+            int i=chk_emp_type(emp_id);
+		    if(i==1){
+                view_attendance(emp_id);
+            }else if(i==2){
+                hourly_view_attendance(emp_id);
+            }
         }else if(ch==2){
             reuest_status(emp_id);
         }else if(ch==3){
@@ -155,7 +160,7 @@ int emp_attendance_mgmt(int emp_id){
                 if((strcmp(decs11,"Invalid Date")==0)){
                     printf("Enter the date on which you have problem (mm/dd/yyyy)\n");
                     scanf("%d/%d/%d",&dd,&mm,&yy);
-                    
+
                 }
                 if(strcmp(decs11,"Invalid description")==0){
                     do{
@@ -164,7 +169,7 @@ int emp_attendance_mgmt(int emp_id){
                         x=notempty(description);
                     }while(x==0);
                 }
-                
+
                 strcpy(decs11,attendance_change(emp_id,dd,mm,yy,description));
             }while(strcmp(decs11,"Request submitted")!=0);
             if(strcmp(decs11,"Database Error")==0){
