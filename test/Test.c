@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
             printf("*********************  TEST 7A  **************************************************\n");
             printf("A leave request will be raised with all valid input parameters except the date which is invalid: 123/123/124\n");
             printf("Expected result is that it should return an Invalid date message \n ");
-            ASSERT_TEST(strcmp("Invalid Date",leave_request(2,123,123,124,4,"SL"))==0);
+            ASSERT_TEST(strcmp("Invalid Date",leave_request(2,123,123,124,4,"ML"))==0);
 
             printf("\n\n*****************  TEST 7B  **************************************************\n");
             printf("A leave request will be raised with all valid input parameters except the leave type which is invalid: ABCD \n");
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
             printf("\n\n*****************  TEST 7C  ***************************************************\n");
             printf("A leave request will be raised with employee id that does not exist in the database\n");
             printf("Expected result is it should return User does not exist \n ");
-            ASSERT_TEST(strcmp("User does not exist",leave_request(61,11,12,2006,4,"SL"))==0);
+            ASSERT_TEST(strcmp("User does not exist",leave_request(61,11,12,2006,4,"ML"))==0);
 
             printf("\n\n*****************  TEST 7D  **************************************************\n");
             printf("A leave request will be raised with leave_type length greater than 10\n");

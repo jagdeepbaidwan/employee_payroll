@@ -189,10 +189,10 @@ insert into `login_details` values (3,"1234","employee","I",NULL);
 insert into `login_details` values (4,"1234","manager","A",NULL);
 
 
-INSERT INTO `leave_details` (`Leave_id`,`Emp_id`,`Medical_leave`,`Paid_leave`,`Leave_year`,`Balance_ML`,`Balance_PL`) VALUES(2,10,10,2009,8,7);
+INSERT INTO `leave_details` (`Emp_id`,`Medical_leave`,`Paid_leave`,`Leave_year`,`Balance_ML`,`Balance_PL`) VALUES(2,10,10,2009,8,7);
 
-use payroll;
-INSERT INTO `payroll`.`emp_details`
+
+INSERT INTO `emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -225,8 +225,8 @@ VALUES
 'Admin',
 1);
 
-use payroll;
-INSERT INTO `payroll`.`emp_details`
+
+INSERT INTO `emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -259,8 +259,8 @@ VALUES
 'Manager',
 4);
 
-use payroll;
-INSERT INTO `payroll`.`emp_details`
+
+INSERT INTO `emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -293,8 +293,8 @@ VALUES
 'Employee',
 3);
 
-use payroll;
-INSERT INTO `payroll`.`emp_details`
+
+INSERT INTO `emp_details`
 (`name1`,
 `name2`,
 `department`,
@@ -327,7 +327,7 @@ VALUES
 'Employee',
 2);
 
-INSERT INTO `payroll`.`salary`
+INSERT INTO `salary`
 (`emp_id`,
 `salary_type`,
 `salary`,
@@ -340,7 +340,7 @@ VALUES
 2020,"Admin");
 
 
-INSERT INTO `payroll`.`salary`
+INSERT INTO `salary`
 (`emp_id`,
 `salary_type`,
 `salary`,
@@ -352,7 +352,7 @@ VALUES
 45,
 2020,"Developer");
 
-INSERT INTO `payroll`.`salary`
+INSERT INTO `salary`
 (`emp_id`,
 `salary_type`,
 `salary`,
@@ -364,7 +364,7 @@ VALUES
 15,
 2019,"Developer");
 
-INSERT INTO `payroll`.`salary`
+INSERT INTO `salary`
 (`emp_id`,
 `salary_type`,
 `salary`,
@@ -376,7 +376,7 @@ VALUES
 1500,
 2020,"Manager");
 
-INSERT INTO `payroll`.`salary_cal`
+INSERT INTO `salary_cal`
 (`emp_id`,
 `salary_type`,
 `month`,
