@@ -151,6 +151,7 @@ char* view_pending_leave_requests(char status[]){
             printf("Failed to execute query.");
         }else{
             int i=0;
+            int count1=0;
             int num=0;
             printf("\n");
             printf("REQ_ID  |	EMP_ID	|   START_DAY   |   LEAVE_MONTH |  LEAVE_YEAR   |   NO_OF_DAYS  |  Leave_Type  |	STATUS");
@@ -159,6 +160,7 @@ char* view_pending_leave_requests(char status[]){
 
             /* Displaying all the pending requests*/
             while((row = mysql_fetch_row(read))){
+            	count1++;
                 num = mysql_num_fields(read);
                 for(i = 0; i < num; i++){
                     printf("%s ", row[i]);
@@ -166,6 +168,10 @@ char* view_pending_leave_requests(char status[]){
                 }
                 printf("\n");
             }
+            if (count1==0){
+            	printf("No pending requests found");
+            	return "No pending requests found";
+			}
         }
     }else{
         printf("not connected");
@@ -259,8 +265,13 @@ char* decision_leave_request(int req_id,int k){
                                     printf("Failed to execute query.");
                                 }else{
                                     row = mysql_fetch_row(read);
-                                    balance_ML=atoi(row[5]);
-                                    balance_PL=atoi(row[6]);
+                                    if(row==NULL){
+                                    	printf("No leaves assigned for the leave request year in the database");
+                                    	return "No leaves assigned for the leave request year in the database";
+									}else{
+									    balance_ML=atoi(row[5]);
+                                        balance_PL=atoi(row[6]);
+									}
                                 }
                                 printf("\n");
                             }else{

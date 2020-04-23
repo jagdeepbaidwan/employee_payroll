@@ -6,8 +6,7 @@
 {\ttfamily \#include $<$stdlib.\+h$>$}\newline
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
 {\ttfamily \#include $<$time.\+h$>$}\newline
-Include dependency graph for salary\+\_\+management.\+c\+:
-\nopagebreak
+Include dependency graph for salary\+\_\+management.\+c\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -17,10 +16,10 @@ Include dependency graph for salary\+\_\+management.\+c\+:
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-char $\ast$ \mbox{\hyperlink{salary__management_8c_a13e5f9f553ba1a2b1c94deefb5a0e691}{add\+\_\+salary}} (int e\+\_\+id, char sal\+\_\+type\mbox{[}20\mbox{]}, float salary, char desig\mbox{[}50\mbox{]})
-\begin{DoxyCompactList}\small\item\em Add the salary in database with table name \textquotesingle{}salary\textquotesingle{} by taking the inputs given by the admin. \end{DoxyCompactList}\item 
-char $\ast$ \mbox{\hyperlink{salary__management_8c_a8227b32cd2f0384d5e7e789b1cd8e49a}{compute\+\_\+salary}} (char stmt\mbox{[}1500\mbox{]}, char sal\+\_\+type\mbox{[}5\mbox{]})
-\begin{DoxyCompactList}\small\item\em Compute the salary for the users in the database by admin. \end{DoxyCompactList}\item 
+char $\ast$ \mbox{\hyperlink{salary__management_8c_ab30d7b9e57d1c383eb718e722f8d65c1}{add\+\_\+salary}} (int e\+\_\+id, char sal\+\_\+type\mbox{[}10\mbox{]}, float salary, char desig\mbox{[}50\mbox{]})
+\item 
+char $\ast$ \mbox{\hyperlink{salary__management_8c_ac6759d5d048ebf533e2f46da0bd6f905}{compute\+\_\+salary}} (char stmt\mbox{[}1500\mbox{]}, char sal\+\_\+type\mbox{[}10\mbox{]})
+\item 
 int \mbox{\hyperlink{salary__management_8c_ad3a6cb1b67c8b194be60e0120838f3b2}{emp\+\_\+sal\+\_\+mgmt}} ()
 \begin{DoxyCompactList}\small\item\em Create connection and basically calls the function from here. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
@@ -40,68 +39,32 @@ int \mbox{\hyperlink{salary__management_8c_ab5ee6d7e8f1fc503f56439cbbb83da48}{po
 Perform the Add salary function and computation of the salary for all users. 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{salary__management_8c_a13e5f9f553ba1a2b1c94deefb5a0e691}\label{salary__management_8c_a13e5f9f553ba1a2b1c94deefb5a0e691}} 
+\mbox{\Hypertarget{salary__management_8c_ab30d7b9e57d1c383eb718e722f8d65c1}\label{salary__management_8c_ab30d7b9e57d1c383eb718e722f8d65c1}} 
 \index{salary\_management.c@{salary\_management.c}!add\_salary@{add\_salary}}
 \index{add\_salary@{add\_salary}!salary\_management.c@{salary\_management.c}}
 \doxysubsubsection{\texorpdfstring{add\_salary()}{add\_salary()}}
-{\footnotesize\ttfamily char $\ast$ add\+\_\+salary (\begin{DoxyParamCaption}\item[{int}]{e\+\_\+id,  }\item[{char}]{sal\+\_\+type\mbox{[}20\mbox{]},  }\item[{float}]{salary,  }\item[{char}]{desig\mbox{[}50\mbox{]} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily char$\ast$ add\+\_\+salary (\begin{DoxyParamCaption}\item[{int}]{e\+\_\+id,  }\item[{char}]{sal\+\_\+type\mbox{[}10\mbox{]},  }\item[{float}]{salary,  }\item[{char}]{desig\mbox{[}50\mbox{]} }\end{DoxyParamCaption})}
 
-
-
-Add the salary in database with table name \textquotesingle{}salary\textquotesingle{} by taking the inputs given by the admin. 
-
-It will add the salary of the employee in the database, but before inserting, validate for salary\+\_\+type was checked that manager is of type salaried (S) and employee is of hourly basis in the database.
-
-
-\begin{DoxyParams}[1]{Parameters}
-\mbox{\texttt{ in}}  & {\em int} & e\+\_\+id Employee ID of the user \\
-\hline
-\mbox{\texttt{ in}}  & {\em char} & sal\+\_\+type\mbox{[}20\mbox{]} Salary type of the user \\
-\hline
-\mbox{\texttt{ in}}  & {\em float} & salary Salary of the user in float \\
-\hline
-\mbox{\texttt{ in}}  & {\em char} & desig\mbox{[}50\mbox{]} Designation of the user\\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-string message for salary addition status 
-\end{DoxyReturn}
 Here is the caller graph for this function\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{salary__management_8c_a13e5f9f553ba1a2b1c94deefb5a0e691_icgraph}
+\includegraphics[width=350pt]{salary__management_8c_ab30d7b9e57d1c383eb718e722f8d65c1_icgraph}
 \end{center}
 \end{figure}
-\mbox{\Hypertarget{salary__management_8c_a8227b32cd2f0384d5e7e789b1cd8e49a}\label{salary__management_8c_a8227b32cd2f0384d5e7e789b1cd8e49a}} 
+\mbox{\Hypertarget{salary__management_8c_ac6759d5d048ebf533e2f46da0bd6f905}\label{salary__management_8c_ac6759d5d048ebf533e2f46da0bd6f905}} 
 \index{salary\_management.c@{salary\_management.c}!compute\_salary@{compute\_salary}}
 \index{compute\_salary@{compute\_salary}!salary\_management.c@{salary\_management.c}}
 \doxysubsubsection{\texorpdfstring{compute\_salary()}{compute\_salary()}}
-{\footnotesize\ttfamily char $\ast$ compute\+\_\+salary (\begin{DoxyParamCaption}\item[{char}]{stmt\mbox{[}1500\mbox{]},  }\item[{char}]{sal\+\_\+type\mbox{[}5\mbox{]} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily char$\ast$ compute\+\_\+salary (\begin{DoxyParamCaption}\item[{char}]{stmt\mbox{[}1500\mbox{]},  }\item[{char}]{sal\+\_\+type\mbox{[}10\mbox{]} }\end{DoxyParamCaption})}
 
-
-
-Compute the salary for the users in the database by admin. 
-
-Compute the salary of the employee by accessing salary\+\_\+type from database Employee users will use \char`\"{}hourly\+\_\+attendance\char`\"{} table to get the hours of them Other(\+Admin, Manager) users will use \char`\"{}daily\+\_\+attendance\char`\"{} table to get their salary.
-
-
-\begin{DoxyParams}[1]{Parameters}
-\mbox{\texttt{ in}}  & {\em char} & stmt\+: Query passed from emp\+\_\+sal\+\_\+mgmt to distinguish between hourly and salared user \\
-\hline
-\mbox{\texttt{ in}}  & {\em char} & sal\+\_\+type\mbox{[}5\mbox{]}\+: Salary type of the user\\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-string message for compute salary status 
-\end{DoxyReturn}
 Initially, Connection is verified that, it is established or not Query\+: Access number of hours of the employee in \char`\"{}hourly\+\_\+attendance\char`\"{} table according to month,year and employee id If employee works more than 40 hours than it will paid as overtime, otherwise normal pay For Admin and Manager, absent will be concludedHere is the caller graph for this function\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{salary__management_8c_a8227b32cd2f0384d5e7e789b1cd8e49a_icgraph}
+\includegraphics[width=350pt]{salary__management_8c_ac6759d5d048ebf533e2f46da0bd6f905_icgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{salary__management_8c_ad3a6cb1b67c8b194be60e0120838f3b2}\label{salary__management_8c_ad3a6cb1b67c8b194be60e0120838f3b2}} 
@@ -127,8 +90,7 @@ Here is the call graph for this function\+:
 \includegraphics[width=285pt]{salary__management_8c_ad3a6cb1b67c8b194be60e0120838f3b2_cgraph}
 \end{center}
 \end{figure}
-Here is the caller graph for this function\+:
-\nopagebreak
+Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
