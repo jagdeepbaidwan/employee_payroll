@@ -457,7 +457,7 @@ INSERT INTO `grievances`
 )
 VALUES
 (1,
-"Puneet is smart."
+"Company laptop lock out"
 );
 
 INSERT INTO `grievances`
@@ -466,5 +466,5 @@ INSERT INTO `grievances`
 )
 VALUES
 (2,
-"Jagdeep is not good person."
+"Unable to access my company email account."
 );

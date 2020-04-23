@@ -126,7 +126,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a279666b874e36a99e3e1b713535c07f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validating empType Salaried or Hourly.  <a href="_validation_8c.html#a279666b874e36a99e3e1b713535c07f3">More...</a><br /></td></tr>
 <tr class="separator:a279666b874e36a99e3e1b713535c07f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11758def6b67ad1ce202168f84bcf7b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_validation_8c.html#a11758def6b67ad1ce202168f84bcf7b8">leave_check</a> (int yy, int emp_id, char le_type[])</td></tr>
-<tr class="memdesc:a11758def6b67ad1ce202168f84bcf7b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">check the availability of leaves  <a href="_validation_8c.html#a11758def6b67ad1ce202168f84bcf7b8">More...</a><br /></td></tr>
+<tr class="memdesc:a11758def6b67ad1ce202168f84bcf7b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">check the availability of leaves in the database for the particular year  <a href="_validation_8c.html#a11758def6b67ad1ce202168f84bcf7b8">More...</a><br /></td></tr>
 <tr class="separator:a11758def6b67ad1ce202168f84bcf7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -326,13 +326,23 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>check the availability of leaves </p>
+<p>check the availability of leaves in the database for the particular year </p>
+<p>The function checks for the availability of leaves when it sees a leave (ML,PL,LWP) in attendance data and deducts from the leave balance accordingly</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">yy</td><td>year in which leave requested and balance to be checked </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">emp_id</td><td>unique user id </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">leave</td><td>type to be checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int according to the execution status </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="_validation_8c_a11758def6b67ad1ce202168f84bcf7b8_icgraph.png" border="0" usemap="#_validation_8c_a11758def6b67ad1ce202168f84bcf7b8_icgraph" alt=""/></div>
 <map name="_validation_8c_a11758def6b67ad1ce202168f84bcf7b8_icgraph" id="_validation_8c_a11758def6b67ad1ce202168f84bcf7b8_icgraph">
-<area shape="rect" title="check the availability of leaves" alt="" coords="792,31,885,57"/>
+<area shape="rect" title="check the availability of leaves in the database for the particular year" alt="" coords="792,31,885,57"/>
 <area shape="rect" href="_validation_8c.html#a98f7cea390f8c27a349f27fa8374956e" title="Validating the attendance." alt="" coords="608,31,744,57"/>
 <area shape="rect" href="admin__attend__mgmt_8c.html#ac138eba1507443b2ad38f5046d24f7f3" title="Add the attendance of the user." alt="" coords="437,5,551,32"/>
 <area shape="rect" href="admin__attend__mgmt_8c.html#a05be99a37dcbc824a657fe08afa55a10" title="Update the attendance of the user." alt="" coords="428,56,560,83"/>
@@ -569,7 +579,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="_validation_8c_a98f7cea390f8c27a349f27fa8374956e_cgraph.png" border="0" usemap="#_validation_8c_a98f7cea390f8c27a349f27fa8374956e_cgraph" alt=""/></div>
 <map name="_validation_8c_a98f7cea390f8c27a349f27fa8374956e_cgraph" id="_validation_8c_a98f7cea390f8c27a349f27fa8374956e_cgraph">
 <area shape="rect" title="Validating the attendance." alt="" coords="5,31,141,57"/>
-<area shape="rect" href="_validation_8c.html#a11758def6b67ad1ce202168f84bcf7b8" title="check the availability of leaves" alt="" coords="189,5,283,32"/>
+<area shape="rect" href="_validation_8c.html#a11758def6b67ad1ce202168f84bcf7b8" title="check the availability of leaves in the database for the particular year" alt="" coords="189,5,283,32"/>
 <area shape="rect" href="_validation_8c.html#acdfc0f8ee81107535c88f945cbfeb305" title="Removes the extra spacing." alt="" coords="212,56,260,83"/>
 </map>
 </div>
@@ -705,11 +715,11 @@ Here is the caller graph for this function:</div>
 <area shape="rect" href="admin__attend__mgmt_8c.html#ac138eba1507443b2ad38f5046d24f7f3" title="Add the attendance of the user." alt="" coords="1035,207,1150,234"/>
 <area shape="rect" href="_main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="The main function which distributes various tasks to other functions." alt="" coords="5,258,56,285"/>
 <area shape="rect" href="admin__attend__mgmt_8c.html#a3b91fdefb5f5cdf7e785feeb24c843a5" title="Add the attendance of the employees." alt="" coords="1029,258,1157,285"/>
-<area shape="rect" href="attendance__display_8c.html#a2e8b07ee7dce7c31811c48724124be9e" title="View the attendance table from admin login credentials." alt="" coords="1013,106,1172,133"/>
+<area shape="rect" href="attendance__display_8c.html#a2e8b07ee7dce7c31811c48724124be9e" title="View the attendance for hourly employees." alt="" coords="1013,106,1172,133"/>
 <area shape="rect" href="leave__request_8c.html#aae90fd3e18df10e9a4f25ff71d3553c5" title="Allow the users to raise a leave request." alt="" coords="835,359,937,386"/>
 <area shape="rect" href="admin__attend__mgmt_8c.html#ac954558374aa1d041896a8d6ad7fb617" title="Add the new_month for attendance of the user." alt="" coords="1049,309,1137,335"/>
 <area shape="rect" href="admin__attend__mgmt_8c.html#a05be99a37dcbc824a657fe08afa55a10" title="Update the attendance of the user." alt="" coords="1027,157,1159,183"/>
-<area shape="rect" href="attendance__display_8c.html#a0fee0bbf0bd0dabdb34a069d8249583a" title=" " alt="" coords="1034,55,1151,82"/>
+<area shape="rect" href="attendance__display_8c.html#a0fee0bbf0bd0dabdb34a069d8249583a" title="View the attendance for salaried employees." alt="" coords="1034,55,1151,82"/>
 <area shape="rect" href="admin__attend__mgmt_8c.html#a64e2f6fc2f36c6e5247282142943406d" title="Attendance Management and calls the function from this function." alt="" coords="837,157,935,183"/>
 <area shape="rect" href="employee__management_8c.html#a456f09d016ff1aa94f56b7465f5f5400" title=" " alt="" coords="104,207,233,234"/>
 <area shape="rect" href="employee__attdnce__management_8c.html#a974d072803a1ac834a7031b4eb6b33cc" title="attendance management takes 1 argument." alt="" coords="807,106,965,133"/>

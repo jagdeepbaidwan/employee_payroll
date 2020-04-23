@@ -15,9 +15,9 @@ Include dependency graph for attendance\+\_\+display.\+c\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{attendance__display_8c_a2e8b07ee7dce7c31811c48724124be9e}{hourly\+\_\+view\+\_\+attendance}} (int emp\+\_\+id)
-\begin{DoxyCompactList}\small\item\em View the attendance table from admin login credentials. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em View the attendance for hourly employees. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{attendance__display_8c_a0fee0bbf0bd0dabdb34a069d8249583a}{view\+\_\+attendance}} (int emp\+\_\+id)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em View the attendance for salaried employees. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -39,9 +39,9 @@ Perform the Admin duties for viewing the attendance from this file
 
 
 
-View the attendance table from admin login credentials. 
+View the attendance for hourly employees. 
 
-Accessing the database to view the attendance from daily\+\_\+attendance table
+Accessing the database to view the attendance from daily\+\_\+attendance table for hourly employees Admin can access for all users but employee and manager can access for own only.
 
 
 \begin{DoxyParams}[1]{Parameters}
@@ -73,6 +73,20 @@ Here is the caller graph for this function\+:
 \doxysubsubsection{\texorpdfstring{view\_attendance()}{view\_attendance()}}
 {\footnotesize\ttfamily void view\+\_\+attendance (\begin{DoxyParamCaption}\item[{int}]{emp\+\_\+id }\end{DoxyParamCaption})}
 
+
+
+View the attendance for salaried employees. 
+
+Accessing the database to view the attendance from daily\+\_\+attendance table for salaried employees Admin can access for all users but employee and manager can access for own only.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em int} & emp\+\_\+id Integer value of the user Employee ID\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Nothing as the function is printing messages on the console screen 
+\end{DoxyReturn}
 Here is the call graph for this function\+:
 \nopagebreak
 \begin{figure}[H]

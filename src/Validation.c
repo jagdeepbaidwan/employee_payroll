@@ -376,16 +376,18 @@ int chk_emp_type(int emp_id){
 }
 
 /**
-* \brief check the availability of leaves
-*
-*
-*
-*
-*
-*
-*
-*
-*/
+ * \brief check the availability of leaves in the database for the particular year
+ * 
+ * The function checks for the availability of leaves 
+ * when it sees a leave (ML,PL,LWP) in attendance data
+ * and deducts from the leave balance accordingly
+ *
+ * @param[in] yy year in which leave requested and balance to be checked 
+ * @param[in] emp_id unique user id
+ * @param[in] leave type to be checked
+ * 
+ * \return int according to the execution status
+ */
 
 int leave_check(int yy,int emp_id, char le_type[]){
 	MYSQL_RES *read=NULL;
