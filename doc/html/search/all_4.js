@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getch_51',['getch',['../employee_8c.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'employee.c']]]
+  ['getch_52',['getch',['../employee_8c.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'employee.c']]]
 ];

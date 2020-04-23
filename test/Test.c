@@ -279,13 +279,13 @@ int main(int argc, char *argv[])
     	printf("*********************  TEST 10E  **************************************************\n");
     	printf("The employee rating function is called for the existing employee \n");
     	printf("Expected result is that it should return 'Rating Updated' message \n ");
-    	ASSERT_TEST(strcmp("Rating Updated",employee_rating(13,1,"Good employee",2020))==0);
+    	ASSERT_TEST(strcmp("Rating Updated",employee_rating(2,1,"Good employee",2020))==0);
 
 	printf("\n\n\n*****  TEST 11 Function: char* view_raised_grievances(int choice,int gri_choice) ****\n");
     	printf("*********************  TEST 11A  **************************************************\n");
     	printf("The view raised grievances function is called when no grievance is added in the table 'grievances' \n");
     	printf("Expected result is that it should return 'No Record with the query' message \n ");
-    	ASSERT_TEST(strcmp("No Record with the query",view_raised_grievances(1,12))==0);
+    	ASSERT_TEST(strcmp("No Record with the query",view_raised_grievances(1,3))==0);
 
     	printf("*********************  TEST 11B  **************************************************\n");
     	printf("The view raised grievances function is called when grievance is in the table 'grievances' \n");
@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
     	printf("Expected result is that it should return 'Wrong choice' message \n ");
     	ASSERT_TEST(strcmp("Wrong choice",view_raised_grievances(4,1))==0);
 
-	printf("\n\n\n*****  TEST 12 Function: char* add_salary(int e_id,char sal_type[20], float salary,char desig[50]) ****\n");
+	    printf("\n\n\n*****  TEST 12 Function: char* add_salary(int e_id,char sal_type[20], float salary,char desig[50]) ****\n");
     	printf("*********************  TEST 12A  **************************************************\n");
     	printf("The add salary function is called but with wrong employee ID \n");
     	printf("Expected result is that it should return 'Employee ID not found' message \n ");
@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
     	printf("*********************  TEST 12B  **************************************************\n");
     	printf("The add salary function is called with right parameters \n");
     	printf("Expected result is that it should return 'Salary added successfully' message \n ");
-    	ASSERT_TEST(strcmp("Salary added successfully",add_salary(10,"Salaried",110.01,"developer"))==0);
+    	ASSERT_TEST(strcmp("Salary added successfully",add_salary(5,"Salaried",110.01,"developer"))==0);
 
     	printf("*********************  TEST 12C  **************************************************\n");
     	printf("The add salary function is called but with wrong salary_type \n");
