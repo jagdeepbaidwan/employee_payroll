@@ -38,7 +38,7 @@ int port11 =3306;
 *
 */
 
-char* add_salary(int e_id,char sal_type[20],float salary,char desig[50]){
+char* add_salary(int e_id,char sal_type[10],float salary,char desig[50]){
     MYSQL_RES *read=NULL;
     MYSQL_RES *res=NULL;
     MYSQL_ROW row=NULL;
@@ -69,8 +69,8 @@ char* add_salary(int e_id,char sal_type[20],float salary,char desig[50]){
                 return ("Employee ID not found");
             }
         }
-        printf("Salary type is %s",sal_type);
-        if (strcasecmp(sal_type,"H")==0 || strcasecmp(sal_type,"S")==0){
+
+        if (strcasecmp(sal_type,"Hourly")==0 || strcasecmp(sal_type,"Salaried")==0){
             int n = sprintf(stmt,add_sal_qry,e_id,sal_type,salary,sal_year,desig);
             if (mysql_query(conn7,stmt)){
                 printf(" Error: %s\n", mysql_error(conn7));
@@ -105,7 +105,7 @@ char* add_salary(int e_id,char sal_type[20],float salary,char desig[50]){
 *
 */
 
-char* compute_salary(char stmt[1500],char sal_type[5]){
+char* compute_salary(char stmt[1500],char sal_type[10]){
     MYSQL_RES *read = NULL;
     MYSQL_RES *read1 = NULL;
     MYSQL_ROW rows=NULL;
@@ -143,7 +143,7 @@ char* compute_salary(char stmt[1500],char sal_type[5]){
                     float hours=0;
                     float net_pay=0,deductions=0,total=0;
 
-                    if (0 == strcasecmp(rows[1],"H")){
+                    if (0 == strcasecmp(rows[1],"Hourly")){
                         conn8 = mysql_init(NULL);
                         mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port11, NULL, 0);
                         char qry[] ={"select * from hourly_attendance where att_month ='%d' and att_year ='%d' and emp_id ='%d'"};
@@ -245,9 +245,8 @@ char* compute_salary(char stmt[1500],char sal_type[5]){
                         if (mysql_query(conn9,stmt)){
                             printf("Error: %s\n", mysql_error(conn9));
                             return ("Failed to execute query.");
-                        }else{
-                            return("\n\n Salary is computed.\n\n");
                         }
+                        return("\n\n Salary is computed.\n\n");
                     }
                 }
             }
@@ -280,7 +279,7 @@ int emp_sal_mgmt(){
     }else{
         int compute_opt;
         char stmt [1500];
-        char sal_type[5];
+        char sal_type[10];
 
         time_t s;
         struct tm* current_time;
@@ -291,14 +290,14 @@ int emp_sal_mgmt(){
         printf("		Press 2 Compute Salary for salaried employees\n");
         scanf("%d",&compute_opt);
         if (compute_opt == 1){
-            char qry[] = {"select * from salary where salary_type='H'"};
+            char qry[] = {"select * from salary where salary_type='Hourly'"};
             int n = sprintf(stmt,qry);
-            strcpy(sal_type,"H");
+            strcpy(sal_type,"Hourly");
             printf("%s", compute_salary(stmt,sal_type));
         }else if(compute_opt == 2){
-            char qry[] = {"select * from salary where salary_type='S'"};
+            char qry[] = {"select * from salary where salary_type='Salaried'"};
             int n = sprintf(stmt,qry);
-            strcpy(sal_type,"S");
+            strcpy(sal_type,"Salaried");
             printf("%s", compute_salary(stmt,sal_type));
         }else{
             printf("Wrong Choice.");

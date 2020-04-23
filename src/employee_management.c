@@ -436,7 +436,8 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
         char phonenumber[20];
         char gender[10];
         char email[100];
-        char status[100];
+        float salary;
+        char sal_type[10];
         int day;
         int month;
         int year;
@@ -508,16 +509,28 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
         x=valid_email(emp.email);
     }while(x==0);
     x=0;
-    do{
-        printf("Enter employement status(A for active or I for inactive)\n");
-        scanf("%s",emp.status);
-        if (strcasecmp(emp.status,"A")==0 || strcasecmp(emp.status,"I")==0)
-        {
+    
+    printf("\nEnter the Salary: \n");
+    scanf("%.2f",&emp.salary);
+    getchar();
+    
+	do{
+    	printf("Enter the Salary type (Hourly/Salaried)? :\n");
+        gets(emp.sal_type);
+        if (strcasecmp(emp.sal_type,"Hourly")==0 || strcasecmp(emp.sal_type,"Salaried")==0){
             x=1;
             break;
         }
     } while(x==0);
     x=0;
+    
+	char desi[50];
+	char salary_type[10];
+	float sal;
+    strcpy(desi,emp.des);
+    strcpy(salary_type,emp.sal_type);
+    sal = emp.salary;
+    
     do{
         printf("Enter Phone number\n");
         scanf("%s",emp.phonenumber);
@@ -543,7 +556,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
     mysql_real_connect(conn8, "localhost", "root", "1234","payroll", port6, NULL, 0);
     char qry[]={"insert into emp_details (name1,name2,department,designation,age,address_l1,address_l2,phonen,gender,email,day,month,year,emp_type) VALUES('%s','%s','%s','%s','%d','%s','%s','%s','%s','%s','%d','%d','%d','%s')"};
     if(conn8){
-        sprintf(stmt,qry,emp.f_name,emp.l_name,emp.dep,emp.des,emp.age,emp.address1,emp.address2,emp.phonenumber,emp.gender,emp.email,emp.day,emp.month,emp.year,emp.status);
+        sprintf(stmt,qry,emp.f_name,emp.l_name,emp.dep,emp.des,emp.age,emp.address1,emp.address2,emp.phonenumber,emp.gender,emp.email,emp.day,emp.month,emp.year,emp.sal_type);
         if (mysql_query(conn8,stmt)){
             printf(" Error: %s\n", mysql_error(conn8));
             return "Failed to execute query.";
@@ -591,7 +604,7 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
     scanf("%s",employee_type);
     char qry3[]={"insert into login_details (emp_id,password,emp_type,status) VALUES('%d','%s','%s','%s')"};
     if(oo1){
-        sprintf(stmt,qry3,emp_id,password,employee_type,emp.status);
+        sprintf(stmt,qry3,emp_id,password,employee_type,"A");
         if (mysql_query(oo1,stmt)){
             printf(" Error: %s\n", mysql_error(oo1));
             return "Failed to execute query.";
@@ -614,15 +627,8 @@ char* add_employee(char dept[],char desig[],int check, int request_id){
                     printf("%s\n", mysql_error(oo3));
                 }
             }
-            float salary;
-            char sal_type[20];
-            char desi[50];
-            strcpy(desi,emp.des);
-            printf("Enter the Salary type  hourly or salaried:\n");
-            scanf("%s",sal_type);
-            printf("\nEnter the Salary: \n");
-            scanf("%.2f",&salary);
-            printf("%s",add_salary(emp_id,sal_type,salary,desi));
+            
+            printf("%s",add_salary(emp_id,salary_type,sal,desi));
             return "User Inserted";
         }
     }else{
@@ -769,7 +775,7 @@ char* modify_employee(int emp_id){
         char phonenumber[20];
         char gender[10];
         char email[100];
-        char status[100];
+        char status[10];
         int day;
         int month;
         int year;
@@ -1044,12 +1050,15 @@ char* modify_employee(int emp_id){
         case 12:{
             int x=0;
             do{
-                printf("Enter the employee status (A for Active or I for Inactive)\n");
-                scanf("%s",emp.status);
-                if(strcmp(emp.status,"A")==0 || strcmp(emp.status,"I")==0){
-                    x=1;
-                }
-            }while(x==0);
+    			printf("Enter the Salary type (Hourly/Salaried)? :\n");
+        		gets(emp.status);
+        		if (strcasecmp(emp.status,"Hourly")==0 || strcasecmp(emp.status,"Salaried")==0){
+            		x=1;
+            		break;
+        		}
+    		}while(x==0);
+    		x=0;
+    		
             char qry[]={"update emp_details set emp_type='%s' where emp_id='%d'"};
             if(conn2){
                 sprintf(stmt,qry,emp.status,emp_id);
@@ -1320,34 +1329,39 @@ int emp_management(int i,int emp_id){
                     int i;
                     scanf("%d",&i);
                     switch(i){
-                        case 1:
-                        emp_sal_mgmt();
-                        break;
-                        case 2:
-                        printf("Enter id of the employee\n");
-                        int e_id;
-                        scanf("%d",&e_id);
-                        int option;
-                        printf("\n                Press 1 if you want to see all pay slips\n");
-                        printf("                Press 2 if you want to see pay slips for particular pay period\n");
-                        printf("                Press 3 To display Per-Hour/Per-Month salary\n");
-                        printf("                Press 4 Go back...\n");
-                        scanf("%d",&option);
-                        int k=display_salary(e_id,option);
-                        break;
-                        case 3:
-                        printf("Enter employee id of employee, you wish to change salary for: \n");
-                        int i;
-                        scanf("%d",&i);
-                        printf("%s",update_salary(i));
-                        break;
-                        case 4:
-                        dcsn=1;
-                        break;
-                        default:
-                        printf("Wrong option\n");
-                        break;
-                    }
+                        case 1:{
+                        	emp_sal_mgmt();
+                        	break;
+                        }
+                        case 2:{
+                        	printf("Enter id of the employee\n");
+                        	int e_id;
+                        	scanf("%d",&e_id);
+	                        int option;
+    	                    printf("\n                Press 1 if you want to see all pay slips\n");
+        	                printf("                Press 2 if you want to see pay slips for particular pay period\n");
+            	            printf("                Press 3 To display Per-Hour/Per-Month salary\n");
+                	        printf("                Press 4 Go back...\n");
+                    	    scanf("%d",&option);
+                        	int k=display_salary(e_id,option);
+	                        break;
+	                    }
+                        case 3:{
+	                        printf("Enter employee id of employee, you wish to change salary for: \n");
+    	                    int i;
+        	                scanf("%d",&i);
+            	            printf("%s",update_salary(i));
+                	        break;
+                    	}
+						case 4:{
+	                        dcsn=1;
+    	                    break;
+    	                }
+                        default:{
+        	                printf("Wrong option\n");
+            	            break;
+            	        }
+                	}
                 }while(dcsn!=1);
                 return 1;
             }
