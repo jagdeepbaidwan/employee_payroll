@@ -73,7 +73,7 @@ a) Test.c
 
 # For Developers
 
-The developer manual is available [here](https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/developer_guide.docx)
+The developer manual is available [here](https://github.com/jagdeepbaidwan/employee_payroll/blob/main_development_payroll/doc/developer_guide.docx)
 
 # License
 
