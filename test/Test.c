@@ -255,11 +255,11 @@ int main(int argc, char *argv[])
     	printf("Expected result is that it should return Request Status Updated successfully message \n ");
     	ASSERT_TEST(strcmp("Request Status Updated successfully",decision_leave_request(1,2))==0);
 
-		printf("\n\n\n*****  TEST 10 Function: char* employee_rating(int emp_id,int rate, char description[200],int year) ****\n");
-		printf("*********************  TEST 10A  **************************************************\n");
-    	printf("The employee rating function is called with employee id '7' but it is not exist in the database \n");
+	printf("\n\n\n*****  TEST 10 Function: char* employee_rating(int emp_id,int rate, char description[200],int year) ****\n");
+	printf("*********************  TEST 10A  **************************************************\n");
+    	printf("The employee rating function is called with employee id '17' but it is not exist in the database \n");
     	printf("Expected result is that it should return Employee ID not found message \n ");
-    	ASSERT_TEST(strcmp("Employee ID not found",employee_rating(7,1,"Good employee",2020))==0);
+    	ASSERT_TEST(strcmp("Employee ID not found",employee_rating(20,1,"Good employee",2020))==0);
 
     	printf("*********************  TEST 10B  **************************************************\n");
     	printf("The employee rating function is called with rating '10' but the range is from 1 to 5 \n");
@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
     	printf("Expected result is that it should return 'Wrong choice' message \n ");
     	ASSERT_TEST(strcmp("Wrong choice",view_raised_grievances(4,1))==0);
 
-	    printf("\n\n\n*****  TEST 12 Function: char* add_salary(int e_id,char sal_type[20], float salary,char desig[50]) ****\n");
+	printf("\n\n\n*****  TEST 12 Function: char* add_salary(int e_id,char sal_type[20], float salary,char desig[50]) ****\n");
     	printf("*********************  TEST 12A  **************************************************\n");
     	printf("The add salary function is called but with wrong employee ID \n");
     	printf("Expected result is that it should return 'Employee ID not found' message \n ");

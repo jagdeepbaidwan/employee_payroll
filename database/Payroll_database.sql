@@ -426,3 +426,45 @@ VALUES
 1000,
 200,
 800);
+
+INSERT INTO `emp_perfor`
+(`emp_id`,
+`rating`,
+`description`,
+`year`)
+VALUES
+(1,
+3,
+"Good Employee",
+2020
+);
+
+INSERT INTO `emp_perfor`
+(`emp_id`,
+`rating`,
+`description`,
+`year`)
+VALUES
+(2,
+4,
+"Excellent work and jolly nature",
+2020
+);
+
+INSERT INTO `grievances`
+(`emp_id`,
+`description`
+)
+VALUES
+(1,
+"Puneet is smart."
+);
+
+INSERT INTO `grievances`
+(`emp_id`,
+`description`
+)
+VALUES
+(2,
+"Jagdeep is not good person."
+);
