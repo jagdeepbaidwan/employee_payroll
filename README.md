@@ -20,7 +20,7 @@ Installation steps are mentioned in [user_manual.docx](https://github.com/jagdee
 # Usage
 
 To run, you must first install it. Then you can follow instructions mentioned in
-[user_manual.docx](https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.docx)
+[user_manual.docx](https://github.com/jagdeepbaidwan/employee_payroll/blob/main_development_payroll/doc/user_manual.docx)
 
 # File Strucutre
 1.	bin: This folder has executable and data file for the Payroll system one input file: 
