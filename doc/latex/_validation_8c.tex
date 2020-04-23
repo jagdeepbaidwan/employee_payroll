@@ -39,7 +39,7 @@ int \mbox{\hyperlink{_validation_8c_a16d7f66201af135f0e60ffc6ac3cbd18}{datevalid
 int \mbox{\hyperlink{_validation_8c_a279666b874e36a99e3e1b713535c07f3}{chk\+\_\+emp\+\_\+type}} (int emp\+\_\+id)
 \begin{DoxyCompactList}\small\item\em Validating emp\+Type Salaried or Hourly. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{_validation_8c_a11758def6b67ad1ce202168f84bcf7b8}{leave\+\_\+check}} (int yy, int emp\+\_\+id, char le\+\_\+type\mbox{[}$\,$\mbox{]})
-\begin{DoxyCompactList}\small\item\em check the availability of leaves \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em check the availability of leaves in the database for the particular year \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -73,8 +73,7 @@ Validating emp\+Type Salaried or Hourly.
 \begin{DoxyReturn}{Returns}
 User\+\_\+\+Type\+: 9\+: database error 1\+: Positive case for valid email 
 \end{DoxyReturn}
-Here is the caller graph for this function\+:
-\nopagebreak
+Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -154,8 +153,22 @@ Here is the caller graph for this function\+:\nopagebreak
 
 
 
-check the availability of leaves 
+check the availability of leaves in the database for the particular year 
 
+The function checks for the availability of leaves when it sees a leave (ML,PL,L\+WP) in attendance data and deducts from the leave balance accordingly
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em yy} & year in which leave requested and balance to be checked \\
+\hline
+\mbox{\texttt{ in}}  & {\em emp\+\_\+id} & unique user id \\
+\hline
+\mbox{\texttt{ in}}  & {\em leave} & type to be checked\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int according to the execution status 
+\end{DoxyReturn}
 Here is the caller graph for this function\+:
 \nopagebreak
 \begin{figure}[H]

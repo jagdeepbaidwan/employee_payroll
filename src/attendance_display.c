@@ -18,15 +18,16 @@ MYSQL *conn10;
 int port3=3306;
 
 /**
-* \brief View the attendance table  from admin login credentials
-*
-* Accessing the database to view the attendance from daily_attendance table
-*
-* @param[in] int emp_id Integer value of the user Employee ID
-*
-* \return Nothing as the function is printing messages on the console screen
-*
-*/
+ * \brief View the attendance for hourly employees
+ *
+ * Accessing the database to view the attendance from daily_attendance table for hourly employees
+ * Admin can access for all users but employee and manager can access for own only.
+ *
+ * @param[in] int emp_id Integer value of the user Employee ID
+ *
+ * \return Nothing as the function is printing messages on the console screen
+ *
+ */
 
  void hourly_view_attendance(int emp_id)
  {
@@ -83,6 +84,20 @@ int port3=3306;
 
 	}
  }
+
+
+/**
+ * \brief View the attendance for salaried employees
+ *
+ * Accessing the database to view the attendance from daily_attendance table for salaried employees
+ * Admin can access for all users but employee and manager can access for own only.
+ *
+ * @param[in] int emp_id Integer value of the user Employee ID
+ *
+ * \return Nothing as the function is printing messages on the console screen
+ *
+ */
+ 
 void view_attendance(int emp_id){
     int dd,mm,yy,r,num;
     MYSQL_RES *read=NULL;
