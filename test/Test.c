@@ -255,11 +255,11 @@ int main(int argc, char *argv[])
     	printf("Expected result is that it should return Request Status Updated successfully message \n ");
     	ASSERT_TEST(strcmp("Request Status Updated successfully",decision_leave_request(1,2))==0);
 
-	printf("\n\n\n*****  TEST 10 Function: char* employee_rating(int emp_id,int rate, char description[200],int year) ****\n");
-	printf("*********************  TEST 10A  **************************************************\n");
-    	printf("The employee rating function is called with employee id '17' but it is not exist in the database \n");
+		printf("\n\n\n*****  TEST 10 Function: char* employee_rating(int emp_id,int rate, char description[200],int year) ****\n");
+		printf("*********************  TEST 10A  **************************************************\n");
+    	printf("The employee rating function is called with employee id '7' but it is not exist in the database \n");
     	printf("Expected result is that it should return Employee ID not found message \n ");
-    	ASSERT_TEST(strcmp("Employee ID not found",employee_rating(20,1,"Good employee",2020))==0);
+    	ASSERT_TEST(strcmp("Employee ID not found",employee_rating(7,1,"Good employee",2020))==0);
 
     	printf("*********************  TEST 10B  **************************************************\n");
     	printf("The employee rating function is called with rating '10' but the range is from 1 to 5 \n");
