@@ -15,7 +15,7 @@ The software automatically takes attendance data from a csv file and calculate s
 
 # Installation
 
-Installation steps are mentioned in [user_manual.docx](https://github.com/jagdeepbaidwan/employee_payroll/tree/master/doc/user_manual.docx)
+Installation steps are mentioned in [user_manual.docx](https://github.com/jagdeepbaidwan/employee_payroll/blob/main_development_payroll/doc/user_manual.docx)
 
 # Usage
 
