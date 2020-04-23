@@ -78,7 +78,7 @@ char* login(int id, char pwd[25])
 
 int main(int argc, char *argv[])
 {
-	printf("*********************************TEST 1 for Login**********************************************\n");
+		printf("*********************************TEST 1 for Login**********************************************\n");
     	printf("***********************************TEST 1A*****************************************************\n");
     	printf("We are first going to login using correct credentials for Admin i.e. Userid=1 and password=1234\n");
     	printf("Expected result is it should return string admin\n ");
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     	printf("Expected result is it should return string User is deactivated\n ");
     	ASSERT_TEST(strcmp(login(3,"1234"),"\nUser is deactivated\n\n\n\n\n\n")==0);
 
-	printf("*******************************TEST 2 for change_password*****************************************\n");
+		printf("*******************************TEST 2 for change_password*****************************************\n");
     	printf("***********************************TEST 2A*****************************************************\n");
     	printf("Change_password accepts 4 parameters i.e. userid,old password , new password , confirm new password\n");
     	printf("In first case we are going to input correct credentials, it should return string Password updated\n");
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     	ASSERT_TEST(strcmp("Invalid Date",attendance_change(2,123,123,1243,"abcd"))==0);
     	printf("\n\n***********************************TEST 3B*****************************************************\n");
     	printf("Function call with a description with more than 150 character\n");
-	printf("Expected result is it should return Description must not be greater than 150 characters 'C is a procedural programming language. It was initially developed by Dennis Ritchie in the year 1972. It was mainly developed as a system programming language to write an operating system' \n ");
+		printf("Expected result is it should return Description must not be greater than 150 characters 'C is a procedural programming language. It was initially developed by Dennis Ritchie in the year 1972. It was mainly developed as a system programming language to write an operating system' \n ");
     	ASSERT_TEST(strcmp("Invalid description",attendance_change(2,01,04,2020,"C is a procedural programming language. It was initially developed by Dennis Ritchie in the year 1972. It was mainly developed as a system programming language to write an operating system"))==0);
     	printf("\n\n***********************************TEST 3C*****************************************************\n");
     	printf("Function call without employee id \n");
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     	printf("***********************************TEST 4B*****************************************************\n");
     	printf("Now we raise a request to deactivate the same logged in user id\n");
     	printf("Expected result is it should return: Same logged in user can not deactivate himself\n ");
-	ASSERT_TEST(strcmp("Same logged in user",deactivate(1,1))==0);
+		ASSERT_TEST(strcmp("Same logged in user",deactivate(1,1))==0);
     	printf("***********************************TEST 4C*****************************************************\n");
     	printf("Now we raise a request to deactivate the already deactivated account\n");
     	printf("Expected result is it should return: User already deactivated\n ");
@@ -163,8 +163,8 @@ int main(int argc, char *argv[])
     	printf("Expected result is it should return: No data found \n ");
     	ASSERT_TEST(display_leaves(1234,2020)==3);
 
-	printf("\n\n\n\n*********************************TEST 6 for  Display Salary**********************************************\n");
-	printf("***********************************TEST 6A*****************************************************\n");
+		printf("\n\n\n\n*********************************TEST 6 for  Display Salary**********************************************\n");
+		printf("***********************************TEST 6A*****************************************************\n");
     	printf("We are first going to raise a display salary request with wrong option\n");
     	printf("Expected result is it should return error\n ");
     	ASSERT_TEST(display_salary(2,8)==3);
@@ -177,8 +177,8 @@ int main(int argc, char *argv[])
     	printf("Expected result is it should return: table show the data of salary\n ");
     	ASSERT_TEST(display_salary(2,1)==0);
 
-	printf("\n\n\n*****  TEST 7 Function: char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[]) ****\n");
-	printf("*********************  TEST 7A  **************************************************\n");
+		printf("\n\n\n*****  TEST 7 Function: char* leave_request(int emp_id,int dd,int mm,int yy,int no_of_days,char leave_type[]) ****\n");
+		printf("*********************  TEST 7A  **************************************************\n");
     	printf("A leave request will be raised with all valid input parameters except the date which is invalid: 123/123/124\n");
     	printf("Expected result is that it should return an Invalid date message \n ");
     	ASSERT_TEST(strcmp("Invalid Date",leave_request(2,123,123,124,4,"ML"))==0);
@@ -203,8 +203,8 @@ int main(int argc, char *argv[])
     	printf("Expected result is it should return a string message Request raised successfully \n ");
     	ASSERT_TEST(strcmp("Request raised successfully",leave_request(2,11,12,2009,4,"ML"))==0);
 
-	printf("\n\n\n*****  TEST 8 Function: char* employee_request(int emp_id,char dept[],char designation[]) ****\n");
-	printf("*********************  TEST 8A  **************************************************\n");
+		printf("\n\n\n*****  TEST 8 Function: char* employee_request(int emp_id,char dept[],char designation[]) ****\n");
+		printf("*********************  TEST 8A  **************************************************\n");
     	printf("The employee request function is called to raise employee request but emp_id of the manager who raises request doesn't exist in the database\n");
     	printf("Expected result is that it should return User does not exist message \n ");
     	ASSERT_TEST(strcmp("User does not exist",employee_request(61,"IT","Technician"))==0);
@@ -224,12 +224,12 @@ int main(int argc, char *argv[])
     	printf("Expected result is it should return Designation string length invalid \n ");
     	ASSERT_TEST(strcmp("Designation string length invalid",employee_request(4,"IT","abcdefghijklmnopqrst"))==0);
 
-	printf("\n\n*****************  TEST 8E  **************************************************\n");
-	printf("The employee request function is called to raise emp request with right parameters\n");
+		printf("\n\n*****************  TEST 8E  **************************************************\n");
+		printf("The employee request function is called to raise emp request with right parameters\n");
     	printf("Expected result is that it should return Request raised successfully\n ");
     	ASSERT_TEST(strcmp("Request raised successfully",employee_request(4,"IT","Technician"))==0);
 
-	printf("\n\n\n*****  TEST 9 Function: char* decision_leave_request(int req_id,int k) ****\n");
+		printf("\n\n\n*****  TEST 9 Function: char* decision_leave_request(int req_id,int k) ****\n");
     	printf("*********************  TEST 9A  **************************************************\n");
     	printf("The decision leave request function is called but no leave request exists with the input request id\n");
     	printf("Expected result is that it should return No such pending leave request exists message \n ");
@@ -257,9 +257,9 @@ int main(int argc, char *argv[])
 
 		printf("\n\n\n*****  TEST 10 Function: char* employee_rating(int emp_id,int rate, char description[200],int year) ****\n");
 		printf("*********************  TEST 10A  **************************************************\n");
-    	printf("The employee rating function is called with employee id '7' but it is not exist in the database \n");
+    	printf("The employee rating function is called with employee id '17' but it is not exist in the database \n");
     	printf("Expected result is that it should return Employee ID not found message \n ");
-    	ASSERT_TEST(strcmp("Employee ID not found",employee_rating(7,1,"Good employee",2020))==0);
+    	ASSERT_TEST(strcmp("Employee ID not found",employee_rating(20,1,"Good employee",2020))==0);
 
     	printf("*********************  TEST 10B  **************************************************\n");
     	printf("The employee rating function is called with rating '10' but the range is from 1 to 5 \n");
