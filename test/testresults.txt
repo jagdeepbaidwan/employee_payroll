@@ -131,7 +131,7 @@ Now we raise a request to deactivate right employee
 Expected result is it should return: Employee deactivated
  
 
-FAILED
+PASSED
 
 
 
@@ -454,7 +454,7 @@ The add salary function is called with right parameters
 Expected result is that it should return 'Salary added successfully' message 
  
 
-FAILED
+PASSED
 
 
 *********************  TEST 12C  **************************************************
